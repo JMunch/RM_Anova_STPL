@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# hi\n\n\n\n\n\nmean(rep(pi, 10))\npi * pi == pi^2\n# hallo\n# test test\n\n5 + 5\n\n# papageienei 123\n\n# papageienei\n\n\n# line 12\n\n# Was geht ab?\n\n",
+    "created" : 1479307208146.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3500670782",
+    "id" : "4EF2DF7A",
+    "lastKnownWriteTime" : 1479309388,
+    "last_content_update" : 1479309388,
+    "path" : "~/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/hi.R",
+    "project_path" : "hi.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
