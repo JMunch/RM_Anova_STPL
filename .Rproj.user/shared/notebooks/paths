@@ -1,9 +1,3 @@
-<<<<<<< HEAD
 /Users/Niko/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/.gitignore="8A8CD461"
-/Users/Niko/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/hi.R="D2A62387"
-/Users/Niko/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/plotting_functions.R="2A56F450"
-=======
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/TODO="72B39EA0"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/hi.R="1E343B8D"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/data_preparation/data_preparation.R="A18EFF74"
->>>>>>> 49036c0f4a5bfba57fd232dcb15f37d6fd83b2fc
+/Users/Niko/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/r/plotting_functions.R="EB7DBA7F"
+/Users/Niko/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/r/quantlet1_rm_anova.R="C1E0778E"
