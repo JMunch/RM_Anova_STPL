@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "*** Topics *** \n\n** Q0. data preparation **\n- simulation of data\n- listwise deletion\n\n** Q1. Compute RM - ANOVA **\n- model specification\n- Estimate model parameter\n- compute decomposition matrix\n  - compute quadratic sums \n- compute degrees of freedom\n- F-test and p-value\n- Output - Anova-tabel\n\n\n** Q2. Compare with standard ANOVA ** \n- quadratic sums for both models\n- create graph(https://statistics.laerd.com/statistical-guides/repeated-measures-anova-statistical-guide-3.php)\n\n** Q3. Compute and plot confidence intervals\n\n\n** Q4. Analysis of contrasts (C)\n- compute orthogonal polynomial constrasts (and their sum of squares)\n- test for significance of the polynomial contrasts\n- plot the contrasts\n\n\n** Q5. Effect size\n- generalized eta-square\n- (simulation: comparison to regular eta-square and partial eta-square)\n\n\n(** Q6. Mauchly test)",
+    "created" : 1479734996686.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1571624043",
+    "id" : "95B76007",
+    "lastKnownWriteTime" : 1479738777,
+    "last_content_update" : 1479738777318,
+    "path" : "D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/TODO",
+    "project_path" : "TODO",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}

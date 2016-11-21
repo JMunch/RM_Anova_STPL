@@ -1,0 +1,35 @@
+*** Topics *** 
+
+** Q0. data preparation **
+- simulation of data
+- listwise deletion
+
+** Q1. Compute RM - ANOVA **
+- model specification
+- Estimate model parameter
+- compute decomposition matrix
+  - compute quadratic sums 
+- compute degrees of freedom
+- F-test and p-value
+- Output - Anova-tabel
+
+
+** Q2. Compare with standard ANOVA ** 
+- quadratic sums for both models
+- create graph(https://statistics.laerd.com/statistical-guides/repeated-measures-anova-statistical-guide-3.php)
+
+** Q3. Compute and plot confidence intervals
+
+
+** Q4. Analysis of contrasts (C)
+- compute orthogonal polynomial constrasts (and their sum of squares)
+- test for significance of the polynomial contrasts
+- plot the contrasts
+
+
+** Q5. Effect size
+- generalized eta-square
+- (simulation: comparison to regular eta-square and partial eta-square)
+
+
+(** Q6. Mauchly test)
