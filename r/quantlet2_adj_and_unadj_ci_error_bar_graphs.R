@@ -10,14 +10,14 @@ require(ggplot2) # is not needed yet but will soon :)
 
 
 # number of entities 
-n = as.numeric(length(rma_data[,1]))
+n = nrow(rma_data)
 
 # Specify the names of the 'id'-variable and of the 'condition'-variables
 rm_names = colnames(rma_data)[-1]
 id_names = colnames(rma_data)[1]
 
 # number of factor levels
-k = as.numeric(length(rm_names))
+k = length(rm_names)
 
 
 # Convert data to long format ---------------------------------------------
@@ -48,12 +48,12 @@ Gm = mean(rma_data_long$value)
 Em = tapply(rma_data_long$value, rma_data_long$id, mean)
 
 # Mean of each measurement condition
-Me = (1:k)
+Me = 1:k
 MeFlm = data.frame(Me, Flm)
 MeFlmlong = MeFlm[rep(seq_len(nrow(MeFlm)), each = n),]
 
 # Mean of each entity/subject
-E = (1:n)
+E = 1:n
 EEm = data.frame(E, Em)
 EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
 
