@@ -1,36 +1,27 @@
-##### quantlet2_adj_and_unadj_ci_error_bar_graphs
+### Computation of adjusted and unadjusted CI for ANOVA with repeated measurement ###
+
+rma_CI = function(rma_data){
+
+# Libraries needed --------------------------------------------------------
+
+require(ggplot2) # is not needed yet but will soon :)
+
+# Define needed constants and variables -----------------------------------
 
 
-#### Preparations
-
-### Clear workspace
-
-#rm(list = ls())   
-
-
-### Install required packages 
-
-
-
-### Define some variables
-
-## 'n' is the number of entities 
-
+# number of entities 
 n = as.numeric(length(rma_data[,1]))
 
-
-## Specify the names of the 'id'-variable and of the 'condition'-variables
-
+# Specify the names of the 'id'-variable and of the 'condition'-variables
 rm_names = colnames(rma_data)[-1]
 id_names = colnames(rma_data)[1]
 
-
-## 'k' is the number of factor levels
-
+# number of factor levels
 k = as.numeric(length(rm_names))
 
 
-## Convert to long format
+# Convert data to long format ---------------------------------------------
+
 
 rma_data_long = reshape(rma_data, 
                         varying = rm_names, 
@@ -44,75 +35,56 @@ colnames(rma_data_long)[1] = "id"
 rma_data_long$condition = as.numeric(rma_data_long$condition)
 
 
-## 'Flm' are the factor level means
+# Compute means -----------------------------------------------------------
 
+
+# Factor level means
 Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
 
-
-## 'Gm' is the general mean
-
+# General mean
 Gm = mean(rma_data_long$value)
 
-
-## 'Em' is the entity/subject mean
-
+# Entity/subject mean
 Em = tapply(rma_data_long$value, rma_data_long$id, mean)
 
-
-## 'Me' Measurements
-
+# Mean of each measurement condition
 Me = (1:k)
-
-
-## Mean of each measurement condition ('MeFlm' dataframe)
-
 MeFlm = data.frame(Me, Flm)
 MeFlmlong = MeFlm[rep(seq_len(nrow(MeFlm)), each = n),]
 
-
-## 'E' Entities
-
+# Mean of each entity/subject
 E = (1:n)
-
-
-## Mean of each entity/subject ('EEm' dataframe)
-
 EEm = data.frame(E, Em)
 EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
 
 
-### Peperation to show the following plots next to eachother
 
-par(mfrow=c(1,2))
-
-
-#### Plotting of 95% Confidence Intervalls
-
-## Because we want a 95% CI the confidence level variable 'Clevel' is set to 0.95
-
-Clevel = 0.95
+# Compute CI for Anova without repeated measures --------------------------
 
 
-### CI for ANOVA without repeated measures  
-
-## 'SE' are the standard errors of the conditional means
-
+Clevel = 0.95 # confidence level
+ 
+# standard errors of the conditional means
 SE = tapply(rma_data_long$value, rma_data_long$condition, sd) / sqrt(n)
 
+# CI for ANOVA without repeated measures 
 CIdist = abs(qt((1 - Clevel)/2, (n - 1))) * SE
 
 
-## Plot of condtional means with CI error bars
+# Plot CI for Anova without repeated measures -----------------------------
 
 
+# Peperation to show the following plots next to eachother
+par(mfrow=c(1,2))
+
+# Plot condtional means with CI error bars
 barends = 0.05
 
 plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist)), max((MeFlm$Flm + CIdist))), main = "Unadjusted CI", xlab = "condition", ylab = "value")
 
-
 for(i in 1:k) {
-  up = MeFlm$Flm[i] + CIdist[i]
-  low = MeFlm$Flm[i] - CIdist[i]
+  up = MeFlm$Flm[i] + CIdist[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  low = MeFlm$Flm[i] - CIdist[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   segments(MeFlm$Me[i],low , MeFlm$Me[i], up)
   segments(MeFlm$Me[i]-barends, up , MeFlm$Me[i]+barends, up)
   segments(MeFlm$Me[i]-barends, low , MeFlm$Me[i]+barends, low)
@@ -127,33 +99,31 @@ for(i in 1:k) {
 #segments(MeFlm$Me - barends, MeFlm$Flm + CIdist, MeFlm$Me + barends, MeFlm$Flm + CIdist)
 
 
-### CI for ANOVA with repeated measures
+# Compute CI for Anova with repeated measures -----------------------------
 
-## 'cf' is a correction factor etablished by Morey (2008)
 
+# correction factor etablished by Morey (2008)
 cf = sqrt(k / (k - 1))
 
 AdjVal = data.frame(Adj = (cf * ((rma_data_long$value - EEmlong$Em + Gm) - MeFlmlong$Flm)) + MeFlmlong$Flm)
 rma_data_long_adj = cbind.data.frame(rma_data_long, AdjVal)
 
-
-## 'SE_adj' are the standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014, see also Loftus & Masson; 1994)
-
+# Standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014, see also Loftus & Masson; 1994)
 SE_adj = (tapply(rma_data_long_adj$Adj, rma_data_long_adj$condition, sd) / sqrt(n))
 
 CIdist_adj = abs(qt((1 - Clevel)/2, (n - 1))) * SE_adj
 
 
-## Plot of condtional means with adjusted CI error bars
+# Plot CI for Anova with repeated measures --------------------------------
 
+
+# Plot of condtional means with adjusted CI error bars
 barends = 0.05
-
 plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist_adj)), max((MeFlm$Flm + CIdist_adj))), main = "Adjusted CI", xlab = "condition", ylab = "value")
 
-
 for(i in 1:k) {
-  up = MeFlm$Flm[i] + CIdist_adj[i]
-  low = MeFlm$Flm[i] - CIdist_adj[i]
+  up = MeFlm$Flm[i] + CIdist_adj[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  low = MeFlm$Flm[i] - CIdist_adj[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   segments(MeFlm$Me[i],low , MeFlm$Me[i], up)
   segments(MeFlm$Me[i]-barends, up , MeFlm$Me[i]+barends, up)
   segments(MeFlm$Me[i]-barends, low , MeFlm$Me[i]+barends, low)
@@ -174,4 +144,7 @@ for(i in 1:k) {
 #matplot(rma_data[2:(k + 1)], type = c("b"), pch = ".", col = 1:k)
 #points(Em, cex = 2, pch = 4)
 #abline(h = Flm, col = 1:k)
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: return confidence intevals !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}
 
