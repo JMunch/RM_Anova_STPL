@@ -107,3 +107,4 @@ ANOVA_table = data.frame("Source" = source,
                          )
 
 rownames(ANOVA_table) = NULL
+

@@ -109,7 +109,7 @@ barends = 0.05
 
 plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist)), max((MeFlm$Flm + CIdist))), main = "Unadjusted CI", xlab = "condition", ylab = "value")
 
-# TODO: Recode with matrix
+
 for(i in 1:k) {
   up = MeFlm$Flm[i] + CIdist[i]
   low = MeFlm$Flm[i] - CIdist[i]
@@ -150,7 +150,7 @@ barends = 0.05
 
 plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist_adj)), max((MeFlm$Flm + CIdist_adj))), main = "Adjusted CI", xlab = "condition", ylab = "value")
 
-# TODO: Recode with matrix
+
 for(i in 1:k) {
   up = MeFlm$Flm[i] + CIdist_adj[i]
   low = MeFlm$Flm[i] - CIdist_adj[i]

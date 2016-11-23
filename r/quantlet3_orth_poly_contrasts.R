@@ -118,13 +118,8 @@ contrast_p_values = 1 - pt(abs(contrast_t_values), n-1)
 
 
 ## Computing sums of squares for each contrast
+contrast_ss = n * contrast_estimator^2 / rowSums(contrast_weights^2)
 
-contrast_ss = c()
-
-# TODO: Recode with matrix
-for(i in 1:maxpoly){
-  contrast_ss[i] = n * contrast_estimator[i]^2 / (sum(contrast_weights[i,]^2))
-}
 
 ## Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend 
 ## ss_trend / ss_factor
