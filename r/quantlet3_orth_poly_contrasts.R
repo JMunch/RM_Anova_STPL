@@ -120,6 +120,8 @@ contrast_p_values = 1 - pt(abs(contrast_t_values), n-1)
 ## Computing sums of squares for each contrast
 
 contrast_ss = c()
+
+# TODO: Recode with matrix
 for(i in 1:maxpoly){
   contrast_ss[i] = n * contrast_estimator[i]^2 / (sum(contrast_weights[i,]^2))
 }
