@@ -5,7 +5,7 @@
 rma = function(rma_data){
   
 # Libraries needed for compuiting rma
-require(dplyr)
+
 
 
 # Define needed constants and the dependent variable ----------------------
@@ -19,7 +19,7 @@ dependent_variable = as.matrix(rma_data[, -1])
 # Define basic anova components -------------------------------------------
 
 
-grand_mean = mean(as.matrix(rma_data[,2: (k + 1)])) #rma_data %>% select(2:ncol(rma_data)) %>% unlist() %>% mean()
+grand_mean = mean(as.matrix(rma_data[,2: (k + 1)])) 
 baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
 
 conditional_means = apply(dependent_variable, 2, mean)
