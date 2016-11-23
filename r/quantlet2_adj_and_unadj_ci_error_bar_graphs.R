@@ -1,11 +1,13 @@
 ### Computation of adjusted and unadjusted CI for ANOVA with repeated measurement ###
 
 rma_CI = function(rma_data){
-
+  
 # Libraries needed --------------------------------------------------------
 
+  
 require(ggplot2) # is not needed yet but will soon :)
 
+  
 # Define needed constants and variables -----------------------------------
 
 
@@ -81,12 +83,14 @@ barends = 0.05
 
 plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist)), max((MeFlm$Flm + CIdist))), main = "Unadjusted CI", xlab = "condition", ylab = "value")
 
+# Compute upper and lower bound
+up_unadj = MeFlm$Flm + CIdist 
+low_unadj = MeFlm$Flm - CIdist 
+
 for(i in 1:k) {
-  up = MeFlm$Flm[i] + CIdist[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  low = MeFlm$Flm[i] - CIdist[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  segments(MeFlm$Me[i],low , MeFlm$Me[i], up)
-  segments(MeFlm$Me[i]-barends, up , MeFlm$Me[i]+barends, up)
-  segments(MeFlm$Me[i]-barends, low , MeFlm$Me[i]+barends, low)
+  segments(MeFlm$Me[i],low_unadj[i] , MeFlm$Me[i], up_unadj[i])
+  segments(MeFlm$Me[i]-barends, up_unadj[i] , MeFlm$Me[i]+barends, up_unadj[i])
+  segments(MeFlm$Me[i]-barends, low_unadj[i] , MeFlm$Me[i]+barends, low_unadj[i])
 }
 
 # !!! Auch hier muesste der Plot noch verschoenert werden 
@@ -120,12 +124,14 @@ CIdist_adj = abs(qt((1 - Clevel)/2, (n - 1))) * SE_adj
 barends = 0.05
 plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist_adj)), max((MeFlm$Flm + CIdist_adj))), main = "Adjusted CI", xlab = "condition", ylab = "value")
 
+# Compute upper and lower bound
+up_adj = MeFlm$Flm + CIdist_adj
+low_adj = MeFlm$Flm - CIdist_adj
+
 for(i in 1:k) {
-  up = MeFlm$Flm[i] + CIdist_adj[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  low = MeFlm$Flm[i] - CIdist_adj[i] # TODO: compute outside loop  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  segments(MeFlm$Me[i],low , MeFlm$Me[i], up)
-  segments(MeFlm$Me[i]-barends, up , MeFlm$Me[i]+barends, up)
-  segments(MeFlm$Me[i]-barends, low , MeFlm$Me[i]+barends, low)
+  segments(MeFlm$Me[i],low_adj[i] , MeFlm$Me[i], up_adj[i])
+  segments(MeFlm$Me[i]-barends, up_adj[i] , MeFlm$Me[i]+barends, up_adj[i])
+  segments(MeFlm$Me[i]-barends, low_adj[i] , MeFlm$Me[i]+barends, low_adj[i])
 }
 
 # !!! Auch hier muesste der Plot noch verschoenert werden 
@@ -144,6 +150,9 @@ for(i in 1:k) {
 #points(Em, cex = 2, pch = 4)
 #abline(h = Flm, col = 1:k)
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: return confidence intevals !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+return(list("adj_CI" = cbind(low_adj, up_adj), "unadj_CI" = cbind(low_unadj, up_unadj)))
 }
 
+
+ 
