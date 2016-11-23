@@ -58,7 +58,6 @@ EEm = data.frame(E, Em)
 EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
 
 
-
 # Compute CI for Anova without repeated measures --------------------------
 
 
