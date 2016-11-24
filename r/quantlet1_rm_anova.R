@@ -5,7 +5,7 @@
 rma = function(rma_data){
   
 # Libraries needed for compuiting rma
-
+require(dplyr)
 
 
 # Define needed constants and the dependent variable ----------------------
