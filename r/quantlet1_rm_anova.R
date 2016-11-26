@@ -101,7 +101,7 @@ source = c("Baseline", "Factor", "Subject", "Error", "Total", "Corrected total")
 ANOVA_table = data.frame("Source" = source,
                          "Sum of squares" = c(ss %>% select(2:5,1) %>% unlist(), corrected_sst),
                          "Degrees of freedom" = c(dof %>% select(2:5,1) %>% unlist(), (n*k)-1),
-                         "Mean squares" = c(ms %>% select(2:5) %>% unlist(), NA, NA),
+                         "Mean squares" = c(ms %>% select(2:5) %>% unlist(), NA, variance),
                          "F-value" = c(F_value_baseline, F_value_factor, NA, NA, NA, NA),
                          "p-value" = c(p_baseline, p_factor, NA, NA, NA, NA)
                          )
