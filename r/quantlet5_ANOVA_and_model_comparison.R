@@ -115,8 +115,14 @@ lbls_2 = paste(lbls_2,"%",sep="") # ad % to labels
 pie(slices_2, lbls_2, col=rainbow(length(lbls_2)),
     main="RM ANOVA") 
 
+
 ## ggplot beispiel
-qplot(factor(cyl), data=mtcars, geom="bar", fill=factor(vs))
+values = as.numeric(c(ss_ANOVA[,3], 0, ss$error, ss$subject_level))
+types = as.factor(c("ANOVA", "ANOVA", "RM ANOVA", "RM ANOVA" ))
+error_type = as.factor(c("SSE", "SS_Subject", "SSE", "SS_Subject"))
+error_df = data.frame(cbind(values, types, error_type))
 
-
+colnames(error_df) = c("value", "ANOVA_type")
+str(error_df)
+ggplot(error_df, aes(ANOVA_type, value, fill = as.factor(error_type))) + geom_bar(stat = "identity")
 
