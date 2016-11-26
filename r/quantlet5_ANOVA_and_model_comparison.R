@@ -76,6 +76,9 @@ ANOVA_table_2 = data.frame("Source" = source_ANOVA,
 rownames(ANOVA_table_2) = NULL
 
 
+
+
+
 ####################################################
 # PART 2: Comparison of error terms in both models #
 ####################################################
@@ -86,43 +89,72 @@ ss$error == ss_ANOVA[,3] - ss$subject_level
 
 
 # Visualisation-------------------------------------------------------------
-#1) Stackplot
+#1) Stackplot-Version 1
 
-table = matrix(c(ss_ANOVA[,3], ss$error, 0, ss$subject_level),ncol=2,byrow=TRUE)
-
+#Defining a table containing the different errortypes
+table = matrix(c(ss_ANOVA[,3], ss$error, 
+                 0, ss$subject_level),ncol=2,byrow=TRUE)
 colnames(table) = c("ANOVA", "RM_ANOVA")
 rownames(table) = c("SSE", "SS_Subjects")
-#table = as.data.frame(table)
-table
 
-barplot(table)
+barplot1 = barplot(table, 
+            col = c("navyblue", "orange"), 
+            xlab = "Model", 
+            ylab = "Sum of Squares Error", 
+            legend.text = TRUE,
+            main = "Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
 
-#2)Pie Charts
+
+#2)Pie Charts-Version 1
 
 slices = c(ss_ANOVA[,3], 0) 
 lbls = c("SSE", "SS_Subject_level")
 pct = round(slices/sum(slices)*100)
 lbls = paste(lbls, pct) # add percents to labels 
 lbls = paste(lbls,"%",sep="") # ad % to labels 
-pie(slices, lbls, col=rainbow(length(lbls)),
-    main="Standard ANOVA") 
+pie1_ANOVA = pie(slices, lbls, col = c("steelblue4", "red"),
+                 main="Standard ANOVA", init.angle = 90) 
+pie1_ANOVA
 
 slices_2 = c(ss$error, ss$subject_level) 
 lbls_2 = c("SSE", "SS_Subject_level")
 pct_2 = round(slices_2/sum(slices_2)*100)
 lbls_2 = paste(lbls_2, pct_2) # add percents to labels 
 lbls_2 = paste(lbls_2,"%",sep="") # ad % to labels 
-pie(slices_2, lbls_2, col=rainbow(length(lbls_2)),
-    main="RM ANOVA") 
+pie1_RM_ANOVA = pie(slices_2, lbls_2, col = c("steelblue4", "red"),
+                 main="RM ANOVA", init.angle = 90) 
+pie1_RM_ANOVA
 
 
-## ggplot beispiel
+
+#Stackplot Version 2 (with ggplot)
+
+#Defining a dataframe for model comparison
 values = as.numeric(c(ss_ANOVA[,3], 0, ss$error, ss$subject_level))
 types = as.factor(c("ANOVA", "ANOVA", "RM ANOVA", "RM ANOVA" ))
 error_type = as.factor(c("SSE", "SS_Subject", "SSE", "SS_Subject"))
-error_df = data.frame(cbind(values, types, error_type))
 
-colnames(error_df) = c("value", "ANOVA_type")
-str(error_df)
-ggplot(error_df, aes(ANOVA_type, value, fill = as.factor(error_type))) + geom_bar(stat = "identity")
+model_comparison = data.frame(cbind(values, types, error_type))
+colnames(model_comparison) = c("value", "ANOVA_type", "Error-type")
+str(model_comparison)
+model_comparison
+
+barplot2 = ggplot(model_comparison, aes(x = ANOVA_type, y = (value/(sum(value)/2)*100), fill = as.factor(error_type))) + 
+                geom_bar(stat = "identity", width = 0.8) +
+                ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA") + 
+                xlab("Model") +
+                ylab("Percentages") +
+                geom_text(aes(label = (value/(sum(value)/2))*100), position = "identity") 
+barplot2
+
+
+#Pie Chart Version 2 (with ggplot)
+
+pie2 = bar_chart + 
+            coord_polar(theta = "y", direction = -1)  + 
+            facet_grid(.~model_comparison$ANOVA_type) +
+            theme_void() +
+            ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
+pie2
+
 
