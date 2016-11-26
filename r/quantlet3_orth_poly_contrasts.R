@@ -85,7 +85,7 @@ contrast_ss = n * contrast_estimator^2 / rowSums(contrast_weights^2)
 
 ## Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend 
 ## ss_trend / ss_factor
-proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly) # seems strange?! Is this right?
+proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly) # seems strange?! Is this right? --> Jap, 'sum(rep((Flm - Gm)^2, each = n)' is computing the Factor ss (its the deviation of the factor level means from grand mean, than squared, and than that times n till every subject is measured under each condition); the last 'rep(..., maxpoly)' is just to matcht the size of the 'contrast_ss' vector
 
 
 # Create contrast table ---------------------------------------------------
