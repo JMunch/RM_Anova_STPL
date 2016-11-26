@@ -1,37 +1,37 @@
 ### Computation of RM ANOVA ###
 ### Create the decomposition matrix ###
 
-# required packages
-library(dplyr)
+
+rma = function(rma_data){
+  
+# Libraries needed for compuiting rma
+require(dplyr)
+
+
+# Define needed constants and the dependent variable ----------------------
 
 
 n = nrow(rma_data)
 k = ncol(rma_data) - 1
-
-
 dependent_variable = as.matrix(rma_data[, -1])
 
 
-# Define basic anova components
-grand_mean = rma_data %>% select(2:ncol(rma_data)) %>% unlist() %>% mean()
-baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
+# Define basic anova components -------------------------------------------
 
+
+grand_mean = mean(as.matrix(rma_data[,2: (k + 1)])) 
+baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
 
 conditional_means = apply(dependent_variable, 2, mean)
 factor_level_components = matrix(rep(conditional_means - grand_mean, each = n), nrow = n)
 
-
 subject_means = apply(dependent_variable, 1, mean)
 subject_components = matrix(rep(subject_means - grand_mean, times = k), nrow = n)
-
 
 error_components = dependent_variable - baseline_components - factor_level_components - subject_components
 
 
-
-
-### Prepare decomposition matrix ###
-
+# Prepare decomposition matrix --------------------------------------------
 # matrix with k*n rows and 5 columns
 # one column for: original values, baseline component, factor level component, subject component, error component
 decomposition_matrix = data.frame("dependent_variable" = numeric(n*k),
@@ -49,14 +49,15 @@ decomposition_matrix$subject_level = as.vector(subject_components)
 decomposition_matrix$error = as.vector(error_components)
 
 
+# Compute sums of squares -------------------------------------------------
 
-### Compute sums of squares
 
 ss = as.data.frame(t(colSums(decomposition_matrix^2)))
 rownames(ss) = "sums_of_squares"
 
 
-### Set degrees of freedom
+# Set degrees of freedom --------------------------------------------------
+
 
 dof = data.frame("dependent_variable" = n*k,
                 "baseline" = 1,
@@ -66,38 +67,37 @@ dof = data.frame("dependent_variable" = n*k,
 )
 
 
+# Compute mean squares ----------------------------------------------------
 
-### Compute mean squares
 
 ms = ss / dof
 rownames(ms) = "mean_squares"
 
 
-### Compute corrected total sum of squares (variance)
+# Compute corrected total sum of squares (variance) -----------------------
+
 
 corrected_sst = ss$dependent_variable - ss$baseline
 variance = corrected_sst / (dof$dependent_variable - dof$baseline)
-
-
-### Compute F values
 
 F_value_factor = ms$factor_level / ms$error
 
 F_value_baseline = ms$baseline / ms$subject_level 
 
 
-
-### Get p-values of F distribution
+# Set p-values of F distribution -------------------------------------------
 
 p_factor = 1 - pf(F_value_factor, dof$factor_level, dof$error)
 p_baseline = 1 - pf(F_value_baseline, dof$baseline, dof$subject_level)
 
 
+# Create the output table -------------------------------------------------
+
+
 # specify source variable
 source = c("Baseline", "Factor", "Subject", "Error", "Total", "Corrected total")
 
-### Putting it all together... the ANOVA table
-
+# create table
 ANOVA_table = data.frame("Source" = source,
                          "Sum of squares" = c(ss %>% select(2:5,1) %>% unlist(), corrected_sst),
                          "Degrees of freedom" = c(dof %>% select(2:5,1) %>% unlist(), (n*k)-1),
@@ -107,3 +107,7 @@ ANOVA_table = data.frame("Source" = source,
                          )
 
 rownames(ANOVA_table) = NULL
+
+return(ANOVA_table)
+}
+
