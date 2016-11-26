@@ -5,6 +5,7 @@
 # PART 1: Computaion of ANOVA model #
 #####################################
 
+#---------------------------------------------------------------------------
 library(ggplot2)
 
 # Computation of the error component 
@@ -74,7 +75,6 @@ ANOVA_table_2 = data.frame("Source" = source_ANOVA,
 
 rownames(ANOVA_table_2) = NULL
 
-#---------------------------------------------------------------------------
 
 ####################################################
 # PART 2: Comparison of error terms in both models #
@@ -92,7 +92,7 @@ table = matrix(c(ss_ANOVA[,3], ss$error, 0, ss$subject_level),ncol=2,byrow=TRUE)
 
 colnames(table) = c("ANOVA", "RM_ANOVA")
 rownames(table) = c("SSE", "SS_Subjects")
-table = as.data.frame(table)
+#table = as.data.frame(table)
 table
 
 barplot(table)
@@ -114,6 +114,9 @@ lbls_2 = paste(lbls_2, pct_2) # add percents to labels
 lbls_2 = paste(lbls_2,"%",sep="") # ad % to labels 
 pie(slices_2, lbls_2, col=rainbow(length(lbls_2)),
     main="RM ANOVA") 
+
+## ggplot beispiel
+qplot(factor(cyl), data=mtcars, geom="bar", fill=factor(vs))
 
 
 
