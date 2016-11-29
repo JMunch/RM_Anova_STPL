@@ -100,7 +100,7 @@ rownames(epsilon_table) = NULL
 
 # Coose recomendet adjustment and add to ANOVA-table    
 
-if (p_w < 1){
+if (p_w < .05){
         if (p_factor_lb < .05){
               ANOVA_table[,"Recommended Lower-Bound corrected p-Value (Greenhouse & Geisser, 1959))"] = c(NA, p_factor_lb, NA, NA, NA, NA)
         }else{
@@ -113,5 +113,4 @@ if (p_w < 1){
               }
         }
 }
-
 
