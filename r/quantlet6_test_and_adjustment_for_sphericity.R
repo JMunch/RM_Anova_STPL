@@ -131,10 +131,6 @@ C = helmert(k)[-1,]
 # ----------------------------------------------------------------
 # Testing:
 
-
-# Mauchly Test ------------------------------------------------------------
-
-
 source("r/simulate_rma_data.R")
 rma_data = sim_rma_data(10, 5)
 mau = mauchly(rma_data)

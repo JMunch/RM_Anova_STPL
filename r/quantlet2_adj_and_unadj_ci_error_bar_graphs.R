@@ -155,4 +155,14 @@ return(list("adj_CI" = cbind(low_adj, up_adj), "unadj_CI" = cbind(low_unadj, up_
 }
 
 
+
+# ----------------------------------------------------------------
+# Testing:
+
+source("r/simulate_rma_data.R")
+rma_data = sim_rma_data(10, 5)
+CI = rma_CI(rma_data)
+
+CI$adj_CI
+CI$unadj_CI
  

@@ -111,3 +111,13 @@ rownames(ANOVA_table) = NULL
 return(ANOVA_table)
 }
 
+# ----------------------------------------------------------------
+# Testing:
+
+source("r/simulate_rma_data.R")
+rma_data = sim_rma_data(10, 5)
+ANOVA = rma(rma_data)
+
+ANOVA
+
+
