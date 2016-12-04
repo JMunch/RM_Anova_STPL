@@ -116,8 +116,8 @@ return(ANOVA_table)
 
 source("r/simulate_rma_data.R")
 rma_data = sim_rma_data(10, 5)
-ANOVA = rma(rma_data)
+rma_results = rma(rma_data)
 
-ANOVA
+rma_results
 
 
