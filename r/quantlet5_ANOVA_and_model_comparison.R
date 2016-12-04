@@ -30,8 +30,7 @@ anova = function(rma_data){
   conditional_means = apply(dependent_variable, 2, mean)
   factor_level_components = matrix(rep(conditional_means - grand_mean, each = n), nrow = n)
 
-  error_components = dependent_variable - baseline_components - factor_level_components - subject_components
-  
+
   # Computation of the error component 
   
   error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
@@ -90,7 +89,7 @@ anova = function(rma_data){
   
   # create table
   ANOVA_table_2 = data.frame("Source" = source_ANOVA,
-                             "Sum of squares" = c(ss_ANOVA %>% select(2:3) %>% unlist(), NA),#, corrected_sst), # corrected sst muss berechnet werden 
+                             "Sum of squares" = c(ss_ANOVA %>% select(2:3) %>% unlist(), NA),#, corrected_sst), # corrected sst muss berechnet werden TODO
                              "Degrees of freedom" = c(dof_ANOVA %>% select(2:3) %>% unlist(), (n*k)-1),
                              "Mean squares" = c(ms_ANOVA %>% select(2:3) %>% unlist(), NA),
                              "F-value" = c(F_value_factor_ANOVA, NA,  NA),
@@ -102,89 +101,117 @@ anova = function(rma_data){
   return(ANOVA_table_2)
 }
 
-source("r/simulate_rma_data.R")
-rma_data = sim_rma_data(10, 5)
-anova(rma_data)
+# ----------------------------------------------------------------
+# Testing:
 
+#source("r/simulate_rma_data.R")
+#rma_data = sim_rma_data(10, 5)
+anova_results = anova(rma_data)
+
+anova_results
 
 ####################################################
 # PART 2: Comparison of error terms in both models #
 ####################################################
 
-library(ggplot2)
+compare_anovas = function(rma_results, anova_results){
+  
+  require(ggplot2)
+  require(reshape)
+  
+  # Defining variables
+  sse_anova = anova_results$Sum.of.squares[2]
+  ss_subject_anova = 0 # Always zero
+  
+  sse_rma = rma_results$Sum.of.squares[4]
+  ss_subject_rma = rma_results$Sum.of.squares[3]
+  
+  
+  # Is this needed check works now, so it seems to be correct?????????????????????????????????????????????????!!
+  
+  # Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS Subjects-------
+  sse_rma - (sse_anova - ss_subject_rma) # They are nearly equal difference should due to floating point
+    
+  #--> The SSE in the RM ANOVA model is also computed with larger degrees of freedom than the SSE in the standard ANOVA model. 
+  
+  #Defining a table containing the different errortypes
+  ss_table = matrix(c(sse_anova, sse_rma, 
+                      ss_subject_anova, ss_subject_rma),ncol=2,byrow=TRUE)
+  colnames(ss_table) = c("ANOVA", "RM_ANOVA")
+  rownames(ss_table) = c("SSE", "SS_Subjects")
+  
+  
+  # Visualisation-------------------------------------------------------------
+  #1) Stackplot-Version
+  barplot1 = barplot(ss_table, 
+              col = c("navyblue", "orange"), 
+              xlab = "Model", 
+              ylab = "Sum of Squares Error", 
+              legend.text = TRUE,
+              main = "Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
+  
+  
+  #2)Pie Charts-Version 1
+  
+  # TODO both pies in one figure
+  slices = c(sse_anova, ss_subject_anova) 
+  lbls = c("SSE", "SS_Subject_level")
+  pct = round(slices/sum(slices)*100)
+  lbls = paste(lbls, pct) # add percents to labels 
+  lbls = paste(lbls,"%",sep="") # ad % to labels 
+  pie1_ANOVA = pie(slices, lbls, col = c("steelblue4", "red"),
+                   main="Standard ANOVA", init.angle = 90) 
+  pie1_ANOVA
+  
+  slices_2 = c(sse_rma, ss_subject_rma) 
+  lbls_2 = c("SSE", "SS_Subject_level")
+  pct_2 = round(slices_2/sum(slices_2)*100)
+  lbls_2 = paste(lbls_2, pct_2) # add percents to labels 
+  lbls_2 = paste(lbls_2,"%",sep="") # ad % to labels 
+  pie1_RM_ANOVA = pie(slices_2, lbls_2, col = c("steelblue4", "red"),
+                   main="RM ANOVA", init.angle = 90) 
+  pie1_RM_ANOVA
+  
+  
+  
+  #Stackplot Version 2 (with ggplot)
+  
+  #Defining a dataframe for model comparison
+  ss_table_gg = melt(ss_table)
+  
+  colnames(ss_table_gg) = c("Error_type", "ANOVA_type", "value")
+  ss_table_gg$value = as.numeric(ss_table_gg$value)
+  ss_table_gg$ANOVA_type = as.factor(ss_table_gg$ANOVA_type)
+  ss_table_gg$Error_type = as.factor(ss_table_gg$Error_type)
+  
+  barplot2 = ggplot(ss_table_gg, aes(x = ANOVA_type, y = (value/(sum(value)/2)*100), fill = Error_type)) + 
+                  geom_bar(stat = "identity", width = 0.8) +
+                  ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA") + 
+                  xlab("Model") +
+                  ylab("Percentages") +
+                  geom_text(aes(label = (value/(sum(value)/2))*100), position = "identity") 
+  barplot2
+  
+  
+  
+  #Pie Chart Version 2 (with ggplot)
+  # What is the object bar_chart?????
+  
+#  pie2 = bar_chart + 
+ #             coord_polar(theta = "y", direction = -1)  + 
+ #             facet_grid(.~model_comparison$ANOVA_type) +
+  #            theme_void() +
+   #           ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
+#  pie2
 
-# Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS Subjects-------
-ss$error == ss_ANOVA[,3] - ss$subject_level
-#--> The SSE in the RM ANOVA model is also computed with larger degrees of freedom than the SSE in the standard ANOVA model. 
+}
 
+# ----------------------------------------------------------------
+# Testing:
 
-# Visualisation-------------------------------------------------------------
-#1) Stackplot-Version 1
+#source("r/simulate_rma_data.R")
+#rma_data = sim_rma_data(10, 5)
+rma_results = rma(rma_data)
+anova_results = anova(rma_data)
 
-#Defining a table containing the different errortypes
-table = matrix(c(ss_ANOVA[,3], ss$error, 
-                 0, ss$subject_level),ncol=2,byrow=TRUE)
-colnames(table) = c("ANOVA", "RM_ANOVA")
-rownames(table) = c("SSE", "SS_Subjects")
-
-barplot1 = barplot(table, 
-            col = c("navyblue", "orange"), 
-            xlab = "Model", 
-            ylab = "Sum of Squares Error", 
-            legend.text = TRUE,
-            main = "Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
-
-
-#2)Pie Charts-Version 1
-
-slices = c(ss_ANOVA[,3], 0) 
-lbls = c("SSE", "SS_Subject_level")
-pct = round(slices/sum(slices)*100)
-lbls = paste(lbls, pct) # add percents to labels 
-lbls = paste(lbls,"%",sep="") # ad % to labels 
-pie1_ANOVA = pie(slices, lbls, col = c("steelblue4", "red"),
-                 main="Standard ANOVA", init.angle = 90) 
-pie1_ANOVA
-
-slices_2 = c(ss$error, ss$subject_level) 
-lbls_2 = c("SSE", "SS_Subject_level")
-pct_2 = round(slices_2/sum(slices_2)*100)
-lbls_2 = paste(lbls_2, pct_2) # add percents to labels 
-lbls_2 = paste(lbls_2,"%",sep="") # ad % to labels 
-pie1_RM_ANOVA = pie(slices_2, lbls_2, col = c("steelblue4", "red"),
-                 main="RM ANOVA", init.angle = 90) 
-pie1_RM_ANOVA
-
-
-
-#Stackplot Version 2 (with ggplot)
-
-#Defining a dataframe for model comparison
-values = as.numeric(c(ss_ANOVA[,3], 0, ss$error, ss$subject_level))
-types = as.factor(c("ANOVA", "ANOVA", "RM ANOVA", "RM ANOVA" ))
-error_type = as.factor(c("SSE", "SS_Subject", "SSE", "SS_Subject"))
-
-model_comparison = data.frame(cbind(values, types, error_type))
-colnames(model_comparison) = c("value", "ANOVA_type", "Error-type")
-str(model_comparison)
-model_comparison
-
-barplot2 = ggplot(model_comparison, aes(x = ANOVA_type, y = (value/(sum(value)/2)*100), fill = as.factor(error_type))) + 
-                geom_bar(stat = "identity", width = 0.8) +
-                ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA") + 
-                xlab("Model") +
-                ylab("Percentages") +
-                geom_text(aes(label = (value/(sum(value)/2))*100), position = "identity") 
-barplot2
-
-
-#Pie Chart Version 2 (with ggplot)
-
-pie2 = bar_chart + 
-            coord_polar(theta = "y", direction = -1)  + 
-            facet_grid(.~model_comparison$ANOVA_type) +
-            theme_void() +
-            ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
-pie2
-
-
+compare_anovas(rma_results, anova_results)
