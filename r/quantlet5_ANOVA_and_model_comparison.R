@@ -1,4 +1,5 @@
 
+
 ### Quantlet 5: Computation of standard ANOVA and comparison with RM-ANOVA ###
 
 #####################################
@@ -6,82 +7,111 @@
 #####################################
 
 #---------------------------------------------------------------------------
-library(ggplot2)
+anova = function(rma_data){
 
-# Computation of the error component 
+  # Libraries needed for compuiting rma
+  require(dplyr)
+  
+  
+  # Define needed constants and the dependent variable ----------------------
+  
+  
+  n = nrow(rma_data)
+  k = ncol(rma_data) - 1
+  dependent_variable = as.matrix(rma_data[, -1])
+  
+  
+  # Define basic anova components -------------------------------------------
+  
+  
+  grand_mean = mean(as.matrix(rma_data[,2: (k + 1)])) 
+  baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
+  
+  conditional_means = apply(dependent_variable, 2, mean)
+  factor_level_components = matrix(rep(conditional_means - grand_mean, each = n), nrow = n)
 
-error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
+  error_components = dependent_variable - baseline_components - factor_level_components - subject_components
+  
+  # Computation of the error component 
+  
+  error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
+  
+  
+  # Prepare decomposition matrix --------------------------------------------
+  # matrix with k*n rows and 3 columns
+  # one column for: original values, factor level component, error component
+  decomposition_matrix_ANOVA = data.frame("dependent_variable" = numeric(n*k),
+                                          "factor_level" = numeric(n*k),
+                                          "error" = numeric(n*k)
+                                          )
+  
+  
+  decomposition_matrix_ANOVA$dependent_variable = as.vector(dependent_variable)
+  decomposition_matrix_ANOVA$factor_level = as.vector(factor_level_components)
+  decomposition_matrix_ANOVA$error = as.vector(error_components_ANOVA)
+  
+  
+  # Compute sums of squares -------------------------------------------------
+  
+  ss_ANOVA = as.data.frame(t(colSums(decomposition_matrix_ANOVA^2)))
+  rownames(ss_ANOVA) = "sums_of_squares"
+  
+  
+  # Set degrees of freedom --------------------------------------------------
+  #-->different dof's for the SSE than in RM ANOVA
+  
+  dof_ANOVA = data.frame("dependent_variable" = (n*k),
+                         "factor_level" = k-1,
+                         "error" = (n-k)
+                          )
+  
+  
+  # Compute mean squares ----------------------------------------------------
+  
+  ms_ANOVA = ss_ANOVA / dof_ANOVA
+  rownames(ms_ANOVA) = "mean_squares"
+  
+  
+  # Calculate the F-Value ---------------------------------------------------
+  
+  F_value_factor_ANOVA = ms_ANOVA$factor_level / ms_ANOVA$error
+  
+  
+  # Set p-value of F distribution -------------------------------------------
+  
+  p_factor_ANOVA = 1 - pf(F_value_factor_ANOVA, dof_ANOVA$factor_level, dof_ANOVA$error)
+  
+  
+  # Create the output table -------------------------------------------------
+  #-->Corrected total sum of squares can be taken from the RM ANOVA-Model as they coincide 
+  
+  # specify source variable
+  source_ANOVA = c("Factor", "Error", "Corrected total")
+  
+  # create table
+  ANOVA_table_2 = data.frame("Source" = source_ANOVA,
+                             "Sum of squares" = c(ss_ANOVA %>% select(2:3) %>% unlist(), NA),#, corrected_sst), # corrected sst muss berechnet werden 
+                             "Degrees of freedom" = c(dof_ANOVA %>% select(2:3) %>% unlist(), (n*k)-1),
+                             "Mean squares" = c(ms_ANOVA %>% select(2:3) %>% unlist(), NA),
+                             "F-value" = c(F_value_factor_ANOVA, NA,  NA),
+                             "p-value" = c(p_factor_ANOVA, NA, NA)
+                             )
+  
+  rownames(ANOVA_table_2) = NULL
+  
+  return(ANOVA_table_2)
+}
 
-
-# Prepare decomposition matrix --------------------------------------------
-# matrix with k*n rows and 3 columns
-# one column for: original values, factor level component, error component
-decomposition_matrix_ANOVA = data.frame("dependent_variable" = numeric(n*k),
-                                        "factor_level" = numeric(n*k),
-                                        "error" = numeric(n*k)
-                                        )
-
-
-decomposition_matrix_ANOVA$dependent_variable = as.vector(dependent_variable)
-decomposition_matrix_ANOVA$factor_level = as.vector(factor_level_components)
-decomposition_matrix_ANOVA$error = as.vector(error_components_ANOVA)
-
-
-# Compute sums of squares -------------------------------------------------
-
-ss_ANOVA = as.data.frame(t(colSums(decomposition_matrix_ANOVA^2)))
-rownames(ss_ANOVA) = "sums_of_squares"
-
-
-# Set degrees of freedom --------------------------------------------------
-#-->different dof's for the SSE than in RM ANOVA
-
-dof_ANOVA = data.frame("dependent_variable" = (n*k),
-                       "factor_level" = k-1,
-                       "error" = (n-k)
-                        )
-
-
-# Compute mean squares ----------------------------------------------------
-
-ms_ANOVA = ss_ANOVA / dof_ANOVA
-rownames(ms_ANOVA) = "mean_squares"
-
-
-# Calculate the F-Value ---------------------------------------------------
-
-F_value_factor_ANOVA = ms_ANOVA$factor_level / ms_ANOVA$error
-
-
-# Set p-value of F distribution -------------------------------------------
-
-p_factor_ANOVA = 1 - pf(F_value_factor_ANOVA, dof_ANOVA$factor_level, dof_ANOVA$error)
-
-
-# Create the output table -------------------------------------------------
-#-->Corrected total sum of squares can be taken from the RM ANOVA-Model as they coincide 
-
-# specify source variable
-source_ANOVA = c("Factor", "Error", "Corrected total")
-
-# create table
-ANOVA_table_2 = data.frame("Source" = source_ANOVA,
-                           "Sum of squares" = c(ss_ANOVA %>% select(2:3) %>% unlist(), corrected_sst),
-                           "Degrees of freedom" = c(dof_ANOVA %>% select(2:3) %>% unlist(), (n*k)-1),
-                           "Mean squares" = c(ms %>% select(2:3) %>% unlist(), NA),
-                           "F-value" = c(F_value_factor_ANOVA, NA,  NA),
-                           "p-value" = c(p_factor, NA, NA)
-                           )
-
-rownames(ANOVA_table_2) = NULL
-
-
-
+source("r/simulate_rma_data.R")
+rma_data = sim_rma_data(10, 5)
+anova(rma_data)
 
 
 ####################################################
 # PART 2: Comparison of error terms in both models #
 ####################################################
+
+library(ggplot2)
 
 # Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS Subjects-------
 ss$error == ss_ANOVA[,3] - ss$subject_level
