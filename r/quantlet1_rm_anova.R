@@ -74,7 +74,7 @@ rma = function(rma_data){
                   "factor_level" = k-1,
                   "subject_level" = n-1,
                   "error" = (n*k)-1-(k-1)-(n-1)
-  )
+                  )
 
 
 # Compute mean squares ----------------------------------------------------
@@ -89,6 +89,10 @@ rma = function(rma_data){
 
   corrected_sst = ss$dependent_variable - ss$baseline
   variance = corrected_sst / (dof$dependent_variable - dof$baseline)
+  
+
+# Compute F-values --------------------------------------------------------
+  
   
   F_value_factor = ms$factor_level / ms$error
   
@@ -117,7 +121,6 @@ rma = function(rma_data){
                            "F-value" = c(F_value_baseline, F_value_factor, NA, NA, NA, NA),
                            "p-value" = c(p_baseline, p_factor, NA, NA, NA, NA)
                            )
-  
   rownames(ANOVA_table) = NULL
   
  

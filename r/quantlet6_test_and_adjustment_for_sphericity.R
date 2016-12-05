@@ -68,7 +68,7 @@ rma_sphericity_test = function(rma_data, append = FALSE){
                              "Chi square" = chi_sq_w,
                              "df" = df_w,
                              "p" = p_w
-  )
+                             )
   rownames(mauchly_table) = NULL
 
 
@@ -114,7 +114,7 @@ rma_sphericity_test = function(rma_data, append = FALSE){
                              "Lower-Bound correction (Greenhouse & Geisser, 1959)" = c(epsilon_lb, p_factor_lb),
                              "Box correction (Geisser & Greenhouse, 1958)" = c(epsilon_gg, p_factor_gg),
                              "Huynh-Feldt correction (Huynh & Feldt, 1976)" = c(epsilon_hf, p_factor_hf)
-  )
+                             )
   rownames(epsilon_table) = NULL
 
   

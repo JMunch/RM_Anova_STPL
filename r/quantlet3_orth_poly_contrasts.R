@@ -28,7 +28,8 @@ rma_orth_poly_contrast = function(rma_data){
                           times = (1:k),
                           idvar = id_names,
                           new.row.names = 1:(k * n),
-                          direction = "long")
+                          direction = "long"
+                          )
   colnames(rma_data_long)[1] = "id"
   rma_data_long$condition = as.numeric(rma_data_long$condition)
 
@@ -106,7 +107,7 @@ rma_orth_poly_contrast = function(rma_data){
                               "Degrees of freedom" = rep((n - 1), maxpoly),
                               "t-value" = contrast_t_values,
                               "p-value" = contrast_p_values
-  )
+                              )
   rownames(contrast_table) = NULL
   
   
@@ -135,8 +136,8 @@ rma_orth_poly_contrast = function(rma_data){
     lines(smooth.spline(rma_data_long$condition, predict(lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
   }
   
-  # !!! plot koennte noch verschoenert werden (Tietel, Beschriftung, Farben, etc.)
-  # !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien...
+  ## !!! plot koennte noch verschoenert werden (Tietel, Beschriftung, Farben, etc.)
+  ## !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien...
   
   
   # Plotting the predictions by the k - 1  orthogonal polynomial trends together with the conditional means 
@@ -145,10 +146,10 @@ rma_orth_poly_contrast = function(rma_data){
     lines(smooth.spline(rma_data_long$condition, predict(lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
   }
   
-  # !!! plot koennte noch verschoenert werden (Titel, Beschriftung, Farben, etc.)
+  ## !!! plot koennte noch verschoenert werden (Titel, Beschriftung, Farben, etc.)
   
-  # !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien... 
-  # !!! also ein funktionsgraph wäre gut
+  ## !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien... 
+  ## !!! also ein funktionsgraph wäre gut
 
   
 # Return the contrast-table -----------------------------------------------
@@ -166,3 +167,4 @@ rma_data = sim_rma_data(10, 5)
 contrast = rma_orth_poly_contrast(rma_data)
 
 contrast
+

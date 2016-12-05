@@ -37,7 +37,7 @@ rma_effect_size = function(rma_data, append = FALSE){
                                  "Source" = "Factor",
                                  "eta squared" = eta_sq,
                                  "partial eta squared" = eta_partial
-  )
+                                 )
   rownames(effect_size_table) = NULL
   
 # Append effect size measures to ANOVA-table ------------------------------
@@ -67,3 +67,4 @@ rma_data = sim_rma_data(10, 5)
 source("r/quantlet1_rm_anova.R")
 
 rma_effect_size(rma_data)
+

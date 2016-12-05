@@ -34,7 +34,8 @@ rma_CI = function(rma_data){
                           times = (1:k),
                           idvar = id_names,
                           new.row.names = 1:(k * n),
-                          direction = "long")
+                          direction = "long"
+                          )
   colnames(rma_data_long)[1] = "id"
   rma_data_long$condition = as.numeric(rma_data_long$condition)
 
@@ -167,4 +168,4 @@ CI = rma_CI(rma_data)
 
 CI$adj_CI
 CI$unadj_CI
- 
+
