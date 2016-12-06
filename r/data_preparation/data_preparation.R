@@ -15,4 +15,17 @@ rma_data$GENDER <- NULL
 rma_data$X <- NULL
 
 
-# -------------------------------------------------
+# Listwise deletion in case of missing values ------------------
+
+deletionvector = vector(mode="numeric", length=0)
+
+for(i in 1:nrow(rma_data)) {
+  if(any(is.na(rma_data[i,])) == TRUE) {
+    deletionvector = union(deletionvector, i)
+  }
+}
+
+rma_data = rma_data[-deletionvector,]
+
+
+
