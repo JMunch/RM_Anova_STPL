@@ -1,5 +1,6 @@
 ##### This script contains the data preparation of the RM Anova data
   # Run this script prior to all other quantlets
+  # Requirement for the datat: each entity is measured under each factor level; wide format; ordered equidistant factor levels
 
 
 # Read data ---------------------------------------
