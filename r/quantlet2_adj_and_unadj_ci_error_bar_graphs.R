@@ -80,23 +80,27 @@ rma_CI = function(rma_data){
 
 
   # Peperation to show the following plots next to eachother
-  par(mfrow=c(1,2))
+  #par(mfrow=c(1,2))
   
   # Plot condtional means with CI error bars
   barends = 0.05
   
-  plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist)), max((MeFlm$Flm + CIdist))), main = "Unadjusted CI", xlab = "condition", ylab = "value")
+  #plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist)), max((MeFlm$Flm + CIdist))), main = "Unadjusted CI", xlab = "condition", ylab = "value")
   
   # Compute upper and lower bound
   up_unadj = MeFlm$Flm + CIdist 
   low_unadj = MeFlm$Flm - CIdist 
   
-  for(i in 1:k) {
-    segments(MeFlm$Me[i],low_unadj[i] , MeFlm$Me[i], up_unadj[i])
-    segments(MeFlm$Me[i]-barends, up_unadj[i] , MeFlm$Me[i]+barends, up_unadj[i])
-    segments(MeFlm$Me[i]-barends, low_unadj[i] , MeFlm$Me[i]+barends, low_unadj[i])
-  }
+  #for(i in 1:k) {
+   #segments(MeFlm$Me[i],low_unadj[i] , MeFlm$Me[i], up_unadj[i])
+    #segments(MeFlm$Me[i]-barends, up_unadj[i] , MeFlm$Me[i]+barends, up_unadj[i])
+    #segments(MeFlm$Me[i]-barends, low_unadj[i] , MeFlm$Me[i]+barends, low_unadj[i])
+  #}
 
+  
+
+  
+  
   ## !!! Auch hier muesste der Plot noch verschoenert werden 
   ## !!! Alternative... habs aber nicht hinbekommen fuer verschiedene CI pro mean
   ##segments(MeFlm$Me, MeFlm$Flm - CIdist, MeFlm$Me, MeFlm$Flm + CIdist)
@@ -123,26 +127,43 @@ rma_CI = function(rma_data){
 
 
   # Plot of condtional means with adjusted CI error bars
-  barends = 0.05
-  plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist_adj)), max((MeFlm$Flm + CIdist_adj))), main = "Adjusted CI", xlab = "condition", ylab = "value")
+  #barends = 0.05
+  #plot(MeFlm, ylim = c(min((MeFlm$Flm - CIdist_adj)), max((MeFlm$Flm + CIdist_adj))), main = "Adjusted CI", xlab = "condition", ylab = "value")
   
   # Compute upper and lower bound
   up_adj = MeFlm$Flm + CIdist_adj
   low_adj = MeFlm$Flm - CIdist_adj
   
-  for(i in 1:k) {
-    segments(MeFlm$Me[i],low_adj[i] , MeFlm$Me[i], up_adj[i])
-    segments(MeFlm$Me[i]-barends, up_adj[i] , MeFlm$Me[i]+barends, up_adj[i])
-    segments(MeFlm$Me[i]-barends, low_adj[i] , MeFlm$Me[i]+barends, low_adj[i])
-  }
+  #for(i in 1:k) {
+    #segments(MeFlm$Me[i],low_adj[i] , MeFlm$Me[i], up_adj[i])
+    #segments(MeFlm$Me[i]-barends, up_adj[i] , MeFlm$Me[i]+barends, up_adj[i])
+    #segments(MeFlm$Me[i]-barends, low_adj[i] , MeFlm$Me[i]+barends, low_adj[i])
+  #}
 
-  ## !!! Auch hier muesste der Plot noch verschoenert werden 
-  ## !!! Alternative... habs aber nicht hinbekommen fuer verschiedene CI pro mean
-  ##segments(MeFlm$Me, MeFlm$Flm - CIdist_adj, MeFlm$Me, MeFlm$Flm + CIdist_adj)
-  ##segments(MeFlm$Me - barends, MeFlm$Flm - CIdist_adj, MeFlm$Me + barends, MeFlm$Flm - CIdist_adj)
-  ##segments(MeFlm$Me - barends, MeFlm$Flm + CIdist_adj, MeFlm$Me + barends, MeFlm$Flm + CIdist_adj)
-
-
+  
+  
+  # ggplot approach for comparison of CIs
+  
+  # create two vectors for lower ci values and upper ci values respectively
+  lower <- c(low_adj, low_unadj)
+  upper <- c(up_adj, up_unadj)
+  
+  # create vector that is used for facetting i.e. for assigning the correct values
+  # to each plot
+  plot_nr <- rep(c("Adjusted CI", "Unadjusted CI"), each = k)
+  
+  # create data frame for ggplot: comparison of ci
+  ci_plot_data <- data.frame(plot_nr, rbind(MeFlm, MeFlm), lower, upper)
+  
+  
+  # create plot with adjusted ci values
+  ci_plot <- ggplot(data = ci_plot_data, aes(Me, Flm)) + 
+      geom_point(size = 2) + 
+      geom_errorbar(aes(ymax = upper, ymin = lower), width = .1) + 
+      facet_grid(~plot_nr) + 
+      labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted (standard) confidence intervals")
+  
+ 
   ## !!! Litle extra plot
   ## !!! Horizontal line are the condition means / 'X' are the subject means 
   ##par(mfrow=c(1,1))
@@ -152,9 +173,9 @@ rma_CI = function(rma_data){
 
 
 # Return adjusted and unadjusted confidence intervalls
-  ## !!! ausserdem sollten die Plots auch returned werden
+  ## !!! ausserdem sollten die Plots auch returned werden --> DONE
   
-  
+  print(ci_plot)
   return(list("adj_CI" = cbind(low_adj, up_adj), "unadj_CI" = cbind(low_unadj, up_unadj)))
 }
 
