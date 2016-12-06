@@ -1,8 +1,9 @@
 ##### quantlet3_orth_poly_contrasts
 
 
-orth_poly_contrast = function(rma_data){
-  
+rma_orth_poly_contrast = function(rma_data){
+
+    
 # Define some variables ---------------------------------------------------
   
   
@@ -27,10 +28,14 @@ orth_poly_contrast = function(rma_data){
                           times = (1:k),
                           idvar = id_names,
                           new.row.names = 1:(k * n),
-                          direction = "long")
+                          direction = "long"
+                          )
   colnames(rma_data_long)[1] = "id"
   rma_data_long$condition = as.numeric(rma_data_long$condition)
+
   
+# Define some more variables ----------------------------------------------
+    
   
   # factor level means
   Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
@@ -83,8 +88,8 @@ orth_poly_contrast = function(rma_data){
   # Computing sums of squares for each contrast
   contrast_ss = n * contrast_estimator^2 / rowSums(contrast_weights^2)
   
-  ## Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend 
-  ## ss_trend / ss_factor
+  # Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend 
+  # ss_trend / ss_factor
   proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly) # seems strange?! Is this right? --> Jap, 'sum(rep((Flm - Gm)^2, each = n)' is computing the Factor ss (its the deviation of the factor level means from grand mean, than squared, and than that times n till every subject is measured under each condition); the last 'rep(..., maxpoly)' is just to matcht the size of the 'contrast_ss' vector
   
   
@@ -93,7 +98,8 @@ orth_poly_contrast = function(rma_data){
   
   # define source variable
   source = rownames(contrast_weights)
-  contrast_table = data.frame("Source" = source,
+  contrast_table = data.frame(check.names = FALSE,
+                              "Source" = source,
                               "Sum of squares" = contrast_ss,
                               "Proportional contribution to the factor effect" = proportional_trend_contribution,
                               "Contrast estimator" = contrast_estimator,
@@ -101,15 +107,16 @@ orth_poly_contrast = function(rma_data){
                               "Degrees of freedom" = rep((n - 1), maxpoly),
                               "t-value" = contrast_t_values,
                               "p-value" = contrast_p_values
-  )
+                              )
   rownames(contrast_table) = NULL
   
   
-  # Orthogonal polynomial trends as polynomial regression  ------------------
-  # used to plot the fitted polynomials
+# Orthogonal polynomial trends as polynomial regression  ------------------
+  # Used to plot the fitted polynomials
   # This is used to display the aditional explanation of the variance in the dependent variable by adding higher order trendcomponent successively 
-  
-  # Peperation to show the following plots (4) next to eachother
+
+    
+  # Peperation to show the following plots (2) next to eachother
   par(mfrow=c(1,2))
   
   # Fitting the k - 1 orthogonal Polynomials
@@ -129,26 +136,35 @@ orth_poly_contrast = function(rma_data){
     lines(smooth.spline(rma_data_long$condition, predict(lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
   }
   
-  # !!! plot koennte noch verschoenert werden (Tietel, Beschriftung, Farben, etc.)
-  # !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien...
+  ## !!! plot koennte noch verschoenert werden (Tietel, Beschriftung, Farben, etc.)
+  ## !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien...
   
   
-  ##Plotting the predictions by the k - 1  orthogonal polynomial trends together with the conditional means 
+  # Plotting the predictions by the k - 1  orthogonal polynomial trends together with the conditional means 
   plot(MeFlm, main = "conditional means", xlab = "condition", ylab = "value")
   for(i in 1:maxpoly){
     lines(smooth.spline(rma_data_long$condition, predict(lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
   }
   
-  # !!! plot koennte noch verschoenert werden (Tietel, Beschriftung, Farben, etc.)
+  ## !!! plot koennte noch verschoenert werden (Titel, Beschriftung, Farben, etc.)
   
-  # !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien... 
-  # !!! also ein funktionsgraph wäre gut
+  ## !!! das sollten eigentlich smooth lines sein... und nicht die Predictions fuer die einzelnen Levels verbunden mit linien... 
+  ## !!! also ein funktionsgraph wäre gut
+
+  
+# Return the contrast-table -----------------------------------------------
+    
   
   return(contrast_table)
 }
 
+
+# -------------------------------------------------------------------------
+# Testing:
+
 source("r/simulate_rma_data.R")
 rma_data = sim_rma_data(10, 5)
-contrast = orth_poly_contrast(rma_data)
+contrast = rma_orth_poly_contrast(rma_data)
 
 contrast
+
