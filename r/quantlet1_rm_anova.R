@@ -115,7 +115,7 @@ return(ANOVA_table)
 # Testing:
 
 source("r/simulate_rma_data.R")
-rma_data = sim_rma_data(10, 5)
+#rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
 rma_results = rma(rma_data)
 
 rma_results
