@@ -229,6 +229,18 @@ compare_anovas = function(rma_data){
   
 # Stackplot Version 2 (with ggplot) ------------------------------------------
   
+  # create variables for comparison plot
+  var <- unlist(error_ss_comparison_table[, -1])
+  model <- rep(c("ANOVA", "RM ANOVA"), each = 2)
+  source <- factor(rep(c("Error", "Subject"), times = 2), levels = c("Subject", "Error"))
+  
+  # merge variables into one data frame
+  comparison_data <- data.frame(var, model, source)
+  comp_plot <- ggplot(comparison_data, aes(model, var, fill = source)) + 
+      geom_bar(stat = "identity") + 
+      labs(x = "Model", y = "Sum of squares (error)", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+      guides(fill=guide_legend(title=NULL)) + 
+      scale_fill_manual(values = c("orange", "navyblue"))
   
   #Defining a dataframe for model comparison
   ##ss_table_gg = melt(ss_table)
@@ -262,7 +274,7 @@ compare_anovas = function(rma_data){
 
 # Return comparison table
   
-  
+  print(comp_plot)
   return("error_ss_comparison_table" = error_ss_comparison_table)
 }
 
