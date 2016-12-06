@@ -5,14 +5,14 @@
 # Read data ---------------------------------------
 
 
-rma_data <- read.csv("data/noisedata.csv")
+rma_data = read.csv("data/noisedata.csv")
 
 
 # Remove idle variables ---------------------------
 
 
-rma_data$GENDER <- NULL
-rma_data$X <- NULL
+rma_data$GENDER = NULL
+rma_data$X = NULL
 
 
 # Listwise deletion in case of missing values ------------------
@@ -22,6 +22,7 @@ deletionvector = vector(mode="numeric", length=0)
 for(i in 1:nrow(rma_data)) {
   if(any(is.na(rma_data[i,])) == TRUE) {
     deletionvector = union(deletionvector, i)
+    print(paste("Missing value(s) for subject", i))
   }
 }
 
