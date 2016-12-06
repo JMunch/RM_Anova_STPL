@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/data_preparation.R="8B11EBB4"
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet1_rm_anova.R="ADE4CDAC"
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet2_adj_and_unadj_ci_error_bar_graphs.R="4F8B2137"
@@ -6,23 +5,7 @@ D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet4_eta_sq.R="98FF3D59"
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet5_ANOVA_and_model_comparison.R="B5C89889"
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet6_test_and_adjustment_for_sphericity.R="A1F64F8F"
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-/Users/Niko/Desktop/Uni/Statistik Master/courses/statistical programming prep/assignment/r/ortho_poly_contrasts_ggplot.R="83A31450"
-=======
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/RMANOVA_6.R="BA44DAEA"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/data_preparation/data_preparation.R="3EBFFD"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/quantlet1_rm_anova.R="6EDD4F34"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/quantlet3_orth_poly_contrasts.R="82411E9F"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/quantlet4_eta_sq.R="204DAB9D"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/quantlet5_ANOVA_and_model_comparison.R="87D2C36F"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/quantlet6_test_and_adjustment_for_sphericity.R="D83687B7"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/quantlet6_test_and_adjustment_for_sphericity_old_version.R="5745464C"
-D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r/simulate_rma_data.R="341C8D2D"
->>>>>>> 84dfabca0d218963f4326ebb1f4f70e752fea9d0
-=======
->>>>>>> 14e6e76570a33d7daf56b552fe4fa8e7362c30e8
+G:/Dateien/Git Projects/RP_Anova_STPL/TODO="BDEFB542"
 G:/Dateien/Git Projects/RP_Anova_STPL/r/data_preparation/data_preparation.R="B53D9E4F"
 G:/Dateien/Git Projects/RP_Anova_STPL/r/quantlet1_rm_anova.R="5487C48F"
 G:/Dateien/Git Projects/RP_Anova_STPL/r/quantlet2_adj_and_unadj_ci_error_bar_graphs.R="F662D72"
@@ -31,4 +14,8 @@ G:/Dateien/Git Projects/RP_Anova_STPL/r/quantlet4_eta_sq.R="42363117"
 G:/Dateien/Git Projects/RP_Anova_STPL/r/quantlet5_ANOVA_and_model_comparison.R="F8508C0A"
 G:/Dateien/Git Projects/RP_Anova_STPL/r/quantlet6_test_and_adjustment_for_sphericity.R="3CAD7302"
 G:/Dateien/Git Projects/RP_Anova_STPL/r/quantlet6_test_and_adjustment_for_sphericity_old_version.R="D7C8FA73"
->>>>>>> d62998a8584ab3472806569ab8d0cb7198259411
+G:/Dateien/Git Projects/RP_Anova_STPL/r/simulate_one_way_rmANOVA_data.R="2AECBA5F"
+G:/Dateien/Git Projects/RP_Anova_STPL/r/summarise_results.R="47D8A67C"
+G:/Dateien/Git Projects/RP_Anova_STPL/r/summaryse_results.R="657259EB"
+G:/Dateien/Git Projects/RP_Anova_STPL/r/to-do="20A239F1"
+G:/Dateien/Git Projects/r/summaryse_results.R="2D1252E3"

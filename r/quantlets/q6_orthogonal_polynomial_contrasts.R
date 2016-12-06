@@ -1,18 +1,18 @@
-##### quantlet3_orth_poly_contrasts
+##### Orthogonal polynomial contrasts in a one-way repeated measures ANOVA
 
 
-rma_orth_poly_contrast = function(rma_data){
+ow_rma_opc = function(ow_rma_data){
 
     
 # Define some variables ---------------------------------------------------
   
   
   # number of entities 
-  n = as.numeric(length(rma_data[,1]))
+  n = as.numeric(length(ow_rma_data[,1]))
   
   # id-variable and condition-variable
-  rm_names = colnames(rma_data)[-1]
-  id_names = colnames(rma_data)[1]
+  rm_names = colnames(ow_rma_data)[-1]
+  id_names = colnames(ow_rma_data)[1]
   
   #  number of factor levels
   k = as.numeric(length(rm_names))
@@ -21,30 +21,30 @@ rma_orth_poly_contrast = function(rma_data){
 # Convert to long format --------------------------------------------------
   
   
-  rma_data_long = reshape(rma_data, 
-                          varying = rm_names, 
-                          v.names = "value",
-                          timevar = "condition", 
-                          times = (1:k),
-                          idvar = id_names,
-                          new.row.names = 1:(k * n),
-                          direction = "long"
-                          )
-  colnames(rma_data_long)[1] = "id"
-  rma_data_long$condition = as.numeric(rma_data_long$condition)
+  ow_rma_data_long = reshape(ow_rma_data, 
+                             varying = rm_names, 
+                             v.names = "value",
+                             timevar = "condition", 
+                             times = (1:k),
+                             idvar = id_names,
+                             new.row.names = 1:(k * n),
+                             direction = "long"
+                             )
+  colnames(ow_rma_data_long)[1] = "id"
+  ow_rma_data_long$condition = as.numeric(ow_rma_data_long$condition)
 
   
 # Define some more variables ----------------------------------------------
     
   
   # factor level means
-  Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
+  Flm = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, mean)
   
   # general mean
-  Gm = mean(rma_data_long$value)
+  Gm = mean(ow_rma_data_long$value)
   
   # entity/subject mean
-  Em = tapply(rma_data_long$value, rma_data_long$id, mean)
+  Em = tapply(ow_rma_data_long$value, ow_rma_data_long$id, mean)
   
   # Measurements
   Me = (1:k)
@@ -71,7 +71,7 @@ rma_orth_poly_contrast = function(rma_data){
   contrast_weights = t(contr.poly(k))
   
   # Applying formula for linear contrasts
-  weighted_dependend_variables = rma_data[rep(seq_len(nrow(rma_data)), each = maxpoly), ][,-1] * (contrast_weights)[rep(seq_len(nrow(contrast_weights)), n), ]
+  weighted_dependend_variables = ow_rma_data[rep(seq_len(nrow(ow_rma_data)), each = maxpoly), ][,-1] * (contrast_weights)[rep(seq_len(nrow(contrast_weights)), n), ]
   linear_subject_contrasts = matrix(rowSums(weighted_dependend_variables), byrow = TRUE, ncol = maxpoly)
   
   # Computing contrast estimators for each orthogonal polynomial contrast as well as standard errors for thees estimators
@@ -122,8 +122,8 @@ rma_orth_poly_contrast = function(rma_data){
   # Fitting the k - 1 orthogonal Polynomials
   for(i in 1:maxpoly){
     pfv = paste("poly.fit.", i, sep = "")
-    assign(pfv, lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE)))
-    poly.fit.max = lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE))
+    assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
+    poly.fit.max = lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE))
   }
   
   
@@ -131,9 +131,9 @@ rma_orth_poly_contrast = function(rma_data){
   
   
   # Plotting the predictions by the k - 1  orthogonal polynomial trends together with the raw data                                      
-  plot(rma_data_long$condition, rma_data_long$value, main = "raw data", xlab = "condition", ylab = "value")                  
+  plot(ow_rma_data_long$condition, ow_rma_data_long$value, main = "raw data", xlab = "condition", ylab = "value")                  
   for(i in 1:maxpoly){
-    lines(smooth.spline(rma_data_long$condition, predict(lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
+    lines(smooth.spline(ow_rma_data_long$condition, predict(lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
   }
   
   ## !!! plot koennte noch verschoenert werden (Tietel, Beschriftung, Farben, etc.)
@@ -143,7 +143,7 @@ rma_orth_poly_contrast = function(rma_data){
   # Plotting the predictions by the k - 1  orthogonal polynomial trends together with the conditional means 
   plot(MeFlm, main = "conditional means", xlab = "condition", ylab = "value")
   for(i in 1:maxpoly){
-    lines(smooth.spline(rma_data_long$condition, predict(lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
+    lines(smooth.spline(ow_rma_data_long$condition, predict(lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = FALSE)))), col = i, lwd = 2)
   }
   
   ## !!! plot koennte noch verschoenert werden (Titel, Beschriftung, Farben, etc.)
@@ -155,16 +155,9 @@ rma_orth_poly_contrast = function(rma_data){
 # Return the contrast-table -----------------------------------------------
     
   
-  return(contrast_table)
+  return(list("orthogonal_polynomial_contrast_table" = contrast_table))
 }
 
 
 # -------------------------------------------------------------------------
-# Testing:
-
-source("r/simulate_rma_data.R")
-rma_data = sim_rma_data(10, 5)
-contrast = rma_orth_poly_contrast(rma_data)
-
-contrast
 

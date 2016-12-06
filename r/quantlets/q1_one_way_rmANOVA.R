@@ -1,7 +1,7 @@
-##### Computation of repeated measures ANOVA (rma)
+##### Computation of one-way repeated measures ANOVA (rma)
 
 
-rma = function(rma_data){
+ow_rma = function(ow_rma_data){
  
   
 # Libraries needed --------------------------------------------------------
@@ -13,18 +13,18 @@ rma = function(rma_data){
 # Define needed constants and the dependent variable ----------------------
 
   # Number of entities
-  n = nrow(rma_data)
+  n = nrow(ow_rma_data)
 
   # Number of factor levels 
-  k = ncol(rma_data) - 1
+  k = ncol(ow_rma_data) - 1
 
-  dependent_variable = as.matrix(rma_data[, -1])
+  dependent_variable = as.matrix(ow_rma_data[, -1])
 
 
 # Define basic anova components -------------------------------------------
 
 
-  grand_mean = mean(as.matrix(rma_data[,2: (k + 1)])) 
+  grand_mean = mean(as.matrix(ow_rma_data[,2: (k + 1)])) 
   baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
   
   conditional_means = apply(dependent_variable, 2, mean)
@@ -127,17 +127,9 @@ rma = function(rma_data){
 # Return ANOVA-table ------------------------------------------------------
   
    
-  return(ANOVA_table)
+  return(list("one_way_repeated_measures_ANOVA_table" = ANOVA_table))
 }
 
 
 # -------------------------------------------------------------------------
-# Testing:
-
-source("r/simulate_rma_data.R")
-#rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
-rma_results = rma(rma_data)
-
-rma_results
-
 

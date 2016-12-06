@@ -5,14 +5,15 @@
 # Read data ---------------------------------------
 
 
-rma_data <- read.csv("data/noisedata.csv")
+ow_rma_data <- read.csv("data/noisedata.csv")
 
 
 # Remove idle variables ---------------------------
 
 
-rma_data$GENDER <- NULL
-rma_data$X <- NULL
+ow_rma_data$GENDER <- NULL
+ow_rma_data$X <- NULL
 
 
 # -------------------------------------------------
+
