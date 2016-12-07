@@ -1,15 +1,15 @@
-##### Effect size measures
-  # Function 'rma' is required (quantlet1_rm_anova.R)!
+##### Effect size measures for a one-way repeated measures ANOVA
+  # Function 'ow_rma' is required (quantlet1_rm_anova.R)!
 
 
-rma_effect_size = function(rma_data, append = FALSE){
+ow_rma_eta = function(ow_rma_data, append = FALSE){
 
   
 # Get ANOVA-table ---------------------------------------------------------
-  # rmANOVA function 'rma' is required!  
+  # rmANOVA function 'ow_rma' is required!  
   
   
-  ANOVA_table = rma(rma_data)
+  ANOVA_table = ow_rma(ow_rma_data)[[1]]
   
   
 # Define needed sums of squares -------------------------------------------
@@ -51,20 +51,12 @@ rma_effect_size = function(rma_data, append = FALSE){
 
     
   if (append == TRUE){  
-    return(list("effect_size_table" = effect_size_table, "ANOVA_table_with_effect_size_measures" = ANOVA_table))
+    return(list("effect_size_table" = effect_size_table, "one_way_repeated_measures_ANOVA_table_with_effect_size_measures" = ANOVA_table))
   }else{
-    return("effect_size_table" = effect_size_table)
+    return(list("effect_size_table" = effect_size_table))
   }
 }
 
 
 # -------------------------------------------------------------------------
-# Testing:
-
-source("r/simulate_rma_data.R")
-rma_data = sim_rma_data(10, 5)
-
-source("r/quantlet1_rm_anova.R")
-
-rma_effect_size(rma_data)
 

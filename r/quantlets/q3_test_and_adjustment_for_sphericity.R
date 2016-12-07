@@ -1,25 +1,25 @@
 ##### Mauchly's Test of Sphericity and the appropriate correction factors (epsilon)
-  # Function 'rma' is required (quantlet1_rm_anova.R)!
+  # Function 'ow_rma' is required (quantlet1_rm_anova.R)!
   # To conduct the Mauchly's Test of Sphericity (Mauchly, 1940), the procedure described by Huynh and Feldt (1970) is used
 
 
-rma_sphericity_test = function(rma_data, append = FALSE){
+ow_rma_spheri = function(ow_rma_data, append = FALSE){
   
   
 # Defining some variables -------------------------------------------------
 
   
   # number of factor levels
-  k = length(rma_data[1,]) - 1
+  k = length(ow_rma_data[1,]) - 1
   
   # number of entities
-  n = as.numeric(length(rma_data[,1]))
+  n = as.numeric(length(ow_rma_data[,1]))
   
   # Factor degrees of freedom
   df = k - 1
 
   # Empirical covariance matrix
-  covariance_matix = cov(as.matrix(rma_data[,-1]))
+  covariance_matix = cov(as.matrix(ow_rma_data[,-1]))
 
   
 # Helmert matrix required for the computation of mauchly's W --------------
@@ -88,10 +88,10 @@ rma_sphericity_test = function(rma_data, append = FALSE){
   
 # Computing the adjusted p-values for the ANOVA-factor F-test -------------
   # The adjustment is realised via correction of the F-distribution degrees of freedom by multplication with the respective correction factor (epsilon)
-  # rmANOVA function 'rma' is required!  
+  # rmANOVA function 'ow_rma' is required!  
   
   
-  ANOVA_table = rma(rma_data)
+  ANOVA_table = ow_rma(ow_rma_data)[[1]]
   
   corrected_factor_df = ANOVA_table[2,3] * epsilon_lb
   corrected_error_df = ANOVA_table[2,3] * epsilon_lb
@@ -141,21 +141,12 @@ rma_sphericity_test = function(rma_data, append = FALSE){
   
       
   if (append == TRUE){
-    return(list("mauchly_test" = mauchly_table, "correction_factors_epsilon" = epsilon_table, "corrected_Anova_Table" = ANOVA_table))
+    return(list("mauchly_test_table" = mauchly_table, "correction_factors_epsilon_table" = epsilon_table, "corrected_one_way_repeated_measures_ANOVA_table" = ANOVA_table))
   }else{
-    return(list("mauchly_test" = mauchly_table, "correction_factors_epsilon" = epsilon_table))
+    return(list("mauchly_test_table" = mauchly_table, "correction_factors_epsilon_table" = epsilon_table))
   }
 }
 
 
 # -------------------------------------------------------------------------
-# Testing:
-
-source("r/simulate_rma_data.R")
-rma_data = sim_rma_data(10, 5)
-sphe = rma_sphericity_test(rma_data, TRUE)
-
-sphe$mauchly_test
-sphe$correction_factors_epsilon
-sphe$corrected_Anova_Table
 

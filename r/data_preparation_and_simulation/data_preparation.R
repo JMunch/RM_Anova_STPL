@@ -1,18 +1,20 @@
 ##### This script contains the data preparation of the RM Anova data
   # Run this script prior to all other quantlets
+  # Requirement for the datat: each entity is measured under each factor level; wide format; ordered equidistant factor levels
 
 
 # Read data ---------------------------------------
 
 
-rma_data <- read.csv("data/noisedata.csv")
+ow_rma_data <- read.csv("data/noisedata.csv")
 
 
 # Remove idle variables ---------------------------
 
 
-rma_data$GENDER <- NULL
-rma_data$X <- NULL
+ow_rma_data$GENDER <- NULL
+ow_rma_data$X <- NULL
 
 
 # -------------------------------------------------
+
