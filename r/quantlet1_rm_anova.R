@@ -1,6 +1,5 @@
 ##### Computation of repeated measures ANOVA (rma)
 
-
 rma = function(rma_data){
  
   
@@ -134,7 +133,7 @@ rma = function(rma_data){
 # -------------------------------------------------------------------------
 # Testing:
 
-source("r/simulate_rma_data.R")
+#source("r/simulate_rma_data.R")
 #rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
 rma_results = rma(rma_data)
 
