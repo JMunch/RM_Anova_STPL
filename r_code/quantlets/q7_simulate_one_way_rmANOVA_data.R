@@ -74,12 +74,4 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
 source("r/quantlet1_rm_anova.R")
 rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30, 40), between_subject_sd = 40)
 rma_data
-rma(rma_data = rma_data)
-rma_orth_poly_contrast(rma_data)
 
-
-source("r/quantlet2_adj_and_unadj_ci_error_bar_graphs.R")
-rma_CI(rma_data)
-
-source("r/quantlet3_orth_poly_contrasts.R")
-orth_poly_contrast(rma_data)
