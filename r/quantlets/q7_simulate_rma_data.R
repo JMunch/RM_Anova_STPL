@@ -68,7 +68,6 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
   return(data.frame(rma_data))
 }
 
-
 # ------------------------------------------------------------
 # Testing:
 
