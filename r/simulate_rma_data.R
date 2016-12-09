@@ -1,7 +1,6 @@
 # Function to simulate data for repeated measurement ANOVA
 
 
-
 sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noice_sd = 10, between_subject_sd = 40){
   
 # Create empty n x k matrix 
