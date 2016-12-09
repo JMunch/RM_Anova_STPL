@@ -9,6 +9,7 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
 # Add column with subject_id
   rma_data[, 1] = 1:n
   
+
   if(!is.null(means)){
     con_means = means
     
@@ -44,8 +45,16 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
   mean_deviation = rnorm(n, mean = 0, sd = between_subject_sd)
   rma_data[, 2:(k+1)]  = rma_data[, 2:(k+1)] + mean_deviation
 
+# Check if only one noice_sd was passed (no sphericity) and create vector 
+  if(length(noice_sd) == 1){
+  noice_sd = rep(noice_sd, times =  k)
+  }
+  
+  noice = matrix(NA, nrow = n, ncol = k)
 # Add noice to data
-  noice = matrix(rnorm(n * k, mean = 0, sd = noice_sd), nrow = n)
+  for(i in 1:k){
+    noice[,i] = rnorm(n, mean = 0, sd = noice_sd[i])
+  }
   rma_data[, 2:(k+1)]  = rma_data[, 2:(k+1)] + noice
 
 # Naming columns
@@ -64,7 +73,8 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
 # Testing:
 
 source("r/quantlet1_rm_anova.R")
-rma_data = sim_rma_data(1000, 10, means = NULL, poly_order = 5, noice_sd = 10, between_subject_sd = 40)
+rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30, 40), between_subject_sd = 40)
+rma_data
 rma(rma_data = rma_data)
 rma_orth_poly_contrast(rma_data)
 
