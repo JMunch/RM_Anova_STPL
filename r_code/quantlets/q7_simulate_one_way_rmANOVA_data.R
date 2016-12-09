@@ -50,8 +50,15 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
   noice_sd = rep(noice_sd, times =  k)
   }
   
-  noice = matrix(NA, nrow = n, ncol = k)
+# Error if noice_sd vector not a vector of length k -----------------------
+  if(length(noice_sd) != k){
+    print("The vector passed for noice_sd does not have the length k. Please pass a vector of the length k.")
+    return(NULL)
+  }
+  
+
 # Add noice to data
+  noice = matrix(NA, nrow = n, ncol = k) 
   for(i in 1:k){
     noice[,i] = rnorm(n, mean = 0, sd = noice_sd[i])
   }
@@ -72,6 +79,6 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
 # Testing:
 
 source("r/quantlet1_rm_anova.R")
-rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30, 40), between_subject_sd = 40)
+rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30), between_subject_sd = 40)
 rma_data
 
