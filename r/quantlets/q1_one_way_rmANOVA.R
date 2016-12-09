@@ -1,12 +1,8 @@
 ##### Computation of one-way repeated measures ANOVA (rma)
 
-<<<<<<< HEAD:r/quantlet1_rm_anova.R
-rma = function(rma_data){
-=======
 
 ow_rma = function(ow_rma_data){
->>>>>>> 082f6cb1de3b2cd687030ccdbc007bb2fc7fb55f:r/quantlets/q1_one_way_rmANOVA.R
- 
+  
   
 # Libraries needed --------------------------------------------------------
 
@@ -136,7 +132,6 @@ ow_rma = function(ow_rma_data){
 
 
 # -------------------------------------------------------------------------
-<<<<<<< HEAD:r/quantlet1_rm_anova.R
 # Testing:
 
 #source("r/simulate_rma_data.R")
@@ -145,6 +140,4 @@ rma_results = rma(rma_data)
 
 rma_results
 
-=======
->>>>>>> 082f6cb1de3b2cd687030ccdbc007bb2fc7fb55f:r/quantlets/q1_one_way_rmANOVA.R
 
