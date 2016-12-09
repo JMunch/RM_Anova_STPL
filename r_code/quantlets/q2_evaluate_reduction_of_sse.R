@@ -9,7 +9,7 @@ ow_rma_sse_reduct = function(ow_rma_data){
  
   
   require(dplyr)
-  ##require(ggplot2)
+  require(ggplot2)
 
 
 # Computaion of ANOVA model -------------------------------------------------
@@ -183,86 +183,59 @@ ow_rma_sse_reduct = function(ow_rma_data){
   par(mfrow = c(1, 2))
   
   
-# Stackplot (version 1) ------------------------------------------------------
-  
-  
-  barplot1 = barplot(ss_comp, 
-                     col = c("navyblue", "orange"), 
-                     xlab = "Model", 
-                     ylab = "Sum of squares",
-                     legend.text = TRUE,
-                     main = "Reductionon of error sum of squares"
-                     )
   
   
 # Pie Charts-Version 1 -------------------------------------------------------
   
+# A ggplot version of the pie chart might also be implemented (NH: I prefer the bar chart)  
   
-  ##slices = c(sse_anova, ss_subject_anova) 
-  ##lbls = c("SS error", "SS subject level")
-  ##pct = round(slices/sum(slices)*100)
+  #slices_2 = c(sse_rma, ss_subject_rma) 
+  #lbls_2 = c("SS error", "SS entity")
+  #pct_2 = round(slices_2/sum(slices_2)*100)
   
-  ##lbls = paste(lbls, pct) 
+  #lbls_2 = paste(lbls_2, pct_2) 
   # add percents to labels 
-  ##lbls = paste(lbls,"%",sep="") 
+  #lbls_2 = paste(lbls_2,"%",sep="") 
   # ad % to labels 
   
-  ##pie1_ANOVA = pie(slices, lbls, col = c("navyblue", "orange"),
-  ##                 main="ANOVA", init.angle = 90) 
-  
-  slices_2 = c(sse_rma, ss_subject_rma) 
-  lbls_2 = c("SS error", "SS entity")
-  pct_2 = round(slices_2/sum(slices_2)*100)
-  
-  lbls_2 = paste(lbls_2, pct_2) 
-  # add percents to labels 
-  lbls_2 = paste(lbls_2,"%",sep="") 
-  # ad % to labels 
-  
-  pie1_RM_ANOVA = pie(slices_2, lbls_2, col = c("navyblue", "orange"),
-                      main="rmANOVA", init.angle = 90
-                      ) 
+  #pie1_RM_ANOVA = pie(slices_2, lbls_2, col = c("navyblue", "orange"),
+  #                    main="rmANOVA", init.angle = 90
+  #                    ) 
   
   
-# Stackplot Version 2 (with ggplot) ------------------------------------------
-  
-  
-  #Defining a dataframe for model comparison
-  ##ss_table_gg = melt(ss_table)
-  
-  ##colnames(ss_table_gg) = c("Error_type", "ANOVA_type", "value")
-  ##ss_table_gg$value = as.numeric(ss_table_gg$value)
-  ##ss_table_gg$ANOVA_type = as.factor(ss_table_gg$ANOVA_type)
-  ##ss_table_gg$Error_type = as.factor(ss_table_gg$Error_type)
-  
-  ##barplot2 = ggplot(ss_table_gg, aes(x = ANOVA_type, y = (value/(sum(value)/2)*100), fill = Error_type)) + 
-  ##                  geom_bar(stat = "identity", width = 0.8) +
-  ##                  ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA") + 
-  ##                  xlab("Model") +
-  ##                  ylab("Percentages") +
-  ##                  geom_text(aes(label = (value/(sum(value)/2))*100), position = "identity"
-  ##                  ) 
-  ##barplot2
-  
-  
-# Pie Chart Version 2 (with ggplot) ------------------------------------------
-  ## !!! What is the object bar_chart?
 
-    
-  ##pie2 = bar_chart + 
-  ##       coord_polar(theta = "y", direction = -1)  + 
-  ##       facet_grid(.~model_comparison$ANOVA_type) +
-  ##       theme_void() +
-  ##    ggtitle("Comparison of error terms between standard ANOVA and Repeated Measures ANOVA")
-  ##pie2
-
+  # Stackplot Version 2 (with ggplot) ------------------------------------------
+  
+  # create variables for comparison plot
+  
+  # var contains the sse by subject and error
+  var <- unlist(error_ss_comparison_table[, -1])
+  
+  # model is used in the ggplot to assign the values to the bars
+  model <- rep(c("ANOVA", "RM ANOVA"), each = 2)
+  
+  # source is required for color and legend label assignment in the ggplot
+  source <- factor(rep(c("Error", "Subject"), times = 2), levels = c("Subject", "Error"))
+  
+  # merge variables into one data frame
+  comparison_data <- data.frame(var, model, source)
+  
+  # create stacked barplot
+  comp_plot <- ggplot(comparison_data, aes(model, var, fill = source)) + 
+      geom_bar(stat = "identity") + 
+      labs(x = "Model", y = "Sum of squares (error)", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+      guides(fill=guide_legend(title=NULL)) + 
+      scale_fill_manual(values = c("orange", "navyblue"))
+  
+  
 
 # Return comparison table ---------------------------------------------------
   
-  
+  print(comp_plot)
   return(list("one_way_ANOVA_table" = ow_a_results, "Caution" = ow_a_warning, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
 }
 
 
 # ---------------------------------------------------------------------------
 
+ow_rma_sse_reduct(ow_rma_data)
