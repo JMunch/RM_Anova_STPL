@@ -221,17 +221,31 @@ ow_rma_sse_reduct = function(ow_rma_data){
   comparison_data <- data.frame(var, model, source)
   
   # create stacked barplot
-  comp_plot <- ggplot(comparison_data, aes(model, var, fill = source)) + 
+  comp_plot_bar <- ggplot(comparison_data, aes(model, var, fill = source)) + 
       geom_bar(stat = "identity") + 
       labs(x = "Model", y = "Sum of squares (error)", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
       guides(fill=guide_legend(title=NULL)) + 
       scale_fill_manual(values = c("orange", "navyblue"))
   
+  # new variable: percentage of sse. used for better readability in piechart
+  # for consistency of interpretations it might make sense to use this variable in the barplots as well
+  comparison_data$var_percent <- comparison_data$var*100/(max(comparison_data$var))
+  
+  # create pie chart
+  comp_plot_pie <- ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
+      geom_bar(width = 1, stat = "identity") + 
+      labs(x = "", y = "", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+      guides(fill=guide_legend(title=NULL)) + 
+      scale_fill_manual(values = c("orange", "navyblue")) + 
+      coord_polar(theta = "y") + 
+      facet_grid(~model)
+  
   
 
 # Return comparison table ---------------------------------------------------
   
-  print(comp_plot)
+  print(comp_plot_pie)
+  print(comp_plot_bar)
   return(list("one_way_ANOVA_table" = ow_a_results, "Caution" = ow_a_warning, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
 }
 
@@ -239,3 +253,6 @@ ow_rma_sse_reduct = function(ow_rma_data){
 # ---------------------------------------------------------------------------
 
 ow_rma_sse_reduct(ow_rma_data)
+
+
+
