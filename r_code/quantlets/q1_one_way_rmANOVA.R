@@ -136,8 +136,8 @@ ow_rma = function(ow_rma_data){
 
 #source("r/simulate_rma_data.R")
 #rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
-rma_results = rma(rma_data)
+ow_rma_results = ow_rma(ow_rma_data)
 
-rma_results
+ow_rma_results
 
 
