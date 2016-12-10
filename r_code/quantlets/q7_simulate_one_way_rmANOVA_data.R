@@ -1,7 +1,7 @@
 # Function to simulate data for repeated measurement ANOVA
 
 
-sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noice_sd = 10, between_subject_sd = 40){
+sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noice_sd = 10, between_subject_sd = 40, NAs = 0){
   
 # Create empty n x k matrix 
 rma_data = matrix(, nrow = n, ncol = k + 1)
@@ -63,6 +63,11 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
     noice[,i] = rnorm(n, mean = 0, sd = noice_sd[i])
   }
   rma_data[, 2:(k+1)]  = rma_data[, 2:(k+1)] + noice
+  
+  for(i in 1:NAs){
+    rma_data[runif(1, min = 1, max = n), runif(1, min = 2, max = (k + 1))] = NA
+    
+  }
 
 # Naming columns
   factor_names = character(k+1)
@@ -79,6 +84,6 @@ rma_data = matrix(, nrow = n, ncol = k + 1)
 # Testing:
 
 source("r/quantlet1_rm_anova.R")
-rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30), between_subject_sd = 40)
+rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 10)
 rma_data
 
