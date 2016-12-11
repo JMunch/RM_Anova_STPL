@@ -39,6 +39,31 @@
 \date{\today}
 \parindent0pt
 
+% Formartierter Code
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=R,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -55,7 +80,22 @@
 	\section{Simulating and Preparing the Data}
 	Short theoretical introduction
 		\subsection{Simulation}
-				 simsimsim
+				 In order to demonstrate and evaluate the functions presented later in this report, we have developed a function to simulate data, which can then be used to estimate repeated measurement ANOVA models. First we will shortly present the functionalities and the implementation of the simulation function.\\
+				 
+				 \begin{lstlisting}
+				 # Run the data simulation
+				 rma_data = sim_rma_data(n = 1000, k = 4, means = NULL, poly_order = 5, noice_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 0)
+				 
+				 \end{lstlisting}
+				 
+				 The data can be simulated by running the function shown above. The function includes functionalities for simulating orthogonal polynomial contrast and sphericity, which can be specified by passing arguments. In the following the implementation and the functionality will be explained.\\
+				 
+				 The first two arguments of the function n and k are obligatory. n defines the number of observation and k the number of factors to be simulated. The output of the function will therefore be an matrix of the size n x (k + 1). The first column contains the subject ids to identify each simulated observation and the following columns represents the factors.\\
+				 
+				 The first step, when simulating the data is to simulate the means of each factors. Thereby each factor columns is filled with the mean for the corresponding factor. This results in all observations having the same value for each factor, in the next step we will therefor simulate the differences between the subjects.  Additionally by passing an integer not larger than k to the argument poly\_order, the means will be simulated so that they create a polynomial contrast in the data.\\
+				 
+				 Instead of letting the function simulate the means, a vector of the lengths k containing the means that should be used for each factor can be passed to the function.   
+				 
 		\subsection{Listwise Deletion}
 				 An dieser Stelle hat der Autor
 				 
