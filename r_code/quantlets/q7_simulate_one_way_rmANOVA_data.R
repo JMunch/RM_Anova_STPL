@@ -71,6 +71,19 @@ ow_rma_data = matrix(, nrow = n, ncol = k + 1)
     } 
   }
 
+# Listwise deletion in case of NAs 
+  
+  deletionvector = vector(mode="numeric", length=0)
+  
+  for(i in 1:nrow(ow_rma_data)) {
+    if(any(is.na(ow_rma_data[i,])) == TRUE) {
+      deletionvector = union(deletionvector, i)
+      print(paste("Listwise deletion due to missing value(s) for subject", i))
+    }
+  }
+  
+  ow_rma_data = ow_rma_data[-deletionvector,]  
+  
 # Naming columns
   factor_names = character(k+1)
   factor_names[1] = "Subject_id"
@@ -86,6 +99,6 @@ ow_rma_data = matrix(, nrow = n, ncol = k + 1)
 # Testing:
 
 source("r/quantlet1_rm_anova.R")
-rma_data = sim_ow_rma_data(1000, 4, means = NULL, poly_order = 2, noice_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1 )
-rma_data
+ow_rma_data = sim_ow_rma_data(1000, 4, means = NULL, poly_order = 2, noice_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1 )
+ow_rma_data
 
