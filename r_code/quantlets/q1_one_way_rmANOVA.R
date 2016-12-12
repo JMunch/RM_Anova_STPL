@@ -12,6 +12,7 @@ ow_rma = function(ow_rma_data){
 
 # Define needed constants and the dependent variable ----------------------
 
+  
   # Number of entities
   n = nrow(ow_rma_data)
 
@@ -70,11 +71,11 @@ ow_rma = function(ow_rma_data){
 
   
   dof = data.frame("dependent_variable" = n*k,
-                  "baseline" = 1,
-                  "factor_level" = k-1,
-                  "subject_level" = n-1,
-                  "error" = (n*k)-1-(k-1)-(n-1)
-                  )
+                   "baseline" = 1,
+                   "factor_level" = k-1,
+                   "subject_level" = n-1,
+                   "error" = (n*k)-1-(k-1)-(n-1)
+                   )
 
 
 # Compute mean squares ----------------------------------------------------
@@ -132,12 +133,8 @@ ow_rma = function(ow_rma_data){
 
 
 # -------------------------------------------------------------------------
+
+
 # Testing:
-
-#source("r/simulate_rma_data.R")
-#rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
-ow_rma_results = ow_rma(ow_rma_data)
-
-ow_rma_results
-
+ow_rma(ow_rma_data)
 

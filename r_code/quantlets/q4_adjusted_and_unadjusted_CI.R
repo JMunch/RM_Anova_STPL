@@ -7,7 +7,7 @@ ow_rma_ci = function(ow_rma_data){
 # Libraries needed --------------------------------------------------------
 
   
-require(ggplot2) 
+  require(ggplot2) 
 
   
 # Define needed constants and variables -----------------------------------
@@ -84,7 +84,6 @@ require(ggplot2)
   low_unadj = MeFlm$Flm - CIdist 
   
 
-
 # Compute CI for Anova with repeated measures -----------------------------
 
 
@@ -106,33 +105,29 @@ require(ggplot2)
   low_adj = MeFlm$Flm - CIdist_adj
   
 
-  
-
-# ggplot CI comparison ----------------------------------------------------
+# CI comparison (ggplot) ---------------------------------------------------
 
   
   # create two vectors for lower ci values and upper ci values respectively
-  lower <- c(low_adj, low_unadj)
-  upper <- c(up_adj, up_unadj)
+  lower = c(low_adj, low_unadj)
+  upper = c(up_adj, up_unadj)
   
   # create vector that is used for facetting i.e. for assigning the correct values
   # to each plot
-  plot_nr <- rep(c("Adjusted CI", "Unadjusted CI"), each = k)
+  plot_nr = rep(c("Adjusted CI", "Unadjusted CI"), each = k)
   
   # create data frame for ggplot: comparison of ci
-  ci_plot_data <- data.frame(plot_nr, rbind(MeFlm, MeFlm), lower, upper)
-  
+  ci_plot_data = data.frame(plot_nr, rbind(MeFlm, MeFlm), lower, upper)
   
   # create plot with adjusted ci values
-  ci_plot <- ggplot(data = ci_plot_data, aes(Me, Flm)) + 
-      geom_point(size = 2) + 
-      geom_errorbar(aes(ymax = upper, ymin = lower), width = .1) + 
-      facet_grid(~plot_nr) + 
-      labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted (standard) confidence intervals")
+  ci_plot = ggplot(data = ci_plot_data, aes(Me, Flm)) + 
+                   geom_point(size = 2) + 
+                   geom_errorbar(aes(ymax = upper, ymin = lower), width = .1) + 
+                   facet_grid(~plot_nr) + 
+                   labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted confidence intervals")
   
-
   
-# Construct CI-tables
+# Construct CI-tables ------------------------------------------------------------------------------
   
   
   lu_adj_CI = cbind(low_adj, up_adj)
@@ -142,7 +137,8 @@ require(ggplot2)
   
 
 # Return plot and table displaying adjusted and unadjusted confidence intervals --------------------
-  
+
+    
   print(ci_plot)
   return(list("adjusted_CI" = lu_adj_CI, "unadjusted_CI" = lu_unadj_CI))
 }
@@ -150,4 +146,7 @@ require(ggplot2)
 
 # -------------------------------------------------------------------------
 
+
+# Testing:
 ow_rma_ci(ow_rma_data)
+

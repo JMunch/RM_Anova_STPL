@@ -122,37 +122,36 @@ ow_rma_opc = function(ow_rma_data){
 
     
   # initialize empty dataframe for polynomial regression coefficients
-  poly_coef <- data.frame(matrix(0, ncol = k-1, nrow = k))
+  poly_coef = data.frame(matrix(0, ncol = k-1, nrow = k))
   
   # Fitting the k - 1 orthogonal Polynomials
   # In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
   for(i in 1:maxpoly){
       pfv = paste("poly.fit.", i, sep = "")
-      poly <- assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
-      poly_coef[,i][1:(i+1)] <- poly$coef
+      poly = assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
+      poly_coef[,i][1:(i+1)] = poly$coef
       poly.fit.max = lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE))
   }
   
-# Plotting contrats -------------------------------------------------------
+# Plotting contrats (ggplot) ---------------------------------------------
   
   
   # create datapoints for polynomial plot:
   # this code automatically sets up the data that is required to plot the k-1 polynomial regression lines
-  
-  poly_curve_data <- data.frame(x = seq(1, k, length.out = 100), 
-                                tcrossprod(outer(seq(1, k, length.out = 100), 0:(k-1), `^`), do.call(rbind, poly_coef))) %>% 
-      gather(var, y, -x)
+  poly_curve_data = data.frame(x = seq(1, k, length.out = 100), 
+                               tcrossprod(outer(seq(1, k, length.out = 100), 0:(k-1), `^`), do.call(rbind, poly_coef))) %>% gather(var, y, -x)
   
   # plot the k-1 polynomial regression lines
-  poly_plot <- ggplot(data = ow_rma_data_long, aes(x = condition, y = value)) + 
-      geom_point() + 
-      labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
-      geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + 
-      scale_color_discrete(labels=as.character(1:(k-1)))
+  poly_plot = ggplot(data = ow_rma_data_long, aes(x = condition, y = value)) + 
+                     geom_point() + 
+                     labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
+                     geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + 
+                     scale_color_discrete(labels=as.character(1:(k-1)))
   
   
-# Return the contrast-table -----------------------------------------------
-    
+# Return the contrast-table and plot --------------------------------------
+
+      
   print(poly_plot)
   return(list("orthogonal_polynomial_contrast_table" = contrast_table))
 }
@@ -160,4 +159,7 @@ ow_rma_opc = function(ow_rma_data){
 
 # -------------------------------------------------------------------------
 
+
+# Testing:
 ow_rma_opc(ow_rma_data)
+

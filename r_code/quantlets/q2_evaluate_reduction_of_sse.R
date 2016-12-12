@@ -1,5 +1,5 @@
 ##### Evaluate reduction of error sum of squares due to the consideration of variance between entities
-  # Function 'ow-rma' is required (quantlet1_rm_anova.R)!
+  # Function 'ow-rma' is required!
 
 
 ow_rma_sse_reduct = function(ow_rma_data){
@@ -182,68 +182,49 @@ ow_rma_sse_reduct = function(ow_rma_data){
   # All plots in one figure
   par(mfrow = c(1, 2))
   
-  
-  
-  
-# Pie Charts-Version 1 -------------------------------------------------------
-  
-# A ggplot version of the pie chart might also be implemented (NH: I prefer the bar chart)  
-  
-  #slices_2 = c(sse_rma, ss_subject_rma) 
-  #lbls_2 = c("SS error", "SS entity")
-  #pct_2 = round(slices_2/sum(slices_2)*100)
-  
-  #lbls_2 = paste(lbls_2, pct_2) 
-  # add percents to labels 
-  #lbls_2 = paste(lbls_2,"%",sep="") 
-  # ad % to labels 
-  
-  #pie1_RM_ANOVA = pie(slices_2, lbls_2, col = c("navyblue", "orange"),
-  #                    main="rmANOVA", init.angle = 90
-  #                    ) 
-  
-  
 
-  # Stackplot Version 2 (with ggplot) ------------------------------------------
+# Stack-plot (with ggplot) ---------------------------------------------------
+  
   
   # create variables for comparison plot
+  var = unlist(error_ss_comparison_table[, -1])
+  # 'var' contains the sse by subject and error
+  model = rep(c("ANOVA", "RM ANOVA"), each = 2)
+  # 'model' is used in the ggplot to assign the values to the bars
+  source = factor(rep(c("Error", "Subject"), times = 2), levels = c("Subject", "Error"))
+  # 'source' is required for color and legend label assignment in the ggplot
   
-  # var contains the sse by subject and error
-  var <- unlist(error_ss_comparison_table[, -1])
+  # Merge variables into one data frame
+  comparison_data = data.frame(var, model, source)
   
-  # model is used in the ggplot to assign the values to the bars
-  model <- rep(c("ANOVA", "RM ANOVA"), each = 2)
-  
-  # source is required for color and legend label assignment in the ggplot
-  source <- factor(rep(c("Error", "Subject"), times = 2), levels = c("Subject", "Error"))
-  
-  # merge variables into one data frame
-  comparison_data <- data.frame(var, model, source)
-  
-  # create stacked barplot
-  comp_plot_bar <- ggplot(comparison_data, aes(model, var, fill = source)) + 
-      geom_bar(stat = "identity") + 
-      labs(x = "Model", y = "Sum of squares (error)", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
-      guides(fill=guide_legend(title=NULL)) + 
-      scale_fill_manual(values = c("orange", "navyblue"))
-  
-  # new variable: percentage of sse. used for better readability in piechart
-  # for consistency of interpretations it might make sense to use this variable in the barplots as well
-  comparison_data$var_percent <- comparison_data$var*100/(max(comparison_data$var))
-  
-  # create pie chart
-  comp_plot_pie <- ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
-      geom_bar(width = 1, stat = "identity") + 
-      labs(x = "", y = "", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
-      guides(fill=guide_legend(title=NULL)) + 
-      scale_fill_manual(values = c("orange", "navyblue")) + 
-      coord_polar(theta = "y") + 
-      facet_grid(~model)
-  
+  # Create stacked barplot
+  comp_plot_bar = ggplot(comparison_data, aes(model, var, fill = source)) + 
+                         geom_bar(stat = "identity") + 
+                         labs(x = "Model", y = "Sum of squares (error)", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+                         guides(fill=guide_legend(title=NULL)) + 
+                         scale_fill_manual(values = c("orange", "navyblue"))
   
 
-# Return comparison table ---------------------------------------------------
+# Pie-chart (with ggplot) ----------------------------------------------------
   
+  
+  # Percentage of sse. used for better readability in piechart
+  ## !!! For consistency of interpretations it might make sense to use this variable in the barplots as well
+  comparison_data$var_percent = comparison_data$var*100/(max(comparison_data$var))
+  
+  # Create pie chart
+  comp_plot_pie = ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
+                         geom_bar(width = 1, stat = "identity") + 
+                         labs(x = "", y = "", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+                         guides(fill=guide_legend(title=NULL)) + 
+                         scale_fill_manual(values = c("orange", "navyblue")) + 
+                         coord_polar(theta = "y") + 
+                         facet_grid(~model)
+        
+
+# Return comparison table and plots -----------------------------------------
+
+    
   print(comp_plot_pie)
   print(comp_plot_bar)
   return(list("one_way_ANOVA_table" = ow_a_results, "Caution" = ow_a_warning, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
@@ -252,7 +233,7 @@ ow_rma_sse_reduct = function(ow_rma_data){
 
 # ---------------------------------------------------------------------------
 
+
+# Testing:
 ow_rma_sse_reduct(ow_rma_data)
-
-
 

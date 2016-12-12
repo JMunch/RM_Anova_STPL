@@ -1,5 +1,5 @@
 ##### Effect size measures for a one-way repeated measures ANOVA
-  # Function 'ow_rma' is required (quantlet1_rm_anova.R)!
+  # Function 'ow_rma' is required!
 
 
 ow_rma_eta = function(ow_rma_data, append = FALSE){
@@ -39,7 +39,8 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
                                  "partial eta squared" = eta_partial
                                  )
   rownames(effect_size_table) = NULL
-  
+
+    
 # Append effect size measures to ANOVA-table ------------------------------
 
   
@@ -59,4 +60,8 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
 
 
 # -------------------------------------------------------------------------
+
+
+# Testing:
+ow_rma_eta(ow_rma_data, append = TRUE)
 
