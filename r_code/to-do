@@ -13,7 +13,7 @@ To-do
   da alle anderen funktionen jetzt mit den data.frame ausgaben bzw. list ausgaben arbeiten. Vlt gibt es auch andere alternativen 
   (kenne mich zu wenig mit pixydust aus)
   
-3. Data preparation braucht den listenweisen fallausschluss
+DONE <- 3. Data preparation braucht den listenweisen fallausschluss (listwise deletion auch in Datasimulation eingeführt)
 4. Data simulation nach empirischem "vorbild" 
 
 # Data simulation und data preparation sollten wir vlt in ein einzelnes r-script schreiben
