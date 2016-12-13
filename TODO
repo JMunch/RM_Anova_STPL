@@ -34,3 +34,28 @@
 
 
 (** Q6. Mauchly test)
+Until Christmas:
+
+- Render code so it follows the style guide -> Quang
+- check for redundant code and loops that can be replaced with matrix computation -> Niko und Joachim
+- code used in multiple function should be outsourced to own function 
+  - listwise in own funktion and being called at the beginning of each function 
+- Make Package -> Niko und Joachim
+- Write docu
+- errorhandling -> Niko makes an example and then everybody can implicate in their code
+  - error 
+  - warning 
+- comparing ANOVA to reduction SSE -> C
+
+After Christmas
+Writing
+- Theory and Motivation
+- R Packages -> Joachim 
+- Quantlet 1 -> Quang
+- Quantlet 2 -> Fred
+- Quantlet 3 
+- Quantlet 4
+- Quantlet 5
+- Quantlet 6 -> Constantin
+- Quantlet 7 -> Joachim
+
