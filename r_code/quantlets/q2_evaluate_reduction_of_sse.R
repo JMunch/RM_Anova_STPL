@@ -2,7 +2,7 @@
   # Function 'ow-rma' is required (quantlet1_rm_anova.R)!
 
 
-ow_rma_sse_reduct = function(ow_rma_data){
+ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   
   
 # Libraries needed ----------------------------------------------------------
@@ -222,11 +222,16 @@ ow_rma_sse_reduct = function(ow_rma_data){
   
   
 
+  if(plot_type == "pie"){
+      final_plot <- comp_plot_pie
+  } else {
+      final_plot <- comp_plot_bar
+  }
+  
 # Return comparison table ---------------------------------------------------
   
   warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
-  print(comp_plot_pie)
-  print(comp_plot_bar)
+  print(final_plot)
   return(list("one_way_ANOVA_table" = ow_a_results, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
 }
 
