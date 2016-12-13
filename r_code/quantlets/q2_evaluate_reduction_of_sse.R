@@ -218,7 +218,7 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   # create pie chart
   comp_plot_pie <- ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
       geom_bar(width = 1, stat = "identity") + 
-      labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE)") + 
+      labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE) in percent") + 
       guides(fill=guide_legend(title=NULL)) + 
       scale_fill_manual(values = c("orange", "navyblue")) + 
       coord_polar(theta = "y") + 
