@@ -17,7 +17,6 @@ ow_rma_sse_reduct = function(ow_rma_data){
   # The ANOVA without repeated measures treates the data as if they are independend i.e. as if there are different entities in each group, which is in fact not the case
   
   
-  ow_a_warning = "Note that the one-way ANOVA without repeated measures is for illustration purposes only since the data structure is correlated across the factor levels because of the dependent measurements. The ANOVA without repeated measures treates the data as if they are independend i.e. as if there are different entities in each group, which is in fact not the case."
 
   ow_a = function(ow_rma_data){
   
@@ -244,9 +243,10 @@ ow_rma_sse_reduct = function(ow_rma_data){
 
 # Return comparison table ---------------------------------------------------
   
+  warning("Note that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
   print(comp_plot_pie)
   print(comp_plot_bar)
-  return(list("one_way_ANOVA_table" = ow_a_results, "Caution" = ow_a_warning, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
+  return(list("one_way_ANOVA_table" = ow_a_results, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
 }
 
 
