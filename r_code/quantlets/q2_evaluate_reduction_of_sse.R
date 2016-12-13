@@ -192,10 +192,10 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   var <- unlist(error_ss_comparison_table[, -1])
   
   # model is used in the ggplot to assign the values to the bars
-  model <- rep(c("ANOVA", "RM ANOVA"), each = 2)
+  model <- rep(c("No estimation of the\nvariation between entities", "Estimation of the\nvariation between entities"), each = 2)
   
   # source is required for color and legend label assignment in the ggplot
-  source <- factor(rep(c("Error", "Subject"), times = 2), levels = c("Subject", "Error"))
+  source <- factor(rep(c("Error", "Entity"), times = 2), levels = c("Entity", "Error"))
   
   # merge variables into one data frame
   comparison_data <- data.frame(var, model, source)
@@ -203,9 +203,13 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   # create stacked barplot
   comp_plot_bar <- ggplot(comparison_data, aes(model, var, fill = source)) + 
       geom_bar(stat = "identity") + 
-      labs(x = "Model", y = "Sum of squares (error)", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+      labs(x = "Model", y = "Sum of squares (error)", title = "Reduction of sum of squared errors (SSE)") + 
       guides(fill=guide_legend(title=NULL)) + 
-      scale_fill_manual(values = c("orange", "navyblue"))
+      scale_fill_manual(values = c("orange", "navyblue")) + 
+      theme_bw() + 
+      theme(panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.background = element_blank()) 
   
   # new variable: percentage of sse. used for better readability in piechart
   # for consistency of interpretations it might make sense to use this variable in the barplots as well
@@ -214,11 +218,15 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   # create pie chart
   comp_plot_pie <- ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
       geom_bar(width = 1, stat = "identity") + 
-      labs(x = "", y = "", title = "Comparison of error terms: Standard ANOVA vs. RM ANOVA") + 
+      labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE)") + 
       guides(fill=guide_legend(title=NULL)) + 
       scale_fill_manual(values = c("orange", "navyblue")) + 
       coord_polar(theta = "y") + 
-      facet_grid(~model)
+      facet_grid(~model) + 
+      theme_bw() + 
+      theme(panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.background = element_blank()) 
   
   
 
@@ -238,7 +246,7 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
 
 # ---------------------------------------------------------------------------
 
-ow_rma_sse_reduct(ow_rma_data)
+ow_rma_sse_reduct(ow_rma_data, plot_type = "bar")
 
 
 
