@@ -4,24 +4,24 @@
 
 
 ow_rma_spheri = function(ow_rma_data, append = FALSE){
-  
-  
+
+
 # Defining some variables -------------------------------------------------
 
-  
+
   # number of factor levels
   k = length(ow_rma_data[1,]) - 1
-  
+
   # number of entities
   n = as.numeric(length(ow_rma_data[,1]))
-  
+
   # Factor degrees of freedom
   df = k - 1
 
   # Empirical covariance matrix
   covariance_matix = cov(as.matrix(ow_rma_data[,-1]))
 
-  
+
 # Helmert matrix required for the computation of mauchly's W --------------
 
 
@@ -48,7 +48,7 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 # Chi-Square Test ---------------------------------------------------------
 
 
-  # Computing the degrees of freedom for the chi-square value 
+  # Computing the degrees of freedom for the chi-square value
   df_w = ((k * df) / 2) - 1
 
   # Computing the chi-square value
@@ -61,7 +61,7 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 
 # Create summary table for mauchly's test ---------------------------------
 
-  
+
   mauchly_table = data.frame(check.names = FALSE,
                              "Source" = "Factor",
                              "Mauchly's W" = w,
@@ -75,40 +75,40 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 # The three different correction factors (epsilon) ------------------------
   # Computing the three different correction factors for the nominator/denominator df of the rmANOVA factor F-test (Box, 1954a; Box, 1954b; Geisser & Greenhouse, 1958; Greenhouse & Geisser, 1959; Huynh & Feldt, 1976) )
 
-    
+
   # Lower-Bound correction (Greenhouse & Geisser, 1959)
   epsilon_lb = 1 / df
-  
+
   # Box correction (Geisser & Greenhouse, 1958)
   epsilon_gg = (sum(diag(C%*%covariance_matix%*%t(C)))^2) / (df * sum(diag(t((C%*%covariance_matix%*%t(C)))%*%(C%*%covariance_matix%*%t(C)))))
-  
+
   # Huynh-Feldt correction (Huynh & Feldt, 1976)
   epsilon_hf = min((n * df * epsilon_gg - 2) / (df * (n - 1) - (df^2 * epsilon_gg)), 1)
-  
-  
+
+
 # Computing the adjusted p-values for the ANOVA-factor F-test -------------
   # The adjustment is realised via correction of the F-distribution degrees of freedom by multplication with the respective correction factor (epsilon)
-  # rmANOVA function 'ow_rma' is required!  
-  
-  
+  # rmANOVA function 'ow_rma' is required!
+
+
   ANOVA_table = ow_rma(ow_rma_data)[[1]]
-  
+
   corrected_factor_df = ANOVA_table[2,3] * epsilon_lb
   corrected_error_df = ANOVA_table[2,3] * epsilon_lb
   p_factor_lb = 1 - pf(ANOVA_table[2,5], corrected_factor_df, corrected_error_df)
-  
+
   corrected_factor_df = ANOVA_table[2,3] * epsilon_gg
   corrected_error_df = ANOVA_table[2,3] * epsilon_gg
   p_factor_gg = 1 - pf(ANOVA_table[2,5], corrected_factor_df, corrected_error_df)
-  
+
   corrected_factor_df = ANOVA_table[2,3] * epsilon_hf
   corrected_error_df = ANOVA_table[2,3] * epsilon_hf
   p_factor_hf = 1 - pf(ANOVA_table[2,5], corrected_factor_df, corrected_error_df)
-  
-  
+
+
 # Table with adjusted p-values and respective corection factors -----------
-  
-  
+
+
   epsilon_table = data.frame(check.names = FALSE,
                              "Source" = c("Epsilon", "Adjusted p-Value"),
                              "Lower-Bound correction (Greenhouse & Geisser, 1959)" = c(epsilon_lb, p_factor_lb),
@@ -117,12 +117,12 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
                              )
   rownames(epsilon_table) = NULL
 
-  
+
 # Coose recomendet adjustment and add to ANOVA-table ----------------------
-  # Correction is only applied if assumption of sphericity is rejected 
+  # Correction is only applied if assumption of sphericity is rejected
   # Recomendation based on results of Greenhouse and Geisser (1959) as well as Huynh and Feldt (1976)
 
-    
+
   if (p_w < .05){
     if (p_factor_lb < .05){
       ANOVA_table[,"Recommended Lower-Bound corrected p-Value (Greenhouse & Geisser, 1959))"] = c(NA, p_factor_lb, NA, NA, NA, NA)
@@ -137,9 +137,9 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 
 
 # Return spericity test and p-value adjustment ----------------------------
-  # If append is 'TRUE' the function will also return the ANOVA-table with the recomendet adjustment of the p-value  
-  
-      
+  # If append is 'TRUE' the function will also return the ANOVA-table with the recomendet adjustment of the p-value
+
+
   if (append == TRUE){
     return(list("mauchly_test_table" = mauchly_table, "correction_factors_epsilon_table" = epsilon_table, "corrected_one_way_repeated_measures_ANOVA_table" = ANOVA_table))
   }else{
@@ -148,5 +148,4 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 }
 
 
-# -------------------------------------------------------------------------
 
