@@ -3,24 +3,49 @@
 
 ow_rma_opc = function(ow_rma_data){
 
-    require(dplyr)
-    require(ggplot2)
-    # needed for preparation of plot data
-    require(tidyverse)
+    # suppress warning messages from the required packages
+    # NOTE: This function still loads the packages!
+    suppressWarnings(suppressMessages(require(dplyr)))
+    suppressWarnings(suppressMessages(require(ggplot2)))
+    suppressWarnings(suppressMessages(require(tidyverse)))
+    
     
         
 # Define some variables ---------------------------------------------------
   
+    # number of entities 
+    n = nrow(ow_rma_data)
+    
+    #  number of factor levels
+    k = (ncol(ow_rma_data)-1)
   
-  # number of entities 
-  n = as.numeric(length(ow_rma_data[,1]))
   
   # id-variable and condition-variable
   rm_names = colnames(ow_rma_data)[-1]
   id_names = colnames(ow_rma_data)[1]
   
-  #  number of factor levels
-  k = as.numeric(length(rm_names))
+
+  
+  
+  # check if the data meet the requirements ---------------------------------
+  
+  
+  # ow_rma_data needs to meet the following requirements:
+  
+  # all variables must be numeric
+  if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
+      stop("All variables in ow_rma_data must be numeric")
+  }
+  
+  # n > k (i.e. more entities than factor levels)
+  if(n <= k){
+      stop("Number of entities must exceed number of factor levels")
+  }
+  
+  # k >= 2 (i.e. at least two or more factor levels)
+  if(k < 2){
+      stop("At least two factor factor levels required")
+  }
   
   
 # Convert to long format --------------------------------------------------
