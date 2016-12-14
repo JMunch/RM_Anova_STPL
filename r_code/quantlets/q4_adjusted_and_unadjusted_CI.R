@@ -7,7 +7,9 @@ ow_rma_ci = function(ow_rma_data){
 # Libraries needed --------------------------------------------------------
 
   
-require(ggplot2) 
+    # suppress warning message about ggplot
+    # NOTE: This function still loads the package!
+    suppressWarnings(suppressMessages(require(ggplot2)))
 
   
 # Define needed constants and variables -----------------------------------
