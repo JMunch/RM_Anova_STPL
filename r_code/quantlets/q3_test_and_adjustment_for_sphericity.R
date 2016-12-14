@@ -10,16 +10,37 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 
   
   # number of factor levels
-  k = length(ow_rma_data[1,]) - 1
+  k = (ncol(ow_rma_data) - 1)
   
   # number of entities
-  n = as.numeric(length(ow_rma_data[,1]))
+  n = nrow(ow_rma_data)
   
   # Factor degrees of freedom
   df = k - 1
 
   # Empirical covariance matrix
   covariance_matix = cov(as.matrix(ow_rma_data[,-1]))
+  
+  
+  # check if the data meet the requirements ---------------------------------
+  
+  
+  # ow_rma_data needs to meet the following requirements:
+  
+  # all variables must be numeric
+  if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
+      stop("All variables in ow_rma_data must be numeric")
+  }
+  
+  # n > k (i.e. more entities than factor levels)
+  if(n <= k){
+      stop("Number of entities must exceed number of factor levels")
+  }
+  
+  # k >= 2 (i.e. at least two or more factor levels)
+  if(k < 2){
+      stop("At least two factor factor levels required")
+  }
 
   
 # Helmert matrix required for the computation of mauchly's W --------------
