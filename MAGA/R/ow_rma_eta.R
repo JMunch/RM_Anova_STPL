@@ -1,7 +1,22 @@
-##### Effect size measures for a one-way repeated measures ANOVA
-  # Function 'ow_rma' is required (quantlet1_rm_anova.R)!
-
-
+#' Effect size measures for a one-way repeated measures ANOVA
+#'
+#' Compute effect size of the repeated measurement ANOVA.
+#'
+#' @param ow_rma_data datataframe with subject id column and k factor columns.
+#'
+#'
+#' @return list with adj. and unadj. confidence intervals
+#' \item{ow_rma_data}{The first object input.}
+#' @author Sums of Suares
+#' @note This functions automatically estimates a repeated meassurement ANOVA to then calculate the effect size.
+#' @examples
+#'
+#' CI_list = ow_rma_ete(some_rma_data)
+#'
+#'
+#'
+#' @rdname ow_rma_eta
+#' @export
 ow_rma_eta = function(ow_rma_data, append = FALSE){
 
 

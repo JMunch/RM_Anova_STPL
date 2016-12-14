@@ -14,7 +14,7 @@ ANOVA Table
 \item{ow_rma_data}{The first object input.}
 }
 \description{
-Estimate an .repeated measurement on fiven data
+Estimate an repeated measurement with given data
 }
 \note{
 This is the main function of the MAGA-package to estimate the repeated measurement ANOVA.

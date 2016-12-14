@@ -1,6 +1,6 @@
 #' Computation of one-way repeated measures ANOVA (rma)
 #'
-#' Estimate an .repeated measurement on fiven data
+#' Estimate an repeated measurement with given data
 #'
 #' @param ow_rma_data datataframe with subject id column and k factor columns.
 #'

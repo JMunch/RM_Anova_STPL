@@ -1,5 +1,27 @@
-##### Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
-
+#' Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
+#'
+#' Estimate adjusted and unadjusted confidence intervals for repeated measurement ANOVA. The functions further allow to plot the confidence intervals.
+#'
+#' @param ow_rma_data datataframe with subject id column and k factor columns.
+#'
+#'
+#' @return list with adj. and unadj. confidence intervals
+#' \item{ow_rma_data}{The first object input.}
+#' @author Sums of Suares
+#' @note This functions allows to calculate the confidence intervals of a repeated measurement ANOVA.
+#' @examples
+#'
+#' CI_list = ow_rma_ci(some_rma_data)
+#'
+#' # adjusted CIs
+#' CI_list$adjusted_CI
+#'
+#' # unadjusted CIs
+#'CI_list$unadjusted_CI
+#'
+#'
+#' @rdname ow_rma_ci
+#' @export
 
 ow_rma_ci = function(ow_rma_data){
 
