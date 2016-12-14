@@ -1,6 +1,20 @@
-##### Computation of one-way repeated measures ANOVA (rma)
-
-
+#' Computation of one-way repeated measures ANOVA (rma)
+#'
+#' Estimate an .repeated measurement on fiven data
+#'
+#' @param ow_rma_data datataframe with subject id column and k factor columns.
+#'
+#'
+#' @return ANOVA Table
+#' \item{ow_rma_data}{The first object input.}
+#' @author Sums of Suares
+#' @note This is the main function of the MAGA-package to estimate the repeated measurement ANOVA.
+#' @examples
+#'
+#' ANOVA_table = ow_rma(some_rma_data)
+#'
+#' @rdname ow_rma
+#' @export
 ow_rma = function(ow_rma_data){
 
 
