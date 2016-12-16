@@ -1,17 +1,44 @@
 ##### Effect size measures for a one-way repeated measures ANOVA
-  # Function 'ow_rma' is required (quantlet1_rm_anova.R)!
+  # Function 'ow_rma' is required!
 
 
 ow_rma_eta = function(ow_rma_data, append = FALSE){
 
+
+# check if the data meet the requirements ---------------------------------
+
+    
+  # Number of entities
+  n = nrow(ow_rma_data)
   
+  # Number of factor levels 
+  k = ncol(ow_rma_data) - 1
+  
+  # ow_rma_data needs to meet the following requirements:
+  
+  # all variables must be numeric
+  if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
+    stop("All variables in ow_rma_data must be numeric")
+  }
+  
+  # n > k (i.e. more entities than factor levels)
+  if(n <= k){
+    stop("Number of entities must exceed number of factor levels")
+  }
+  
+  # k >= 2 (i.e. at least two or more factor levels)
+  if(k < 2){
+    stop("At least two factor factor levels required")
+  }
+  
+    
 # Get ANOVA-table ---------------------------------------------------------
   # rmANOVA function 'ow_rma' is required!  
   
   
   ANOVA_table = ow_rma(ow_rma_data)[[1]]
   
-  
+
 # Define needed sums of squares -------------------------------------------
 
 
@@ -39,7 +66,8 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
                                  "partial eta squared" = eta_partial
                                  )
   rownames(effect_size_table) = NULL
-  
+
+    
 # Append effect size measures to ANOVA-table ------------------------------
 
   
@@ -59,4 +87,8 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
 
 
 # -------------------------------------------------------------------------
+
+
+# Testing:
+ow_rma_eta(ow_rma_data, append = TRUE)
 
