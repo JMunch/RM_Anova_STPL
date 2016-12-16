@@ -4,44 +4,45 @@
 ow_rma = function(ow_rma_data){
     
     
-    # Define needed constants and the dependent variable ----------------------
+# Define needed constants and the dependent variable ----------------------
+
+      
+  # Number of entities
+  n = nrow(ow_rma_data)
     
-    # Number of entities
-    n = nrow(ow_rma_data)
+  # Number of factor levels 
+  k = ncol(ow_rma_data) - 1
     
-    # Number of factor levels 
-    k = ncol(ow_rma_data) - 1
-    
-    dependent_variable = as.matrix(ow_rma_data[, -1])
+  dependent_variable = as.matrix(ow_rma_data[, -1])
     
     
-    
-    # check if the data meet the requirements ---------------------------------
+# check if the data meet the requirements ---------------------------------
 
     
-    # ow_rma_data needs to meet the following requirements:
+  # ow_rma_data needs to meet the following requirements:
     
-    # all variables must be numeric
-    if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
-        stop("All variables in ow_rma_data must be numeric")
-    }
+  # all variables must be numeric
+  if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
+    stop("All variables in ow_rma_data must be numeric")
+  }
     
-    # n > k (i.e. more entities than factor levels)
-    if(n <= k){
-        stop("Number of entities must exceed number of factor levels")
-    }
+  # n > k (i.e. more entities than factor levels)
+  if(n <= k){
+    stop("Number of entities must exceed number of factor levels")
+  }
     
-    # k >= 2 (i.e. at least two or more factor levels)
-    if(k < 2){
-        stop("At least two factor factor levels required")
-    }
+  # k >= 2 (i.e. at least two or more factor levels)
+  if(k < 2){
+    stop("At least two factor factor levels required")
+  }
   
   
 # Libraries needed --------------------------------------------------------
 
-    # suppress warning message about masked objects by dplyr
-    # NOTE: This function still loads the dplyr package!
-    suppressWarnings(suppressMessages(require(dplyr)))
+  
+  # suppress warning message about masked objects by dplyr
+  # NOTE: This function still loads the dplyr package!
+  suppressWarnings(suppressMessages(require(dplyr)))
 
 
 # Define basic anova components -------------------------------------------
@@ -93,11 +94,11 @@ ow_rma = function(ow_rma_data){
 
   
   dof = data.frame("dependent_variable" = n*k,
-                  "baseline" = 1,
-                  "factor_level" = k-1,
-                  "subject_level" = n-1,
-                  "error" = (n*k)-1-(k-1)-(n-1)
-                  )
+                   "baseline" = 1,
+                   "factor_level" = k-1,
+                   "subject_level" = n-1,
+                   "error" = (n*k)-1-(k-1)-(n-1)
+                   )
 
 
 # Compute mean squares ----------------------------------------------------
@@ -155,12 +156,8 @@ ow_rma = function(ow_rma_data){
 
 
 # -------------------------------------------------------------------------
+
+
 # Testing:
-
-#source("r/simulate_rma_data.R")
-#rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
-ow_rma_results = ow_rma(ow_rma_data)
-
-ow_rma_results
-
+ow_rma(ow_rma_data)
 
