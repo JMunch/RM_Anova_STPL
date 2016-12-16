@@ -179,8 +179,7 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
     
     
   }else{
-    no_test_notification = "Note that there can't be a violation of sphericity since the factor of the one-way ANOVA has only two factor levels"
-    return(list("Caution" = no_test_warning))
+    stop("Note that there can't be a violation of sphericity since the factor of the one-way ANOVA has only two factor levels")
   }
 }  
 
