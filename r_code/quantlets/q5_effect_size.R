@@ -8,12 +8,6 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
 # check if the data meet the requirements ---------------------------------
 
     
-  # Number of entities
-  n = nrow(ow_rma_data)
-  
-  # Number of factor levels 
-  k = ncol(ow_rma_data) - 1
-  
   # ow_rma_data needs to meet the following requirements:
   
   # all variables must be numeric
@@ -22,12 +16,12 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
   }
   
   # n > k (i.e. more entities than factor levels)
-  if(n <= k){
+  if(nrow(ow_rma_data) <= (ncol(ow_rma_data)-1)){
     stop("Number of entities must exceed number of factor levels")
   }
   
   # k >= 2 (i.e. at least two or more factor levels)
-  if(k < 2){
+  if((ncol(ow_rma_data)-1) < 2){
     stop("At least two factor factor levels required")
   }
   
