@@ -3,48 +3,46 @@
 
 ow_rma_opc = function(ow_rma_data){
 
-    # suppress warning messages from the required packages
-    # NOTE: This function still loads the packages!
-    suppressWarnings(suppressMessages(require(dplyr)))
-    suppressWarnings(suppressMessages(require(ggplot2)))
-    suppressWarnings(suppressMessages(require(tidyverse)))
-    
+  # suppress warning messages from the required packages
+  # NOTE: This function still loads the packages!
+  suppressWarnings(suppressMessages(require(dplyr)))
+  suppressWarnings(suppressMessages(require(ggplot2)))
+  suppressWarnings(suppressMessages(require(tidyverse)))
     
         
 # Define some variables ---------------------------------------------------
   
-    # number of entities 
-    n = nrow(ow_rma_data)
+  
+  # number of entities 
+  n = nrow(ow_rma_data)
     
-    #  number of factor levels
-    k = (ncol(ow_rma_data)-1)
+  #  number of factor levels
+  k = (ncol(ow_rma_data)-1)
   
   
   # id-variable and condition-variable
   rm_names = colnames(ow_rma_data)[-1]
   id_names = colnames(ow_rma_data)[1]
   
-
   
-  
-  # check if the data meet the requirements ---------------------------------
+# check if the data meet the requirements ---------------------------------
   
   
   # ow_rma_data needs to meet the following requirements:
   
   # all variables must be numeric
   if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
-      stop("All variables in ow_rma_data must be numeric")
+    stop("All variables in ow_rma_data must be numeric")
   }
   
   # n > k (i.e. more entities than factor levels)
   if(n <= k){
-      stop("Number of entities must exceed number of factor levels")
+    stop("Number of entities must exceed number of factor levels")
   }
   
   # k >= 2 (i.e. at least two or more factor levels)
   if(k < 2){
-      stop("At least two factor factor levels required")
+    stop("At least two factor factor levels required")
   }
   
   
@@ -147,42 +145,45 @@ ow_rma_opc = function(ow_rma_data){
 
     
   # initialize empty dataframe for polynomial regression coefficients
-  poly_coef <- data.frame(matrix(0, ncol = k-1, nrow = k))
+  poly_coef = data.frame(matrix(0, ncol = k-1, nrow = k))
   
   # Fitting the k - 1 orthogonal Polynomials
   # In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
   for(i in 1:maxpoly){
       pfv = paste("poly.fit.", i, sep = "")
-      poly <- assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
-      poly_coef[,i][1:(i+1)] <- poly$coef
+      poly = assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
+      poly_coef[,i][1:(i+1)] = poly$coef
       poly.fit.max = lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE))
   }
   
-# Plotting contrats -------------------------------------------------------
+# Plotting contrats (ggplot) -------------------------------------------------
   
   
   # create datapoints for polynomial plot:
   # this code automatically sets up the data that is required to plot the k-1 polynomial regression lines
   
-  poly_curve_data <- data.frame(x = seq(1, k, length.out = 100), 
-                                tcrossprod(outer(seq(1, k, length.out = 100), 0:(k-1), `^`), do.call(rbind, poly_coef))) %>% 
-      gather(var, y, -x)
+  poly_curve_data = data.frame(x = seq(1, k, length.out = 100), 
+                               tcrossprod(outer(seq(1, k, length.out = 100), 0:(k-1), `^`), do.call(rbind, poly_coef))) %>% gather(var, y, -x)
   
   # plot the k-1 polynomial regression lines
-  poly_plot <- ggplot(data = ow_rma_data_long, aes(x = condition, y = value)) + 
-      geom_point() + 
-      labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
-      geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + 
-      scale_color_discrete(labels=as.character(1:(k-1)))
+  poly_plot = ggplot(data = ow_rma_data_long, aes(x = condition, y = value)) + 
+              geom_point() + 
+              labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
+              geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + 
+              scale_color_discrete(labels=as.character(1:(k-1)))
   
   
-# Return the contrast-table -----------------------------------------------
-    
+# Return the contrast-table and plot ----------------------------------------
+
+      
   print(poly_plot)
   return(list("orthogonal_polynomial_contrast_table" = contrast_table))
 }
 
 
-# -------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
+
+# Testing:
 ow_rma_opc(ow_rma_data)
+
