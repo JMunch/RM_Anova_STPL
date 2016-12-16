@@ -1,34 +1,31 @@
 ##### Evaluate reduction of error sum of squares due to the consideration of variance between entities
-  # Function 'ow-rma' is required (quantlet1_rm_anova.R)!
+  # Function 'ow-rma' is required!
 
 
-ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
+ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE){
     
     
+# check if the data meet the requirements ---------------------------------
+
+
+  # ow_rma_data needs to meet the following requirements:
     
-    # check if the data meet the requirements ---------------------------------
+  # all variables must be numeric
+  if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
+    stop("All variables in ow_rma_data must be numeric")
+  }
     
+  # n > k (i.e. more entities than factor levels)
+  if(nrow(ow_rma_data) <= (ncol(ow_rma_data)-1)){
+    stop("Number of entities must exceed number of factor levels")
+  }
     
-    # ow_rma_data needs to meet the following requirements:
-    
-    # all variables must be numeric
-    if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
-        stop("All variables in ow_rma_data must be numeric")
-    }
-    
-    # n > k (i.e. more entities than factor levels)
-    if(nrow(ow_rma_data) <= (ncol(ow_rma_data)-1)){
-        stop("Number of entities must exceed number of factor levels")
-    }
-    
-    # k >= 2 (i.e. at least two or more factor levels)
-    if((ncol(ow_rma_data)-1) < 2){
-        stop("At least two factor factor levels required")
-    }
+  # k >= 2 (i.e. at least two or more factor levels)
+  if((ncol(ow_rma_data)-1) < 2){
+    stop("At least two factor factor levels required")
+  }
   
 
-    
-      
 # Libraries needed ----------------------------------------------------------
  
   
@@ -44,7 +41,6 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   
   # The ANOVA without repeated measures treates the data as if they are independend 
   # i.e. as if there are different entities in each group, which is in fact not the case.
-  
   
 
   ow_a = function(ow_rma_data){
@@ -64,8 +60,6 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
     
     dependent_variable = as.matrix(ow_rma_data[, -1])
     
-
-  
   
 # Define basic ANOVA components ---------------------------------------------
   
@@ -177,6 +171,7 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   # rmANOVA function 'ow-rma' is required!
   # ANOVA function 'ow-a' is required!
   
+
   # ANOVA-tables of rmANOVA and ANOVA without repeated measures
   ow_a_results = ow_a(ow_rma_data)[[1]]
   ow_rma_results = ow_rma(ow_rma_data)[[1]]
@@ -188,91 +183,97 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie"){
   sse_rma = ow_rma_results[4, 2]
   ss_subject_rma = ow_rma_results[3, 2]
   
+
+# Create variables for comparison plot displaying the reduction of error terms ------------------------------------------
   
-# Defining a table containing the different errortypes-----------------------
-  # Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS Subjects
   
+  # 'var' contains the sse by subject and error
+  var = c(sse_anova, ss_subject_anova, sse_rma, ss_subject_rma)
+  
+  # 'model' is used in the ggplot to assign the values to the bars
+  model = rep(c("No estimation of the\nvariation between entities", "Estimation of the\nvariation between entities"), each = 2)
+  
+  # 'source' is required for color and legend label assignment in the ggplot
+  source = factor(rep(c("Error", "Entity"), times = 2), levels = c("Entity", "Error"))
+  
+  # Merge variables into one data frame
+  comparison_data = data.frame(var, model, source)
+  
+  
+# Create stacked barplot ---------------------------------------------------------
+  
+  
+  comp_plot_bar = ggplot(comparison_data, aes(model, var, fill = source)) + 
+                  geom_bar(stat = "identity") + 
+                  labs(x = "Model", y = "Sum of squares (error)", title = "Reduction of sum of squared errors (SSE)") + 
+                  guides(fill=guide_legend(title=NULL)) + 
+                  scale_fill_manual(values = c("orange", "navyblue")) + 
+                  theme_bw() + 
+                  theme(panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        panel.background = element_blank()) 
+  
+  
+# Create pie chart -----------------------------------------------------------------
+  
+  
+  # New variable: percentage of sse. used for better readability in piechart
+  ## !!! for consistency of interpretations it might make sense to use this variable in the barplots as well
+  comparison_data$var_percent = comparison_data$var*100/(max(comparison_data$var))
+  
+  comp_plot_pie = ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
+                  geom_bar(width = 1, stat = "identity") + 
+                  labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE) in percent") + 
+                  guides(fill=guide_legend(title=NULL)) + 
+                  scale_fill_manual(values = c("orange", "navyblue")) + 
+                  coord_polar(theta = "y") + 
+                  facet_grid(~model) + 
+                  theme_bw() + 
+                  theme(panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        panel.background = element_blank()) 
+  
+  
+# Selection of plot design --------------------------------------------------
+  
+  
+  if(plot_type == "pie"){
+    final_plot = comp_plot_pie
+  } else {
+    final_plot = comp_plot_bar
+  }
+
+  
+# Create comparison table ---------------------------------------------------
+  # Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS entety
+  
+    
+  percent_sign = c("%", "%")
   
   error_ss_comparison_table = data.frame(check.names = FALSE,
-                                         "Sum of squares" = c("Error", "Entity"),
-                                         "ANOVA"   = c(sse_anova, ss_subject_anova),
-                                         "rmANOVA" = c(sse_rma, ss_subject_rma)
-                                        )
+                                         " " = c("Error", "Entity"),
+                                         "Sum of squares" = c(sse_rma, ss_subject_rma),
+                                         "Percentage share" = paste(as.character(round(comparison_data$var_percent[3:4])), percent_sign, sep = "")
+                                         )
   rownames(error_ss_comparison_table) = NULL
   
-
-# Preparing the error sum of squares comparison plots ------------------------
-  
-  
-  # Convert into matrix for stackplot
-  ss_comp = as.matrix(error_ss_comparison_table[, -1])
-  rownames(ss_comp) = error_ss_comparison_table[, 1]
-  colnames(ss_comp) = c("No estmation of  the variation between entities", "Estmation of  the variation between entities")
-  
-
-  # Stacked barplot and piechart displaying the reduction of error terms ------------------------------------------
-  
-  # create variables for comparison plot
-  
-  # var contains the sse by subject and error
-  var <- unlist(error_ss_comparison_table[, -1])
-  
-  # model is used in the ggplot to assign the values to the bars
-  model <- rep(c("No estimation of the\nvariation between entities", "Estimation of the\nvariation between entities"), each = 2)
-  
-  # source is required for color and legend label assignment in the ggplot
-  source <- factor(rep(c("Error", "Entity"), times = 2), levels = c("Entity", "Error"))
-  
-  # merge variables into one data frame
-  comparison_data <- data.frame(var, model, source)
-  
-  # create stacked barplot
-  comp_plot_bar <- ggplot(comparison_data, aes(model, var, fill = source)) + 
-      geom_bar(stat = "identity") + 
-      labs(x = "Model", y = "Sum of squares (error)", title = "Reduction of sum of squared errors (SSE)") + 
-      guides(fill=guide_legend(title=NULL)) + 
-      scale_fill_manual(values = c("orange", "navyblue")) + 
-      theme_bw() + 
-      theme(panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            panel.background = element_blank()) 
-  
-  # new variable: percentage of sse. used for better readability in piechart
-  # for consistency of interpretations it might make sense to use this variable in the barplots as well
-  comparison_data$var_percent <- comparison_data$var*100/(max(comparison_data$var))
-  
-  # create pie chart
-  comp_plot_pie <- ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
-      geom_bar(width = 1, stat = "identity") + 
-      labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE) in percent") + 
-      guides(fill=guide_legend(title=NULL)) + 
-      scale_fill_manual(values = c("orange", "navyblue")) + 
-      coord_polar(theta = "y") + 
-      facet_grid(~model) + 
-      theme_bw() + 
-      theme(panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            panel.background = element_blank()) 
-  
-  
-
-  if(plot_type == "pie"){
-      final_plot <- comp_plot_pie
-  } else {
-      final_plot <- comp_plot_bar
-  }
-  
+    
 # Return comparison table ---------------------------------------------------
+    
   
-  warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
   print(final_plot)
-  return(list("one_way_ANOVA_table" = ow_a_results, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
+  if(ow_a_table == TRUE){
+    warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
+    return(list("one_way_ANOVA_table" = ow_a_results, "error_sum_of_squares_reduction_table" = error_ss_comparison_table))
+  }else{
+    return(list("error_sum_of_squares_reduction_table" = error_ss_comparison_table))
+  }
 }
 
 
 # ---------------------------------------------------------------------------
 
-ow_rma_sse_reduct(ow_rma_data, plot_type = "bar")
 
-
+# Testing:
+ow_rma_sse_reduct(ow_rma_data, plot_type = "bar", ow_a_table = TRUE)
 
