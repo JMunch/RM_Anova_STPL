@@ -2,13 +2,19 @@
   # Function 'ow-rma' is required!
 
 
-ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE){
+ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie", ow_a_table = FALSE){
     
     
 # check if the data meet the requirements ---------------------------------
 
 
   # ow_rma_data needs to meet the following requirements:
+    
+    # independent_var must either be an integer specifying the column position
+    # of the independent variable
+    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+        stop("independent_var must be an integer specifying the column position of the independent variable")
+    }
     
   # all variables must be numeric
   if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
@@ -29,8 +35,8 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
 # Libraries needed ----------------------------------------------------------
  
   
-  require(dplyr)
-  require(ggplot2)
+    suppressWarnings(suppressMessages(require(dplyr)))
+    suppressWarnings(suppressMessages(require(ggplot2)))
 
 
 # Computaion of ANOVA model -------------------------------------------------
@@ -43,53 +49,51 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
   # i.e. as if there are different entities in each group, which is in fact not the case.
   
 
-  ow_a = function(ow_rma_data){
+  ow_a = function(ow_rma_data, independent_var){
   
   
 # Define needed constants and the dependent variable ------------------------
   
   
+      dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+      
     # Number of entities in one group
     n_group = nrow(ow_rma_data)
     
     # Number of factor levels
-    k = ncol(ow_rma_data) - 1
+    k = ncol(dependent_variable)
     
     # Number of entities
     n = (k * n_group)
     
-    dependent_variable = as.matrix(ow_rma_data[, -1])
     
   
 # Define basic ANOVA components ---------------------------------------------
   
   
-    grand_mean = mean(as.matrix(ow_rma_data[,2: (k + 1)])) 
-    baseline_components = matrix(rep(grand_mean, times = n), nrow = n_group)
+    grand_mean = mean(dependent_variable) 
+    baseline_components = matrix(grand_mean, nrow = n_group, ncol = k)
     
-    conditional_means = apply(dependent_variable, 2, mean)
-    factor_level_components = matrix(rep(conditional_means - grand_mean, each = n_group), nrow = n_group)
+    conditional_means = colMeans(dependent_variable)
+    factor_level_components = matrix(conditional_means - grand_mean, nrow = n_group, ncol = k, byrow = TRUE)
+    
 
 
     # Computation of the error component 
     error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
   
   
-# Prepare decomposition matrix ----------------------------------------------
+# Construct decomposition matrix ----------------------------------------------
   # Matrix with n rows and 4 columns
   # One column for: original values, factor level component, error component
   
   
-    decomposition_matrix_ANOVA = data.frame("dependent_variable" = numeric(n),
-                                            "baseline" = numeric(n),
-                                            "factor_level" = numeric(n),
-                                            "error" = numeric(n)
+    decomposition_matrix_ANOVA = data.frame("dependent_variable" = as.vector(dependent_variable),
+                                            "baseline" = as.vector(baseline_components),
+                                            "factor_level" = as.vector(factor_level_components),
+                                            "error" = as.vector(error_components_ANOVA)
                                             )
     
-    decomposition_matrix_ANOVA$dependent_variable = as.vector(dependent_variable)
-    decomposition_matrix_ANOVA$baseline = as.vector(baseline_components)
-    decomposition_matrix_ANOVA$factor_level = as.vector(factor_level_components)
-    decomposition_matrix_ANOVA$error = as.vector(error_components_ANOVA)
   
   
 # Compute sums of squares ---------------------------------------------------
@@ -173,8 +177,8 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
   
 
   # ANOVA-tables of rmANOVA and ANOVA without repeated measures
-  ow_a_results = ow_a(ow_rma_data)[[1]]
-  ow_rma_results = ow_rma(ow_rma_data)[[1]]
+  ow_a_results = ow_a(ow_rma_data, independent_var)[[1]]
+  ow_rma_results = ow_rma(ow_rma_data, independent_var)[[1]]
   
   sse_anova = ow_a_results[3, 2]
   ss_subject_anova = 0 
@@ -202,8 +206,11 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
   
 # Create stacked barplot ---------------------------------------------------------
   
+  # New variable: percentage of sse. used for better readability in piechart
+
+    comparison_data$var_percent = comparison_data$var*100/(max(comparison_data$var))
   
-  comp_plot_bar = ggplot(comparison_data, aes(model, var, fill = source)) + 
+  comp_plot_bar = ggplot(comparison_data, aes(model, var_percent, fill = source)) + 
                   geom_bar(stat = "identity") + 
                   labs(x = "Model", y = "Sum of squares (error)", title = "Reduction of sum of squared errors (SSE)") + 
                   guides(fill=guide_legend(title=NULL)) + 
@@ -217,9 +224,7 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
 # Create pie chart -----------------------------------------------------------------
   
   
-  # New variable: percentage of sse. used for better readability in piechart
-  ## !!! for consistency of interpretations it might make sense to use this variable in the barplots as well
-  comparison_data$var_percent = comparison_data$var*100/(max(comparison_data$var))
+
   
   comp_plot_pie = ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
                   geom_bar(width = 1, stat = "identity") + 
@@ -248,12 +253,11 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
   # Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS entety
   
     
-  percent_sign = c("%", "%")
   
   error_ss_comparison_table = data.frame(check.names = FALSE,
                                          " " = c("Error", "Entity"),
                                          "Sum of squares" = c(sse_rma, ss_subject_rma),
-                                         "Percentage share" = paste(as.character(round(comparison_data$var_percent[3:4])), percent_sign, sep = "")
+                                         "Percentage share" = paste(as.character(round(comparison_data$var_percent[3:4])), c("%", "%"), sep = "")
                                          )
   rownames(error_ss_comparison_table) = NULL
   
@@ -275,5 +279,5 @@ ow_rma_sse_reduct = function(ow_rma_data, plot_type = "pie", ow_a_table = FALSE)
 
 
 # Testing:
-ow_rma_sse_reduct(ow_rma_data, plot_type = "bar", ow_a_table = TRUE)
+ow_rma_sse_reduct(ow_rma_data, independent_var = 1, plot_type = "bar", ow_a_table = TRUE)
 
