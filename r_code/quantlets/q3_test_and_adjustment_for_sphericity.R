@@ -3,23 +3,31 @@
 # To conduct the Mauchly's Test of Sphericity (Mauchly, 1940), the procedure described by Huynh and Feldt (1970) is used
 
 
-ow_rma_spheri = function(ow_rma_data, append = FALSE){
+ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE){
   
   
+    # independent_var must either be an integer specifying the column position
+    # of the independent variable
+    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+        stop("independent_var must be an integer specifying the column position of the independent variable")
+    }
+    
+    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+    
   # Defining some variables -------------------------------------------------
   
   
   # number of factor levels
-  k = length(ow_rma_data[1,]) - 1
+  k = ncol(dependent_variable)
   
   # number of entities
-  n = as.numeric(length(ow_rma_data[,1]))
+  n = nrow(ow_rma_data)
   
   # Factor degrees of freedom
   df = k - 1
   
   # Empirical covariance matrix
-  covariance_matix = cov(as.matrix(ow_rma_data[,-1]))
+  covariance_matix = cov(dependent_variable)
   
 
 # check if the data meet the requirements ---------------------------------
@@ -188,5 +196,5 @@ ow_rma_spheri = function(ow_rma_data, append = FALSE){
 
 
 # Testing: 
-ow_rma_spheri(ow_rma_data, append = TRUE)
+ow_rma_spheri(ow_rma_data, independent_var = 1, append = TRUE)
 
