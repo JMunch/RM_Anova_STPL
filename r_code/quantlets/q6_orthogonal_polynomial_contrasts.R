@@ -1,13 +1,25 @@
 ##### Orthogonal polynomial contrasts in a one-way repeated measures ANOVA
 
 
-ow_rma_opc = function(ow_rma_data){
+ow_rma_opc = function(ow_rma_data, independent_var = 1){
 
   # suppress warning messages from the required packages
   # NOTE: This function still loads the packages!
   suppressWarnings(suppressMessages(require(dplyr)))
   suppressWarnings(suppressMessages(require(ggplot2)))
   suppressWarnings(suppressMessages(require(tidyverse)))
+  
+  
+  # Check if the data meet the following requirement:
+  
+  # independent_var must either be an integer specifying the column position
+  # of the independent variable
+  if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+      stop("independent_var must be an integer specifying the column position of the independent variable")
+  }
+  
+  dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+  
     
         
 # Define some variables ---------------------------------------------------
@@ -17,12 +29,12 @@ ow_rma_opc = function(ow_rma_data){
   n = nrow(ow_rma_data)
     
   #  number of factor levels
-  k = (ncol(ow_rma_data)-1)
+  k = ncol(dependent_variable)
   
   
-  # id-variable and condition-variable
-  rm_names = colnames(ow_rma_data)[-1]
-  id_names = colnames(ow_rma_data)[1]
+  # Specify the names of the 'id'-variable and of the 'condition'-variables
+  rm_names = colnames(dependent_variable)
+  id_names = colnames(ow_rma_data)[independent_var]
   
   
 # check if the data meet the requirements ---------------------------------
@@ -75,18 +87,18 @@ ow_rma_opc = function(ow_rma_data){
   Em = tapply(ow_rma_data_long$value, ow_rma_data_long$id, mean)
   
   # Measurements
-  Me = (1:k)
+  Me = 1:k
   
   # Mean of each measurement condition ('MeFlm' dataframe)
   MeFlm = data.frame(Me, Flm)
   MeFlmlong = MeFlm[rep(seq_len(nrow(MeFlm)), each = n),]
   
   # Entities
-  E = (1:n)
+  E = 1:n
   
   # Mean of each entity/subject ('EEm' dataframe)
   EEm = data.frame(E, Em)
-  EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
+  EEmlong = EEm[rep(seq_len(nrow(EEm)), each = k), ]
   
   
 # Orthogonal polynomial Contrasts -----------------------------------------
@@ -99,7 +111,7 @@ ow_rma_opc = function(ow_rma_data){
   contrast_weights = t(contr.poly(k))
   
   # Applying formula for linear contrasts
-  weighted_dependend_variables = ow_rma_data[rep(seq_len(nrow(ow_rma_data)), each = maxpoly), ][,-1] * (contrast_weights)[rep(seq_len(nrow(contrast_weights)), n), ]
+  weighted_dependend_variables = dependent_variable[rep(1:n, each = maxpoly), ] * (contrast_weights)[rep(1:maxpoly, n), ]
   linear_subject_contrasts = matrix(rowSums(weighted_dependend_variables), byrow = TRUE, ncol = maxpoly)
   
   # Computing contrast estimators for each orthogonal polynomial contrast as well as standard errors for thees estimators
@@ -118,7 +130,8 @@ ow_rma_opc = function(ow_rma_data){
   
   # Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend 
   # ss_trend / ss_factor
-  proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly) # seems strange?! Is this right? --> Jap, 'sum(rep((Flm - Gm)^2, each = n)' is computing the Factor ss (its the deviation of the factor level means from grand mean, than squared, and than that times n till every subject is measured under each condition); the last 'rep(..., maxpoly)' is just to matcht the size of the 'contrast_ss' vector
+  proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly) 
+  
   
   
 # Create contrast table ---------------------------------------------------
@@ -150,10 +163,9 @@ ow_rma_opc = function(ow_rma_data){
   # Fitting the k - 1 orthogonal Polynomials
   # In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
   for(i in 1:maxpoly){
-      pfv = paste("poly.fit.", i, sep = "")
+      pfv = paste("poly_fit_", i, sep = "")
       poly = assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
       poly_coef[,i][1:(i+1)] = poly$coef
-      poly.fit.max = lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE))
   }
   
 # Plotting contrats (ggplot) -------------------------------------------------
@@ -185,5 +197,5 @@ ow_rma_opc = function(ow_rma_data){
 
 
 # Testing:
-ow_rma_opc(ow_rma_data)
+ow_rma_opc(ow_rma_data, independent_var = 1)
 
