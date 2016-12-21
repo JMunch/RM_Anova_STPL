@@ -1,7 +1,16 @@
 ##### Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
 
 
-ow_rma_ci = function(ow_rma_data){
+ow_rma_ci = function(ow_rma_data, independent_var = 1){
+    
+    
+    # independent_var must either be an integer specifying the column position
+    # of the independent variable
+    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+        stop("independent_var must be an integer specifying the column position of the independent variable")
+    }
+    
+    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
 
     
 # Libraries needed --------------------------------------------------------
@@ -19,11 +28,11 @@ ow_rma_ci = function(ow_rma_data){
   n = nrow(ow_rma_data)
   
   # Number of factor levels
-  k = (ncol(ow_rma_data)-1)
+  k = ncol(dependent_variable)
 
   # Specify the names of the 'id'-variable and of the 'condition'-variables
-  rm_names = colnames(ow_rma_data)[-1]
-  id_names = colnames(ow_rma_data)[1]
+  rm_names = colnames(dependent_variable)
+  id_names = colnames(ow_rma_data)[independent_var]
   
   
 # check if the data meet the requirements ---------------------------------
@@ -83,20 +92,20 @@ ow_rma_ci = function(ow_rma_data){
   # Mean of each entity/subject
   E = 1:n
   EEm = data.frame(E, Em)
-  EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
+  EEmlong = EEm[rep(seq_len(nrow(EEm)), each = k), ]
 
 
 # Compute CI for Anova without repeated measures --------------------------
 
 
   # Confidence level
-  Clevel = 0.95 
+  C_level = 0.95 
    
   # Standard errors of the conditional means
   SE = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, sd) / sqrt(n)
   
   # CI for ANOVA without repeated measures 
-  CIdist = abs(qt((1 - Clevel)/2, (n - 1))) * SE
+  CIdist = abs(qt((1 - C_level)/2, (n - 1))) * SE
 
 
 # Compute CI for Anova without repeated measures -----------------------------
@@ -152,9 +161,9 @@ ow_rma_ci = function(ow_rma_data){
   
   
   lu_adj_CI = cbind(low_adj, up_adj)
-  colnames(lu_adj_CI) = c("Lower bound", "Upper bound")
   lu_unadj_CI = cbind(low_unadj, up_unadj)
-  colnames(lu_unadj_CI) = c("Lower bound", "Upper bound")
+
+  colnames(lu_adj_CI) = colnames(lu_unadj_CI) = c("Lower bound", "Upper bound")
   
 
 # Return plot and table displaying adjusted and unadjusted confidence intervals --------------------
@@ -169,5 +178,5 @@ ow_rma_ci = function(ow_rma_data){
 
 
 # Testing:
-ow_rma_ci(ow_rma_data)
+ow_rma_ci(ow_rma_data, independent_var = 1)
 
