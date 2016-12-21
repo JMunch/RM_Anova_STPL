@@ -2,13 +2,19 @@
   # Function 'ow_rma' is required!
 
 
-ow_rma_eta = function(ow_rma_data, append = FALSE){
+ow_rma_eta = function(ow_rma_data, independent_var = 1, append = FALSE){
 
 
 # check if the data meet the requirements ---------------------------------
 
     
   # ow_rma_data needs to meet the following requirements:
+    
+    # independent_var must either be an integer specifying the column position
+    # of the independent variable
+    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+        stop("independent_var must be an integer specifying the column position of the independent variable")
+    }
   
   # all variables must be numeric
   if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
@@ -30,7 +36,7 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
   # rmANOVA function 'ow_rma' is required!  
   
   
-  ANOVA_table = ow_rma(ow_rma_data)[[1]]
+  ANOVA_table = ow_rma(ow_rma_data, independent_var = independent_var)[[1]]
   
 
 # Define needed sums of squares -------------------------------------------
@@ -84,5 +90,5 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
 
 
 # Testing:
-ow_rma_eta(ow_rma_data, append = TRUE)
+ow_rma_eta(ow_rma_data, independent_var = 1, append = FALSE)
 
