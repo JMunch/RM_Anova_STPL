@@ -1,15 +1,24 @@
 ##### Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
 
 
-ow_rma_ci = function(ow_rma_data){
+ow_rma_ci = function(ow_rma_data, independent_var = 1){
+    
+    
+    # independent_var must either be an integer specifying the column position
+    # of the independent variable
+    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+        stop("independent_var must be an integer specifying the column position of the independent variable")
+    }
+    
+    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
 
     
 # Libraries needed --------------------------------------------------------
 
   
-    # suppress warning message about ggplot
-    # NOTE: This function still loads the package!
-    suppressWarnings(suppressMessages(require(ggplot2)))
+  # suppress warning message about ggplot
+  # NOTE: This function still loads the package!
+  suppressWarnings(suppressMessages(require(ggplot2)))
 
   
 # Define needed constants and variables -----------------------------------
@@ -19,34 +28,32 @@ ow_rma_ci = function(ow_rma_data){
   n = nrow(ow_rma_data)
   
   # Number of factor levels
-  k = (ncol(ow_rma_data)-1)
+  k = ncol(dependent_variable)
 
   # Specify the names of the 'id'-variable and of the 'condition'-variables
-  rm_names = colnames(ow_rma_data)[-1]
-  id_names = colnames(ow_rma_data)[1]
+  rm_names = colnames(dependent_variable)
+  id_names = colnames(ow_rma_data)[independent_var]
   
   
-  # check if the data meet the requirements ---------------------------------
+# check if the data meet the requirements ---------------------------------
   
   
   # ow_rma_data needs to meet the following requirements:
   
   # all variables must be numeric
   if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
-      stop("All variables in ow_rma_data must be numeric")
+    stop("All variables in ow_rma_data must be numeric")
   }
   
   # n > k (i.e. more entities than factor levels)
   if(n <= k){
-      stop("Number of entities must exceed number of factor levels")
+    stop("Number of entities must exceed number of factor levels")
   }
   
   # k >= 2 (i.e. at least two or more factor levels)
   if(k < 2){
-      stop("At least two factor factor levels required")
+    stop("At least two factor factor levels required")
   }
-
-  
 
 
 # Convert data to long format ---------------------------------------------
@@ -85,20 +92,20 @@ ow_rma_ci = function(ow_rma_data){
   # Mean of each entity/subject
   E = 1:n
   EEm = data.frame(E, Em)
-  EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
+  EEmlong = EEm[rep(seq_len(nrow(EEm)), each = k), ]
 
 
 # Compute CI for Anova without repeated measures --------------------------
 
 
   # Confidence level
-  Clevel = 0.95 
+  C_level = 0.95 
    
   # Standard errors of the conditional means
   SE = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, sd) / sqrt(n)
   
   # CI for ANOVA without repeated measures 
-  CIdist = abs(qt((1 - Clevel)/2, (n - 1))) * SE
+  CIdist = abs(qt((1 - C_level)/2, (n - 1))) * SE
 
 
 # Compute CI for Anova without repeated measures -----------------------------
@@ -107,7 +114,6 @@ ow_rma_ci = function(ow_rma_data){
   # Compute upper and lower bound
   up_unadj = MeFlm$Flm + CIdist 
   low_unadj = MeFlm$Flm - CIdist 
-  
 
 
 # Compute CI for Anova with repeated measures -----------------------------
@@ -121,53 +127,48 @@ ow_rma_ci = function(ow_rma_data){
 
   # Standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014, see also Loftus & Masson; 1994)
   SE_adj = (tapply(ow_rma_data_long_adj$Adj, ow_rma_data_long_adj$condition, sd) / sqrt(n))
-  
   CIdist_adj = abs(qt((1 - Clevel)/2, (n - 1))) * SE_adj
-
-
 
   # Compute upper and lower bound
   up_adj = MeFlm$Flm + CIdist_adj
   low_adj = MeFlm$Flm - CIdist_adj
   
-
   
-
-# ggplot CI comparison ----------------------------------------------------
+# CI comparison (ggplot) ----------------------------------------------------
 
   
   # create two vectors for lower ci values and upper ci values respectively
-  lower <- c(low_adj, low_unadj)
-  upper <- c(up_adj, up_unadj)
+  lower = c(low_adj, low_unadj)
+  upper = c(up_adj, up_unadj)
   
   # create vector that is used for facetting i.e. for assigning the correct values
   # to each plot
-  plot_nr <- rep(c("Adjusted CI", "Unadjusted CI"), each = k)
+  plot_nr = rep(c("Adjusted CI", "Unadjusted CI"), each = k)
   
   # create data frame for ggplot: comparison of ci
-  ci_plot_data <- data.frame(plot_nr, rbind(MeFlm, MeFlm), lower, upper)
+  ci_plot_data = data.frame(plot_nr, rbind(MeFlm, MeFlm), lower, upper)
   
   
   # create plot with adjusted ci values
-  ci_plot <- ggplot(data = ci_plot_data, aes(Me, Flm)) + 
-      geom_point(size = 2) + 
-      geom_errorbar(aes(ymax = upper, ymin = lower), width = .1) + 
-      facet_grid(~plot_nr) + 
-      labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted (standard) confidence intervals")
+  ci_plot = ggplot(data = ci_plot_data, aes(Me, Flm)) + 
+            geom_point(size = 2) + 
+            geom_errorbar(aes(ymax = upper, ymin = lower), width = .1) + 
+            facet_grid(~plot_nr) + 
+            labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted (standard) confidence intervals")
   
-
   
-# Construct CI-tables
+# Construct CI-tables ------------------------------------------------------------------------------
   
   
   lu_adj_CI = cbind(low_adj, up_adj)
-  colnames(lu_adj_CI) = c("Lower bound", "Upper bound")
   lu_unadj_CI = cbind(low_unadj, up_unadj)
-  colnames(lu_unadj_CI) = c("Lower bound", "Upper bound")
+
+  colnames(lu_adj_CI) = colnames(lu_unadj_CI) = c("Lower bound", "Upper bound")
   
 
 # Return plot and table displaying adjusted and unadjusted confidence intervals --------------------
-  
+
+    
   print(ci_plot)
   return(list("adjusted_CI" = lu_adj_CI, "unadjusted_CI" = lu_unadj_CI))
 }
@@ -175,4 +176,7 @@ ow_rma_ci = function(ow_rma_data){
 
 # -------------------------------------------------------------------------
 
-ow_rma_ci(ow_rma_data)
+
+# Testing:
+ow_rma_ci(ow_rma_data, independent_var = 1)
+

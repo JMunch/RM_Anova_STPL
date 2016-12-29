@@ -1,85 +1,85 @@
 ##### Computation of one-way repeated measures ANOVA (rma)
 
 
-ow_rma = function(ow_rma_data){
+ow_rma = function(ow_rma_data, independent_var = 1){
     
     
-    # Define needed constants and the dependent variable ----------------------
-    
-    # Number of entities
-    n = nrow(ow_rma_data)
-    
-    # Number of factor levels 
-    k = ncol(ow_rma_data) - 1
-    
-    dependent_variable = as.matrix(ow_rma_data[, -1])
+# Define needed constants and the dependent variable ----------------------
     
     
+    # independent_var must either be an integer specifying the column position
+    # of the independent variable
+    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+        stop("independent_var must be an integer specifying the column position of the independent variable")
+    }
     
-    # check if the data meet the requirements ---------------------------------
+    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+
+      
+  # Number of entities
+  n = nrow(ow_rma_data)
+    
+  # Number of factor levels 
+  k = ncol(dependent_variable)
+    
+    
+    
+# check if the data meet the requirements ---------------------------------
 
     
-    # ow_rma_data needs to meet the following requirements:
+  # ow_rma_data needs to meet the following requirements:
     
-    # all variables must be numeric
-    if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
-        stop("All variables in ow_rma_data must be numeric")
-    }
+  # all variables must be numeric
+  if(all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))){
+    stop("All variables in ow_rma_data must be numeric")
+  }
     
-    # n > k (i.e. more entities than factor levels)
-    if(n <= k){
-        stop("Number of entities must exceed number of factor levels")
-    }
+  # n > k (i.e. more entities than factor levels)
+  if(n <= k){
+    stop("Number of entities must exceed number of factor levels")
+  }
     
-    # k >= 2 (i.e. at least two or more factor levels)
-    if(k < 2){
-        stop("At least two factor factor levels required")
-    }
+  # k >= 2 (i.e. at least two or more factor levels)
+  if(k < 2){
+    stop("At least two factor factor levels required")
+  }
   
   
 # Libraries needed --------------------------------------------------------
 
-    # suppress warning message about masked objects by dplyr
-    # NOTE: This function still loads the dplyr package!
-    suppressWarnings(suppressMessages(require(dplyr)))
+  
+  # suppress warning message about masked objects by dplyr
+  # NOTE: This function still loads the dplyr package!
+  suppressWarnings(suppressMessages(require(dplyr)))
 
 
 # Define basic anova components -------------------------------------------
 
 
-  grand_mean = mean(as.matrix(ow_rma_data[,2: (k + 1)])) 
-  baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
+  grand_mean = mean(dependent_variable) 
+  baseline_components = matrix(grand_mean, nrow = n, ncol = k)
   
-  conditional_means = apply(dependent_variable, 2, mean)
-  factor_level_components = matrix(rep(conditional_means - grand_mean, each = n), nrow = n)
+  conditional_means = colMeans(dependent_variable)
+  factor_level_components = matrix(conditional_means - grand_mean, nrow = n, ncol = k, byrow = TRUE)
   
-  subject_means = apply(dependent_variable, 1, mean)
-  subject_components = matrix(rep(subject_means - grand_mean, times = k), nrow = n)
+  subject_means = rowMeans(dependent_variable)
+  subject_components = matrix(subject_means - grand_mean,nrow = n, ncol = k)
   
   error_components = dependent_variable - baseline_components - factor_level_components - subject_components
 
 
-# Prepare decomposition matrix --------------------------------------------
+  # Construct decomposition matrix ------------------------------------------
   # Matrix with k * n rows and 5 columns
   # One column for: original values, baseline component, factor level component, subject component, error component
 
 
-  decomposition_matrix = data.frame("dependent_variable" = numeric(n*k),
-                                    "baseline" = numeric(n*k),
-                                    "factor_level" = numeric(n*k),
-                                    "subject_level" = numeric(n*k),
-                                    "error" = numeric(n*k)
+  decomposition_matrix = data.frame("dependent_variable" = as.vector(dependent_variable),
+                                    "baseline" = as.vector(baseline_components),
+                                    "factor_level" = as.vector(factor_level_components),
+                                    "subject_level" = as.vector(subject_components),
+                                    "error" = as.vector(error_components)
                                     )
 
-
-# Construct decomposition matrix ------------------------------------------
-
-  
-  decomposition_matrix$dependent_variable = as.vector(dependent_variable)
-  decomposition_matrix$baseline = as.vector(baseline_components)
-  decomposition_matrix$factor_level = as.vector(factor_level_components)
-  decomposition_matrix$subject_level = as.vector(subject_components)
-  decomposition_matrix$error = as.vector(error_components)
 
 
 # Compute sums of squares -------------------------------------------------
@@ -93,11 +93,11 @@ ow_rma = function(ow_rma_data){
 
   
   dof = data.frame("dependent_variable" = n*k,
-                  "baseline" = 1,
-                  "factor_level" = k-1,
-                  "subject_level" = n-1,
-                  "error" = (n*k)-1-(k-1)-(n-1)
-                  )
+                   "baseline" = 1,
+                   "factor_level" = k-1,
+                   "subject_level" = n-1,
+                   "error" = (n*k)-1-(k-1)-(n-1)
+                   )
 
 
 # Compute mean squares ----------------------------------------------------
@@ -155,12 +155,8 @@ ow_rma = function(ow_rma_data){
 
 
 # -------------------------------------------------------------------------
+
+
 # Testing:
-
-#source("r/simulate_rma_data.R")
-#rma_data = sim_rma_data(n = 1000, k = 5, between_subject_sd = 50)
-ow_rma_results = ow_rma(ow_rma_data)
-
-ow_rma_results
-
+ow_rma(ow_rma_data, 1)
 
