@@ -96,7 +96,7 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1){
   # Mean of each entity/subject
   E = 1:n
   EEm = data.frame(E, Em)
-  EEmlong = EEm[rep(seq_len(nrow(EEm)), each = k), ]
+  EEmlong = EEm[rep(seq_len(nrow(EEm)), times = k), ]
 
 
 # Compute CI for Anova without repeated measures --------------------------
@@ -106,15 +106,15 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1){
   SE = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, sd) / sqrt(n)
   
   # CI for ANOVA without repeated measures 
-  CIdist = abs(qt((1 - C_level)/2, (n - 1))) * SE
+  CIdist_unadj = abs(qt((1 - C_level)/2, (n - 1))) * SE
 
 
 # Compute CI for Anova without repeated measures -----------------------------
 
 
   # Compute upper and lower bound
-  up_unadj = MeFlm$Flm + CIdist 
-  low_unadj = MeFlm$Flm - CIdist 
+  up_unadj = MeFlm$Flm + CIdist_unadj 
+  low_unadj = MeFlm$Flm - CIdist_unadj 
 
 
 # Compute CI for Anova with repeated measures -----------------------------
