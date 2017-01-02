@@ -1,16 +1,20 @@
 ##### Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
 
 
-ow_rma_ci = function(ow_rma_data, independent_var = 1){
+ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1){
+  
     
+  # 'C_level' must be larger than 0 and smaler than 1
+  if (C_level >= 1 | C_level <= 0){
+    stop("C_level must be larger than 0 and smaler than 1")
+  }
+  # independent_var must either be an integer specifying the column position
+  # of the independent variable
+  if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
+    stop("independent_var must be an integer specifying the column position of the independent variable")
+  }
     
-    # independent_var must either be an integer specifying the column position
-    # of the independent variable
-    if(independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1){
-        stop("independent_var must be an integer specifying the column position of the independent variable")
-    }
-    
-    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+  dependent_variable = as.matrix(ow_rma_data[, -independent_var])
 
     
 # Libraries needed --------------------------------------------------------
@@ -96,10 +100,7 @@ ow_rma_ci = function(ow_rma_data, independent_var = 1){
 
 
 # Compute CI for Anova without repeated measures --------------------------
-
-
-  # Confidence level
-  C_level = 0.95 
+   
    
   # Standard errors of the conditional means
   SE = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, sd) / sqrt(n)
@@ -127,7 +128,7 @@ ow_rma_ci = function(ow_rma_data, independent_var = 1){
 
   # Standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014, see also Loftus & Masson; 1994)
   SE_adj = (tapply(ow_rma_data_long_adj$Adj, ow_rma_data_long_adj$condition, sd) / sqrt(n))
-  CIdist_adj = abs(qt((1 - Clevel)/2, (n - 1))) * SE_adj
+  CIdist_adj = abs(qt((1 - C_level)/2, (n - 1))) * SE_adj
 
   # Compute upper and lower bound
   up_adj = MeFlm$Flm + CIdist_adj
@@ -178,5 +179,5 @@ ow_rma_ci = function(ow_rma_data, independent_var = 1){
 
 
 # Testing:
-ow_rma_ci(ow_rma_data, independent_var = 1)
+ow_rma_ci(ow_rma_data, C_level = .99, independent_var = 1)
 
