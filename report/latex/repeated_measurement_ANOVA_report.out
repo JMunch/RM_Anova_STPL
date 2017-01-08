@@ -2,10 +2,10 @@
 \BOOKMARK [1][-]{section.2}{Simulating and Preparing the Data}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Simulation}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Listwise Deletion}{section.2}% 4
-\BOOKMARK [1][-]{section.3}{Estimating the Repeated Measurement Anova}{}% 5
+\BOOKMARK [1][-]{section.3}{Estimating the Repeated Measures Anova}{}% 5
 \BOOKMARK [2][-]{subsection.3.1}{Estimation}{section.3}% 6
 \BOOKMARK [2][-]{subsection.3.2}{Effect Size}{section.3}% 7
-\BOOKMARK [1][-]{section.4}{SSE Reduction with the Repeated Measurement Anova}{}% 8
+\BOOKMARK [1][-]{section.4}{SSE Reduction with the Repeated Measures Anova \(currently in work...\(Freddi\)\) }{}% 8
 \BOOKMARK [2][-]{subsection.4.1}{Estimating Anova}{section.4}% 9
 \BOOKMARK [2][-]{subsection.4.2}{Comparing the Error Terms}{section.4}% 10
 \BOOKMARK [1][-]{section.5}{Confidence Intervals\(CI\)}{}% 11

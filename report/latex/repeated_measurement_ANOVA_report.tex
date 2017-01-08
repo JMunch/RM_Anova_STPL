@@ -98,19 +98,27 @@
 				 Instead of letting the function simulate the means, a vector of the lengths k containing the means that should be used for each factor can be passed to the function.   
 				 
 		\subsection{Listwise Deletion}
-				 An dieser Stelle hat der Autor
+				 When computing a Repeated Measures Anova, the way to deal with missing values is listwise deletion. As we measure the change of our subjects over factor levels, a missing value in one factor level leads to a dropout of the whole observation from our analysis.\\
+				
+				Since we use simulated data, we could easily avoid having missing values. However, for demonstration as well as for applicability to other data, we integrated a function for listwise deletion. In the above mentioned data simulation function rma\_data, one specifies the number of NAs, which then randomly replace values of factor levels in the simulated data. Subsequently, the listwise deletion function checks for existing NAs and drops out the corresponding subject(s), while displaying a message informing about the id(s) of the subject(s) that has/have been deleted.
 				 
-	\section{Estimating the Repeated Measurement Anova}
+	
+			
+				
+	\section{Estimating the Repeated Measures Anova} 
 		\subsection{Estimation}
 	
 		\subsection{Effect Size}
 	
-	\section{SSE Reduction with the Repeated Measurement Anova}
-		\subsection{Estimating Anova}
 	
+		
+	\section{SSE Reduction with the Repeated Measures Anova  (currently in work...(Freddi)) }
+			
+		\subsection{Estimating Anova}
+							
 		\subsection{Comparing the Error Terms}
 		
- 
+		
 	\section{Confidence Intervals(CI)}
 	Short theoretical introduction
 		\subsection{Unadjusted CIs}
