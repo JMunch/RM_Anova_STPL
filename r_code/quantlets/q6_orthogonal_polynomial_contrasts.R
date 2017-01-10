@@ -1,7 +1,7 @@
 ##### Orthogonal polynomial contrasts in a one-way repeated measures ANOVA
 
 
-ow_rma_opc = function(ow_rma_data, independent_var = 1) {
+rma_opc = function(rma_data, id = 1, maxpoly = NA) {
     
     # suppress warning messages from the required packages NOTE: This function still loads the packages!
     suppressWarnings(suppressMessages(require(dplyr)))
@@ -11,12 +11,12 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     
     # Check if the data meet the following requirement:
     
-    # independent_var must either be an integer specifying the column position of the independent variable
-    if (independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1) {
-        stop("independent_var must be an integer specifying the column position of the independent variable")
+    # id must either be an integer specifying the column position of the independent variable
+    if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+        stop("id must be an integer specifying the column position of the independent variable")
     }
     
-    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+    dependent_variable = as.matrix(rma_data[, -id])
     
     
     
@@ -24,7 +24,7 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     
     
     # number of entities
-    n = nrow(ow_rma_data)
+    n = nrow(rma_data)
     
     # number of factor levels
     k = ncol(dependent_variable)
@@ -32,17 +32,17 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     
     # Specify the names of the 'id'-variable and of the 'condition'-variables
     rm_names = colnames(dependent_variable)
-    id_names = colnames(ow_rma_data)[independent_var]
+    id_names = colnames(rma_data)[id]
     
     
     # check if the data meet the requirements ---------------------------------
     
     
-    # ow_rma_data needs to meet the following requirements:
+    # rma_data needs to meet the following requirements:
     
     # all variables must be numeric
-    if (all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))) {
-        stop("All variables in ow_rma_data must be numeric")
+    if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+        stop("All variables in rma_data must be numeric")
     }
     
     # n > k (i.e. more entities than factor levels)
@@ -59,23 +59,23 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     # Convert to long format --------------------------------------------------
     
     
-    ow_rma_data_long = reshape(ow_rma_data, varying = rm_names, v.names = "value", timevar = "condition", times = (1:k), idvar = id_names, new.row.names = 1:(k * n), 
+    rma_data_long = reshape(rma_data, varying = rm_names, v.names = "value", timevar = "condition", times = (1:k), idvar = id_names, new.row.names = 1:(k * n), 
         direction = "long")
-    colnames(ow_rma_data_long)[1] = "id"
-    ow_rma_data_long$condition = as.numeric(ow_rma_data_long$condition)
+    colnames(rma_data_long)[1] = "id"
+    rma_data_long$condition = as.numeric(rma_data_long$condition)
     
     
     # Define some more variables ----------------------------------------------
     
     
     # factor level means
-    Flm = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, mean)
+    Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
     
     # general mean
-    Gm = mean(ow_rma_data_long$value)
+    Gm = mean(rma_data_long$value)
     
     # entity/subject mean
-    Em = tapply(ow_rma_data_long$value, ow_rma_data_long$id, mean)
+    Em = tapply(rma_data_long$value, rma_data_long$id, mean)
     
     # Measurements
     Me = 1:k
@@ -96,7 +96,8 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     
     
     # maximal polynomial degree for orthogonal polynomials
-    maxpoly = k - 1
+    if((maxpoly > k - 1) | (is.na(maxpoly))){
+    maxpoly = k - 1}
     
     # Defining Contrast weights for orthogonal polynomial contrasts
     contrast_weights = t(contr.poly(k))
@@ -145,7 +146,7 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     # Fitting the k - 1 orthogonal Polynomials In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
     for (i in 1:maxpoly) {
         pfv = paste("poly_fit_", i, sep = "")
-        poly = assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
+        poly = assign(pfv, lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE)))
         poly_coef[, i][1:(i + 1)] = poly$coef
     }
     
@@ -158,7 +159,7 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
         y, -x)
     
     # plot the k-1 polynomial regression lines
-    poly_plot = ggplot(data = ow_rma_data_long, aes(x = condition, y = value)) + geom_point() + labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
+    poly_plot = ggplot(data = rma_data_long, aes(x = condition, y = value)) + geom_point() + labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
         geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(k - 1)))
     
     
@@ -166,7 +167,7 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
     
     
     print(poly_plot)
-    return(list(orthogonal_polynomial_contrast_table = contrast_table))
+    return(list(contrast_table = contrast_table))
 }
 
 
@@ -174,5 +175,5 @@ ow_rma_opc = function(ow_rma_data, independent_var = 1) {
 
 
 # Testing:
-ow_rma_opc(ow_rma_data, independent_var = 1)
+rma_opc(rma_data, id = 1)
 

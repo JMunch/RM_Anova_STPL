@@ -1,31 +1,31 @@
 ##### Evaluate reduction of error sum of squares due to the consideration of variance between entities. Function 'ow-rma' is required!
 
 
-ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie", return_anova_table = FALSE) {
+rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_table = FALSE) {
     
     
     # check if the data meet the requirements ---------------------------------
     
     
-    # ow_rma_data needs to meet the following requirements:
+    # rma_data needs to meet the following requirements:
     
-    # independent_var must either be an integer specifying the column position of the independent variable
-    if (independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1) {
-        stop("independent_var must be an integer specifying the column position of the independent variable")
+    # id must either be an integer specifying the column position of the independent variable
+    if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+        stop("id must be an integer specifying the column position of the independent variable")
     }
     
     # all variables must be numeric
-    if (all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))) {
-        stop("All variables in ow_rma_data must be numeric")
+    if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+        stop("All variables in rma_data must be numeric")
     }
     
     # n > k (i.e. more entities than factor levels)
-    if (nrow(ow_rma_data) <= (ncol(ow_rma_data) - 1)) {
+    if (nrow(rma_data) <= (ncol(rma_data) - 1)) {
         stop("Number of entities must exceed number of factor levels")
     }
     
     # k >= 2 (i.e. at least two or more factor levels)
-    if ((ncol(ow_rma_data) - 1) < 2) {
+    if ((ncol(rma_data) - 1) < 2) {
         stop("At least two factor factor levels required")
     }
     
@@ -46,16 +46,16 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
     # case.
     
     
-    ow_a = function(ow_rma_data, independent_var) {
+    ow_a = function(rma_data, id) {
         
         
         # Define needed constants and the dependent variable ------------------------
         
         
-        dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+        dependent_variable = as.matrix(rma_data[, -id])
         
         # Number of entities in one group
-        n_group = nrow(ow_rma_data)
+        n_group = nrow(rma_data)
         
         # Number of factor levels
         k = ncol(dependent_variable)
@@ -158,8 +158,8 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
     
     
     # ANOVA-tables of rmANOVA and ANOVA without repeated measures
-    ow_a_results = ow_a(ow_rma_data, independent_var)[[1]]
-    ow_rma_results = ow_rma(ow_rma_data, independent_var)[[1]]
+    ow_a_results = ow_a(rma_data, id)[[1]]
+    ow_rma_results = ow_rma(rma_data, id)[[1]]
     
     sse_anova = ow_a_results[3, 2]
     ss_subject_anova = 0
@@ -199,8 +199,6 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
     # Create pie chart -----------------------------------------------------------------
     
     
-    
-    
     comp_plot_pie = ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + geom_bar(width = 1, stat = "identity") + labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE) in percent") + 
         guides(fill = guide_legend(title = NULL)) + scale_fill_manual(values = c("orange", "navyblue")) + coord_polar(theta = "y") + facet_grid(~model) + theme_bw() + 
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank())
@@ -233,7 +231,7 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
         warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
         return(list(one_way_ANOVA_table = ow_a_results, error_sum_of_squares_reduction_table = error_ss_comparison_table))
     } else {
-        return(list(error_sum_of_squares_reduction_table = error_ss_comparison_table))
+        return(list(sse_reduction_table = error_ss_comparison_table))
     }
 }
 
@@ -242,5 +240,5 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
 
 
 # Testing:
-ow_rma_sse_reduct(ow_rma_data, independent_var = 1, plot_type = "bar", return_anova_table = TRUE)
+rma_sse_reduct(rma_data, id = 1, plot_type = "bar", return_anova_table = TRUE)
 

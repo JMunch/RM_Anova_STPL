@@ -1,18 +1,18 @@
 ##### Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
 
 
-ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
+rma_ci = function(rma_data, C_level = 0.95, id = 1) {
   
   # 'C_level' must be larger than 0 and smaler than 1
   if (C_level >= 1 | C_level <= 0) {
     stop("C_level must be larger than 0 and smaler than 1")
   }
-  # independent_var must either be an integer specifying the column position of the independent variable
-  if (independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1) {
-    stop("independent_var must be an integer specifying the column position of the independent variable")
+  # id must either be an integer specifying the column position of the independent variable
+  if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+    stop("id must be an integer specifying the column position of the independent variable")
   }
   
-  dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+  dependent_variable = as.matrix(rma_data[, -id])
   
   
   # Libraries needed --------------------------------------------------------
@@ -26,24 +26,24 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
   
   
   # Number of entities
-  n = nrow(ow_rma_data)
+  n = nrow(rma_data)
   
   # Number of factor levels
   k = ncol(dependent_variable)
   
   # Specify the names of the 'id'-variable and of the 'condition'-variables
   rm_names = colnames(dependent_variable)
-  id_names = colnames(ow_rma_data)[independent_var]
+  id_names = colnames(rma_data)[id]
   
   
   # check if the data meet the requirements ---------------------------------
   
   
-  # ow_rma_data needs to meet the following requirements:
+  # rma_data needs to meet the following requirements:
   
   # all variables must be numeric
-  if (all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))) {
-    stop("All variables in ow_rma_data must be numeric")
+  if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+    stop("All variables in rma_data must be numeric")
   }
   
   # n > k (i.e. more entities than factor levels)
@@ -60,23 +60,23 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
   # Convert data to long format ---------------------------------------------
   
   
-  ow_rma_data_long = reshape(ow_rma_data, varying = rm_names, v.names = "value", timevar = "condition", times = (1:k), idvar = id_names, new.row.names = 1:(k * n), 
+  rma_data_long = reshape(rma_data, varying = rm_names, v.names = "value", timevar = "condition", times = (1:k), idvar = id_names, new.row.names = 1:(k * n), 
                              direction = "long")
-  colnames(ow_rma_data_long)[1] = "id"
-  ow_rma_data_long$condition = as.numeric(ow_rma_data_long$condition)
+  colnames(rma_data_long)[1] = "id"
+  rma_data_long$condition = as.numeric(rma_data_long$condition)
   
   
   # Compute means -----------------------------------------------------------
   
   
   # Factor level means
-  Flm = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, mean)
+  Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
   
   # General mean
-  Gm = mean(ow_rma_data_long$value)
+  Gm = mean(rma_data_long$value)
   
   # Entity/subject mean
-  Em = tapply(ow_rma_data_long$value, ow_rma_data_long$id, mean)
+  Em = tapply(rma_data_long$value, rma_data_long$id, mean)
   
   # Mean of each measurement condition
   Me = 1:k
@@ -93,7 +93,7 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
   
   
   # Standard errors of the conditional means
-  SE = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, sd)/sqrt(n)
+  SE = tapply(rma_data_long$value, rma_data_long$condition, sd)/sqrt(n)
   
   # CI for ANOVA without repeated measures
   CIdist_unadj = abs(qt((1 - C_level)/2, (n - 1))) * SE
@@ -113,11 +113,11 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
   # Correction factor etablished by Morey (2008)
   cf = sqrt(k/(k - 1))
   
-  AdjVal = data.frame(Adj = (cf * ((ow_rma_data_long$value - EEmlong$Em + Gm) - MeFlmlong$Flm)) + MeFlmlong$Flm)
-  ow_rma_data_long_adj = cbind.data.frame(ow_rma_data_long, AdjVal)
+  AdjVal = data.frame(Adj = (cf * ((rma_data_long$value - EEmlong$Em + Gm) - MeFlmlong$Flm)) + MeFlmlong$Flm)
+  rma_data_long_adj = cbind.data.frame(rma_data_long, AdjVal)
   
   # Standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014, see also Loftus & Masson; 1994)
-  SE_adj = (tapply(ow_rma_data_long_adj$Adj, ow_rma_data_long_adj$condition, sd)/sqrt(n))
+  SE_adj = (tapply(rma_data_long_adj$Adj, rma_data_long_adj$condition, sd)/sqrt(n))
   CIdist_adj = abs(qt((1 - C_level)/2, (n - 1))) * SE_adj
   
   # Compute upper and lower bound
@@ -157,7 +157,7 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
   
   
   print(ci_plot)
-  return(list(adjusted_CI = lu_adj_CI, unadjusted_CI = lu_unadj_CI))
+  return(list(confidence_intervals = data.frame(adjusted_CI = lu_adj_CI, unadjusted_CI = lu_unadj_CI)))
 }
 
 
@@ -165,4 +165,4 @@ ow_rma_ci = function(ow_rma_data, C_level = 0.95, independent_var = 1) {
 
 
 # Testing:
-ow_rma_ci(ow_rma_data, independent_var = 1)
+rma_ci(rma_data, id = 1)

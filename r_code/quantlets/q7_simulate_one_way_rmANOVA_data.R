@@ -1,7 +1,7 @@
 # Function to simulate data for repeated measurement ANOVA
 
 
-sim_ow_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, between_subject_sd = 40, NAs = 0) {
+sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, between_subject_sd = 40, NAs = 0) {
     
     
     # Create data structure and simulate data --------------------------------------------------
@@ -109,6 +109,6 @@ sim_ow_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10,
 
 
 # Testing:
-ow_rma_data = sim_ow_rma_data(1000, 4, means = NULL, poly_order = 2, noise_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1)
+rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 2, noise_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1)
 ow_rma_data
 

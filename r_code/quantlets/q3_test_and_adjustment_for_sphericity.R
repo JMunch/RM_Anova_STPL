@@ -2,15 +2,15 @@
 ##### 1940), the procedure described by Huynh and Feldt (1970) is used
 
 
-ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE) {
+rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     
-    # independent_var must either be an integer specifying the column position of the independent variable
-    if (independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1) {
-        stop("independent_var must be an integer specifying the column position of the independent variable")
+    # id must either be an integer specifying the column position of the independent variable
+    if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+        stop("id must be an integer specifying the column position of the independent variable")
     }
     
-    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+    dependent_variable = as.matrix(rma_data[, -id])
     
     # Defining some variables -------------------------------------------------
     
@@ -19,7 +19,7 @@ ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE) {
     k = ncol(dependent_variable)
     
     # number of entities
-    n = nrow(ow_rma_data)
+    n = nrow(rma_data)
     
     # Factor degrees of freedom
     df = k - 1
@@ -31,11 +31,11 @@ ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE) {
     # check if the data meet the requirements ---------------------------------
     
     
-    # ow_rma_data needs to meet the following requirements:
+    # rma_data needs to meet the following requirements:
     
     # all variables must be numeric
-    if (all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))) {
-        stop("All variables in ow_rma_data must be numeric")
+    if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+        stop("All variables in rma_data must be numeric")
     }
     
     # n > k (i.e. more entities than factor levels)
@@ -118,7 +118,7 @@ ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE) {
         # multplication with the respective correction factor (epsilon) rmANOVA function 'ow_rma' is required!
         
         
-        ANOVA_table = ow_rma(ow_rma_data)[[1]]
+        ANOVA_table = ow_rma(rma_data)[[1]]
         
         corrected_factor_df = ANOVA_table[2, 3] * epsilon_lb
         corrected_error_df = ANOVA_table[2, 3] * epsilon_lb
@@ -164,7 +164,7 @@ ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE) {
         
         
         if (append == TRUE) {
-            return(list(mauchly_test_table = mauchly_table, correction_factors_epsilon_table = epsilon_table, corrected_one_way_repeated_measures_ANOVA_table = ANOVA_table))
+            return(list(mauchly_table = mauchly_table, correction_factors_epsilon_table = epsilon_table, corrected_one_way_repeated_measures_ANOVA_table = ANOVA_table))
         } else {
             return(list(mauchly_test_table = mauchly_table, correction_factors_epsilon_table = epsilon_table))
         }
@@ -183,5 +183,5 @@ ow_rma_spheri = function(ow_rma_data, independent_var = 1, append = FALSE) {
 
 
 # Testing:
-ow_rma_spheri(ow_rma_data, independent_var = 1, append = TRUE)
+rma_spheri(rma_data, id = 1, append = TRUE)
 
