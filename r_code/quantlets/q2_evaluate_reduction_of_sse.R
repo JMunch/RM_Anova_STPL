@@ -159,14 +159,14 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     # ANOVA-tables of rmANOVA and ANOVA without repeated measures
     ow_a_results = ow_a(rma_data, id)[[1]]
-    ow_rma_results = ow_rma(rma_data, id)[[1]]
+    rma_results = rma(rma_data, id)[[1]]
     
     sse_anova = ow_a_results[3, 2]
     ss_subject_anova = 0
     # Always zero because the subject effect is not considered in an ANOVA without repeated measures
     
-    sse_rma = ow_rma_results[4, 2]
-    ss_subject_rma = ow_rma_results[3, 2]
+    sse_rma = rma_results[4, 2]
+    ss_subject_rma = rma_results[3, 2]
     
     
     # Create variables for comparison plot displaying the reduction of error terms ------------------------------------------
@@ -227,13 +227,9 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     
     print(final_plot)
-<<<<<<< HEAD
-    if (ow_a_table == TRUE) {
-        warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treats the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
-=======
+
     if (return_anova_table == TRUE) {
         warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
->>>>>>> 03f12e80b6a4e4d8541211273a9215488ff20463
         return(list(one_way_ANOVA_table = ow_a_results, error_sum_of_squares_reduction_table = error_ss_comparison_table))
     } else {
         return(list(sse_reduction_table = error_ss_comparison_table))

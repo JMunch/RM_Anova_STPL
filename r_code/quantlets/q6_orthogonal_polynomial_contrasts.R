@@ -1,7 +1,7 @@
 ##### Orthogonal polynomial contrasts in a one-way repeated measures ANOVA
 
 
-rma_opc = function(rma_data, id = 1, maxpoly = NA) {
+rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     # suppress warning messages from the required packages NOTE: This function still loads the packages!
     suppressWarnings(suppressMessages(require(dplyr)))
@@ -165,9 +165,10 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA) {
     
     # Return the contrast-table and plot ----------------------------------------
     
+    if (print_plot == TRUE){
+    print(poly_plot)}
     
-    print(poly_plot)
-    return(list(contrast_table = contrast_table))
+    return(list(contrast_table = contrast_table, poly_plot = poly_plot))
 }
 
 

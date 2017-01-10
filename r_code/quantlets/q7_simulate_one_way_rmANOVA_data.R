@@ -8,10 +8,10 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     
     
     # Create empty n x k matrix
-    ow_rma_data = matrix(, nrow = n, ncol = k + 1)
+    rma_data = matrix(, nrow = n, ncol = k + 1)
     
     # Add column with subject_id
-    ow_rma_data[, 1] = 1:n
+    rma_data[, 1] = 1:n
     
     
     if (!is.null(means)) {
@@ -41,11 +41,11 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     }
     
     # Add con_mean to the rma_data matrix
-    ow_rma_data[, 2:(k + 1)] = matrix(rep(con_means, each = n), nrow = n)
+    rma_data[, 2:(k + 1)] = matrix(rep(con_means, each = n), nrow = n)
     
     # Simulate subject means Calculate the deviation from the conditional mean for each subject
     mean_deviation = rnorm(n, mean = 0, sd = between_subject_sd)
-    ow_rma_data[, 2:(k + 1)] = ow_rma_data[, 2:(k + 1)] + mean_deviation
+    rma_data[, 2:(k + 1)] = rma_data[, 2:(k + 1)] + mean_deviation
     
     # Check if only one noise_sd was passed (no sphericity) and create vector
     if (length(noise_sd) == 1) {
@@ -66,12 +66,12 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     for (i in 1:k) {
         noise[, i] = rnorm(n, mean = 0, sd = noise_sd[i])
     }
-    ow_rma_data[, 2:(k + 1)] = ow_rma_data[, 2:(k + 1)] + noise
+    rma_data[, 2:(k + 1)] = rma_data[, 2:(k + 1)] + noise
     
     # Simulating NAs, adds the number of NA to the the data passed as argument
     if (NAs > 0) {
         for (i in 1:NAs) {
-            ow_rma_data[runif(1, min = 1, max = n), runif(1, min = 2, max = (k + 1))] = NA
+            rma_data[runif(1, min = 1, max = n), runif(1, min = 2, max = (k + 1))] = NA
         }
     }
     
@@ -81,14 +81,14 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     
     deletionvector = vector(mode = "numeric", length = 0)
     
-    for (i in 1:nrow(ow_rma_data)) {
-        if (any(is.na(ow_rma_data[i, ])) == TRUE) {
+    for (i in 1:nrow(rma_data)) {
+        if (any(is.na(rma_data[i, ])) == TRUE) {
             deletionvector = union(deletionvector, i)
             print(paste("Listwise deletion due to missing value(s) for subject", i))
         }
     }
     
-    ow_rma_data = ow_rma_data[-deletionvector, ]
+    rma_data = rma_data[-deletionvector, ]
     
     
     # Naming columns ------------------------------------------------------------
@@ -99,9 +99,9 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     for (i in 1:k) {
         factor_names[i + 1] = paste("Factor", i)
     }
-    colnames(ow_rma_data) = factor_names
+    colnames(rma_data) = factor_names
     
-    return(data.frame(ow_rma_data))
+    return(data.frame(rma_data))
 }
 
 
@@ -110,5 +110,5 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
 
 # Testing:
 rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 2, noise_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1)
-ow_rma_data
+rma_data
 
