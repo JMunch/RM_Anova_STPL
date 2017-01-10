@@ -1,4 +1,4 @@
-##### Evaluate reduction of error sum of squares due to the consideration of variance between entities Function 'ow-rma' is required!
+##### Evaluate reduction of error sum of squares due to the consideration of variance between entities. Function 'ow-rma' is required!
 
 
 ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie", ow_a_table = FALSE) {
@@ -42,7 +42,7 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
     # Note that the one-way ANOVA without repeated measures is for illustration purposes only since the data structure is correlated across the factor levels because of
     # the dependent measurements.
     
-    # The ANOVA without repeated measures treates the data as if they are independend i.e. as if there are different entities in each group, which is in fact not the
+    # The ANOVA without repeated measures treates the data as if they are independend i.e. as if there were different entities in each group, which is in fact not the
     # case.
     
     
@@ -80,7 +80,7 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
         error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
         
         
-        # Construct decomposition matrix ---------------------------------------------- Matrix with n rows and 4 columns One column for: original values, factor level
+        # Construct decomposition matrix ---------------------------------------------- Matrix with n rows and 4 columns. One column for: original values, factor level
         # component, error component
         
         
