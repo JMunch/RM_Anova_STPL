@@ -1,7 +1,26 @@
-# Function to simulate data for repeated measurement ANOVA
+#' Simulate data for one-way repeated measures ANOVA
+#'
+#' Simulate data that can be used to estimate repeated measures ANOVA models. Function parameters allow to simulate different data properties such as sphericity and polynomial trends.
+#'
+#' @param n Integer specifying the number of subjects.
+#' @param k Integer specifying the number of factor levels i.e. repeated measurements.
+#' @param means Numeric vector specifying the means for the k factor levels. If length of means vector exeeds k, the mean vector is truncated to match the number of factor levels. Default is NULL.
+#' @param poly_order = Integer specifying the highest order polynomial trend that the simulated data is supposed to have. Ignored if means argument is specified. Default is NULL.
+#' @param noise_sd Numeric vector specifying the standard deviation of the noise that is added to each factor level values. If it is desired to simulate sphericity, noise_sd must be of length k, otherwise of length 1. Default is 10.
+#' @param between_subject_sd Numeric vector specifying the standard deviation of the values withing each of the k factor levels. Default is 40.
+#' @param NAs Integer specifying the number of missing values that is randomly assigned to the data. Only used to ensure that the functions are robust against missing values. Default is 0.
+#'
+#' @return Returns an object of type data.frame
+#' \item{rma_data}{An object of type data.frame containing the simulated data}
+#' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
+#' @note
+#' @examples
+#'
+#'
+#' @rdname sim_ow_rma_data
+#' @export
 
-
-sim_ow_rma_data = function(n, k, means = NULL, poly_order = NULL, noice_sd = 10, between_subject_sd = 40, NAs = 0){
+sim_ow_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, between_subject_sd = 40, NAs = 0){
 
 # Create empty n x k matrix
 ow_rma_data = matrix(, nrow = n, ncol = k + 1)
