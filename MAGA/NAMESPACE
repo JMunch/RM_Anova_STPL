@@ -2,3 +2,7 @@
 
 export(ow_rma)
 export(ow_rma_ci)
+export(ow_rma_eta)
+export(ow_rma_opc)
+export(ow_rma_spheri)
+export(ow_rma_sse_reduct)
