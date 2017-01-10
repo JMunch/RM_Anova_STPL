@@ -2,19 +2,24 @@
 % Please edit documentation in R/ow_rma_ci.R
 \name{ow_rma_ci}
 \alias{ow_rma_ci}
-\title{Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement}
+\title{Compute of adjusted and unadjusted confidence intervals for one-way repeated measures ANOVA}
 \usage{
 ow_rma_ci(ow_rma_data)
 }
 \arguments{
-\item{ow_rma_data}{datataframe with subject id column and k factor columns.}
+\item{ow_rma_data}{An object of type data.frame that contains the data for the repeated measures ANOVA. Each row should represent one entity and each column one variable.}
+
+\item{c_level}{= A numeric value specifying the level of the confidence intervals. Default is 0.95.}
+
+\item{id}{An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.}
 }
 \value{
-list with adj. and unadj. confidence intervals
-\item{ow_rma_data}{The first object input.}
+Returns an object of type list.
+\item{ci_plot}{A ggplot object displaying the comparison of adjusted and unadjusted confidence intervals}
+\item{confidence_intervals}{An object of type data.frame. Contains adjusted and unadjusted confidence intervals of specified level.}
 }
 \description{
-Estimate adjusted and unadjusted confidence intervals for repeated measurement ANOVA.
+Estimate adjusted and unadjusted confidence intervals for repeated measurement ANOVA. Adjusted confidence intervals take into account the inter-subject variance. The functions allows to visually compare both types.
 }
 \note{
 This functions allows to calculate the confidence intervals of a repeated measurement ANOVA.
@@ -32,6 +37,6 @@ CI_list$unadjusted_CI
 
 }
 \author{
-Sums of Suares
+Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
 }
 

@@ -1,13 +1,15 @@
-#' Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
+#' Compute of adjusted and unadjusted confidence intervals for one-way repeated measures ANOVA
 #'
-#' Estimate adjusted and unadjusted confidence intervals for repeated measurement ANOVA. The functions further allow to plot the confidence intervals.
+#' Estimate adjusted and unadjusted confidence intervals for repeated measurement ANOVA. Adjusted confidence intervals take into account the inter-subject variance. The functions allows to visually compare both types.
 #'
-#' @param ow_rma_data datataframe with subject id column and k factor columns.
+#' @param ow_rma_data An object of type data.frame that contains the data for the repeated measures ANOVA. Each row should represent one entity and each column one variable.
+#' @param c_level = A numeric value specifying the level of the confidence intervals. Default is 0.95.
+#' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
 #'
-#'
-#' @return list with adj. and unadj. confidence intervals
-#' \item{ow_rma_data}{The first object input.}
-#' @author Sums of Suares
+#' @return Returns an object of type list.
+#' \item{ci_plot}{A ggplot object displaying the comparison of adjusted and unadjusted confidence intervals}
+#' \item{confidence_intervals}{An object of type data.frame. Contains adjusted and unadjusted confidence intervals of specified level.}
+#' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
 #' @note This functions allows to calculate the confidence intervals of a repeated measurement ANOVA.
 #' @examples
 #'

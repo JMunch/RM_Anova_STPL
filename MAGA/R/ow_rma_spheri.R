@@ -1,7 +1,22 @@
-##### Mauchly's Test of Sphericity and the appropriate correction factors (epsilon)
-  # Function 'ow_rma' is required (quantlet1_rm_anova.R)!
-  # To conduct the Mauchly's Test of Sphericity (Mauchly, 1940), the procedure described by Huynh and Feldt (1970) is used
-
+#' Test for sphericity and p-value adjustment
+#'
+#' Perform a Mauchly test for sphericity and compute p-value adjustments
+#'
+#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
+#' @param append Logical. If FALSE only the results from the sphericity test are returned along with three different p-value adjustments. If TRUE, an ANOVA table with appropriately adjusted p-values is returned aditionally. Default is FALSE.
+#'
+#' @return Returns an object of type list.
+#' \item{mauchly_table}{An object of type data.frame containing the results from the Mauchly test for sphericity}
+#' \item{correction_factors}{An object of type data.frame containing the correction factors for p-values in the presence of sphericity}
+#' \item{corrected_rm_anova}{An object of type data.frame. RM ANOVA table with appropriately adjusted p-values}
+#' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
+#' @note LITERATURE REFERENCES
+#' @examples
+#'
+#'
+#' @rdname ow_rma_spheri
+#' @export
 
 ow_rma_spheri = function(ow_rma_data, append = FALSE){
 
