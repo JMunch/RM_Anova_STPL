@@ -1,7 +1,7 @@
 ##### Computation of adjusted and unadjusted confidence intervalls for one-way ANOVA with repeated measurement
 
 
-rma_ci = function(rma_data, C_level = 0.95, id = 1) {
+rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
   
   # 'C_level' must be larger than 0 and smaler than 1
   if (C_level >= 1 | C_level <= 0) {
@@ -155,9 +155,9 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1) {
   
   # Return plot and table displaying adjusted and unadjusted confidence intervals --------------------
   
-  
-  print(ci_plot)
-  return(list(confidence_intervals = data.frame(adjusted_CI = lu_adj_CI, unadjusted_CI = lu_unadj_CI)))
+  if (print_plot == TRUE){
+  print(ci_plot)}
+  return(list(confidence_intervals = data.frame(adjusted_CI = lu_adj_CI, unadjusted_CI = lu_unadj_CI), ci_plot = ci_plot))
 }
 
 

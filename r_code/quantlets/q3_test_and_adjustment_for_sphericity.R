@@ -1,4 +1,4 @@
-##### Mauchly's Test of Sphericity and the appropriate correction factors (epsilon) Function 'ow_rma' is required!  To conduct the Mauchly's Test of Sphericity (Mauchly,
+##### Mauchly's Test of Sphericity and the appropriate correction factors (epsilon) Function 'rma' is required!  To conduct the Mauchly's Test of Sphericity (Mauchly,
 ##### 1940), the procedure described by Huynh and Feldt (1970) is used
 
 
@@ -50,7 +50,7 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     
     # Check whether a test for sphericity is needed ------------------------------- Note that there can't be a violation of sphericity since the factor of the one-way
-    # ANOVA has only two factor levels
+    # anova has only two factor levels
     
     
     if (k > 2) {
@@ -101,7 +101,7 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         
         
         # The three different correction factors (epsilon) ------------------------ Computing the three different correction factors for the nominator/denominator df of the
-        # rmANOVA factor F-test (Box, 1954a; Box, 1954b; Geisser & Greenhouse, 1958; Greenhouse & Geisser, 1959; Huynh & Feldt, 1976) )
+        # rmanova factor F-test (Box, 1954a; Box, 1954b; Geisser & Greenhouse, 1958; Greenhouse & Geisser, 1959; Huynh & Feldt, 1976) )
         
         
         # Lower-Bound correction (Greenhouse & Geisser, 1959)
@@ -114,23 +114,23 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         epsilon_hf = min((n * df * epsilon_gg - 2)/(df * (n - 1) - (df^2 * epsilon_gg)), 1)
         
         
-        # Computing the adjusted p-values for the ANOVA-factor F-test ------------- The adjustment is realised via correction of the F-distribution degrees of freedom by
-        # multplication with the respective correction factor (epsilon) rmANOVA function 'ow_rma' is required!
+        # Computing the adjusted p-values for the anova-factor F-test ------------- The adjustment is realised via correction of the F-distribution degrees of freedom by
+        # multplication with the respective correction factor (epsilon) rmanova function 'rma' is required!
         
         
-        ANOVA_table = ow_rma(rma_data)[[1]]
+        anova_table = rma(rma_data)[[1]]
         
-        corrected_factor_df = ANOVA_table[2, 3] * epsilon_lb
-        corrected_error_df = ANOVA_table[2, 3] * epsilon_lb
-        p_factor_lb = 1 - pf(ANOVA_table[2, 5], corrected_factor_df, corrected_error_df)
+        corrected_factor_df = anova_table[2, 3] * epsilon_lb
+        corrected_error_df = anova_table[2, 3] * epsilon_lb
+        p_factor_lb = 1 - pf(anova_table[2, 5], corrected_factor_df, corrected_error_df)
         
-        corrected_factor_df = ANOVA_table[2, 3] * epsilon_gg
-        corrected_error_df = ANOVA_table[2, 3] * epsilon_gg
-        p_factor_gg = 1 - pf(ANOVA_table[2, 5], corrected_factor_df, corrected_error_df)
+        corrected_factor_df = anova_table[2, 3] * epsilon_gg
+        corrected_error_df = anova_table[2, 3] * epsilon_gg
+        p_factor_gg = 1 - pf(anova_table[2, 5], corrected_factor_df, corrected_error_df)
         
-        corrected_factor_df = ANOVA_table[2, 3] * epsilon_hf
-        corrected_error_df = ANOVA_table[2, 3] * epsilon_hf
-        p_factor_hf = 1 - pf(ANOVA_table[2, 5], corrected_factor_df, corrected_error_df)
+        corrected_factor_df = anova_table[2, 3] * epsilon_hf
+        corrected_error_df = anova_table[2, 3] * epsilon_hf
+        p_factor_hf = 1 - pf(anova_table[2, 5], corrected_factor_df, corrected_error_df)
         
         
         # Table with adjusted p-values and respective corection factors -----------
@@ -142,29 +142,29 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         rownames(epsilon_table) = NULL
         
         
-        # Coose recomendet adjustment and add to ANOVA-table ---------------------- Correction is only applied if assumption of sphericity is rejected Recomendation (e.g.
+        # Coose recomendet adjustment and add to anova-table ---------------------- Correction is only applied if assumption of sphericity is rejected Recomendation (e.g.
         # Girden, 1992) based on results of Greenhouse and Geisser (1959) as well as Huynh and Feldt (1976)
         
         
         if (p_w < 0.05) {
             if (p_factor_lb < 0.05) {
-                ANOVA_table[, "Recommended Lower-Bound corrected p-Value (Greenhouse & Geisser, 1959))"] = c(NA, p_factor_lb, NA, NA, NA, NA)
+                anova_table[, "Recommended Lower-Bound corrected p-Value (Greenhouse & Geisser, 1959))"] = c(NA, p_factor_lb, NA, NA, NA, NA)
             } else {
                 if (epsilon_gg < 0.75) {
-                  ANOVA_table[, "Recommended Box corrected p-Value (Geisser & Greenhouse, 1958)"] = c(NA, p_factor_gg, NA, NA, NA, NA)
+                  anova_table[, "Recommended Box corrected p-Value (Geisser & Greenhouse, 1958)"] = c(NA, p_factor_gg, NA, NA, NA, NA)
                 } else {
-                  ANOVA_table[, "Recommended Huynh-Feldt corrected p-Value (Huynh & Feldt, 1976)"] = c(NA, p_factor_hf, NA, NA, NA, NA)
+                  anova_table[, "Recommended Huynh-Feldt corrected p-Value (Huynh & Feldt, 1976)"] = c(NA, p_factor_hf, NA, NA, NA, NA)
                 }
             }
         }
         
         
-        # Return spericity test and p-value adjustment ---------------------------- If append is 'TRUE' the function will also return the ANOVA-table with the recomendet
+        # Return spericity test and p-value adjustment ---------------------------- If append is 'TRUE' the function will also return the anova-table with the recomendet
         # adjustment of the p-value
         
         
         if (append == TRUE) {
-            return(list(mauchly_table = mauchly_table, correction_factors_epsilon_table = epsilon_table, corrected_one_way_repeated_measures_ANOVA_table = ANOVA_table))
+            return(list(mauchly_table = mauchly_table, correction_factors_epsilon_table = epsilon_table, corrected_anova_table = anova_table))
         } else {
             return(list(mauchly_test_table = mauchly_table, correction_factors_epsilon_table = epsilon_table))
         }
@@ -174,7 +174,7 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         
         
     } else {
-        stop("Note that there can't be a violation of sphericity since the factor of the one-way ANOVA has only two factor levels")
+        stop("Note that there can't be a violation of sphericity since the factor of the one-way anova has only two factor levels")
     }
 }
 
