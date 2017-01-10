@@ -1,7 +1,7 @@
 ##### Evaluate reduction of error sum of squares due to the consideration of variance between entities. Function 'ow-rma' is required!
 
 
-ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie", ow_a_table = FALSE) {
+ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie", return_anova_table = FALSE) {
     
     
     # check if the data meet the requirements ---------------------------------
@@ -229,8 +229,13 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
     
     
     print(final_plot)
+<<<<<<< HEAD
     if (ow_a_table == TRUE) {
         warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treats the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
+=======
+    if (return_anova_table == TRUE) {
+        warning("\nNote that the one-way ANOVA without repeated measures is for\nillustration purposes only since the data structure is correlated\nacross the factor levels because of the dependent measurements.\nThe ANOVA without repeated measures treates the data as if they\nare independend i.e. as if there are different entities in each\ngroup, which is in fact not the case.")
+>>>>>>> 03f12e80b6a4e4d8541211273a9215488ff20463
         return(list(one_way_ANOVA_table = ow_a_results, error_sum_of_squares_reduction_table = error_ss_comparison_table))
     } else {
         return(list(error_sum_of_squares_reduction_table = error_ss_comparison_table))
@@ -242,5 +247,5 @@ ow_rma_sse_reduct = function(ow_rma_data, independent_var = 1, plot_type = "pie"
 
 
 # Testing:
-ow_rma_sse_reduct(ow_rma_data, independent_var = 1, plot_type = "bar", ow_a_table = TRUE)
+ow_rma_sse_reduct(ow_rma_data, independent_var = 1, plot_type = "bar", return_anova_table = TRUE)
 
