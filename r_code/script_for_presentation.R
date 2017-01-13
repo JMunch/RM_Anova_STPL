@@ -12,13 +12,15 @@ set.seed(1)
 means = c(400, 170, 55, 45, 40)
 
 ow_rma_data = sim_ow_rma_data(n = 30, k = 5, means = means, poly_order = NULL, noise_sd = c(155, 65, 75, 15, 40), between_subject_sd = 60, NAs = 2) 
-ow_rma_data = (ow_rma_data  + 100) / 2
+ow_rma_data[,2:5] = (ow_rma_data[,2:5]  + 100) / 2
+#ow_rma_data = read.csv("r_code/simulated_rigelmann_data.csv")
 ow_rma(ow_rma_data)
 ow_rma_ci(ow_rma_data, C_level = 0.99)
 ow_rma_eta(ow_rma_data)
 ow_rma_opc(ow_rma_data)
 ow_rma_spheri(ow_rma_data, append = TRUE)
-ow_rma_sse_reduct(ow_rma_data)
+ow_rma_sse_reduct(ow_rma_data, ow_a_table = TRUE)
 
-write.csv(x = ow_rma_data, file = "r_code/simulated_rigelmann_data.csv")
+#write.csv(x = ow_rma_data, file = "r_code/simulated_rigelmann_data.csv")
 
+View(ow_rma_data)
