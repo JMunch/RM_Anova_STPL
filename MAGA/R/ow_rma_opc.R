@@ -1,5 +1,20 @@
-##### Orthogonal polynomial contrasts in a one-way repeated measures ANOVA
-
+#' Estimate and plot orthogonal polynomial trends
+#'
+#' Compute orthogonal polynomial contrasts and plot orthogonal polynomial regression curves for a repeated measures ANOVA.
+#'
+#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
+#' @param maxpoly Integer. Specifies the highest order polynomial for the contrast analysis. Truncated to number of factor levels (k) -1 if larger. Default is NA which will be set to k-1 within the function.
+#'
+#' @return Returns an object of type list.
+#' \item{contrast_table}{An object of type data.frame containing the contribution of the polynomial trends to the total factor effect and their respective significance levels}
+#' \item{poly_plot}{A ggplot object. Displays the orthogonal polynomial regression curves.}
+#' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
+#' @note LITERATURE
+#' @examples
+#'
+#' @rdname ow_rma_opc
+#' @export
 
 ow_rma_opc = function(ow_rma_data){
 

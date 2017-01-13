@@ -2,19 +2,21 @@
 % Please edit documentation in R/ow_rma.R
 \name{ow_rma}
 \alias{ow_rma}
-\title{Computation of one-way repeated measures ANOVA (rma)}
+\title{Compute one-way repeated measures ANOVA}
 \usage{
-ow_rma(ow_rma_data)
+ow_rma(ow_rma_data, independent_var = 1)
 }
 \arguments{
-\item{ow_rma_data}{datataframe with subject id column and k factor columns.}
+\item{ow_rma_data}{An object of type data.frame. Each row should represent one subject and each column one variable.}
+
+\item{id}{An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.}
 }
 \value{
-ANOVA Table
-\item{ow_rma_data}{The first object input.}
+Returns an object of class data.frame that contains the results from the RM ANOVA
+\item{}{}
 }
 \description{
-Estimate an repeated measurement with given data
+Estimate an AVOVA model with repeated measurements.
 }
 \note{
 This is the main function of the MAGA-package to estimate the repeated measurement ANOVA.
@@ -25,6 +27,6 @@ ANOVA_table = ow_rma(some_rma_data)
 
 }
 \author{
-Sums of Suares
+Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
 }
 

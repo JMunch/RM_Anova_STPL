@@ -1,6 +1,22 @@
-##### Evaluate reduction of error sum of squares due to the consideration of variance between entities
-  # Function 'ow-rma' is required (quantlet1_rm_anova.R)!
-
+#' Visualize reduction of SSE due to model selection
+#'
+#' Compare the sums of squared errors in regular one-way ANOVA and one-way RM ANOVA.
+#'
+#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
+#' @param plot_type A character specifying the type of plot that is returned to visualize the error variance reduction. Possible values are “pie” and “bar”. Default is “pie”.
+#' @param return_anova_table Logical. If TRUE, a regular oneway ANOVA table without repeated measurements is returned additionally. Default is FALSE.
+#'
+#' @return Returns an object of type list.
+#' \item{plot}{A ggplot object. The type of plot is determined by the argument plot_type}
+#' \item{anova_table}{An object of type data.frame containing a regular oneway ANOVA table without repeated measurements}
+#' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
+#' @note Note that the one-way ANOVA without repeated measures is for illustration purposes only since the data structure is correlated across the factor levels because of the dependent measurements.The ANOVA without repeated measures treats the data as if they were independend i.e. as if there were different subjects in each group, which is in fact not the case.
+#' @examples
+#'
+#'
+#' @rdname ow_rma_sse_reduct
+#' @export
 
 ow_rma_sse_reduct = function(ow_rma_data){
 

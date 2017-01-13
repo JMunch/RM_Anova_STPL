@@ -1,22 +1,22 @@
 ##### Computation of one-way repeated measures ANOVA (rma)
 
 
-ow_rma = function(ow_rma_data, independent_var = 1) {
+rma = function(rma_data, id = 1) {
     
     
     # Define needed constants and the dependent variable ----------------------
     
     
-    # independent_var must either be an integer specifying the column position of the independent variable
-    if (independent_var %in% 1:ncol(ow_rma_data) == FALSE || length(independent_var) != 1) {
-        stop("independent_var must be an integer specifying the column position of the independent variable")
+    # id must either be an integer specifying the column position of the independent variable
+    if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+        stop("id must be an integer specifying the column position of the independent variable")
     }
     
-    dependent_variable = as.matrix(ow_rma_data[, -independent_var])
+    dependent_variable = as.matrix(rma_data[, -id])
     
     
     # Number of entities
-    n = nrow(ow_rma_data)
+    n = nrow(rma_data)
     
     # Number of factor levels
     k = ncol(dependent_variable)
@@ -26,11 +26,11 @@ ow_rma = function(ow_rma_data, independent_var = 1) {
     # check if the data meet the requirements ---------------------------------
     
     
-    # ow_rma_data needs to meet the following requirements:
+    # rma_data needs to meet the following requirements:
     
     # all variables must be numeric
-    if (all(sapply(ow_rma_data, is.numeric)) == FALSE | any(sapply(ow_rma_data, is.factor))) {
-        stop("All variables in ow_rma_data must be numeric")
+    if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+        stop("All variables in rma_data must be numeric")
     }
     
     # n > k (i.e. more entities than factor levels)
@@ -133,7 +133,7 @@ ow_rma = function(ow_rma_data, independent_var = 1) {
     # Return ANOVA-table ------------------------------------------------------
     
     
-    return(list(one_way_repeated_measures_ANOVA_table = ANOVA_table))
+    return(list(rm_ANOVA_table = ANOVA_table))
 }
 
 
@@ -141,5 +141,5 @@ ow_rma = function(ow_rma_data, independent_var = 1) {
 
 
 # Testing:
-ow_rma(ow_rma_data, 1)
+ow_rma(rma_data, 1)
 

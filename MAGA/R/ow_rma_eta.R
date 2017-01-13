@@ -1,17 +1,18 @@
 #' Effect size measures for a one-way repeated measures ANOVA
 #'
-#' Compute effect size of the repeated measurement ANOVA.
+#' Compute eta-square and partial eta_square for repeated measures ANOVA. Partial eta square is the effect size for the total variance reduced by the inter-subject variance (as done in a repeated measures ANOVA model)
 #'
-#' @param ow_rma_data datataframe with subject id column and k factor columns.
+#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
+#' @param append Logical. If FALSE only the effect sizes. If TRUE, an ANOVA table augmented with effect sizes is returned aditionally. Default is FALSE.
 #'
-#'
-#' @return list with adj. and unadj. confidence intervals
-#' \item{ow_rma_data}{The first object input.}
-#' @author Sums of Suares
-#' @note This functions automatically estimates a repeated meassurement ANOVA to then calculate the effect size.
+#' @return Returns an object of type list.
+#' \item{effect_size_table}{An object of type data.frame containing the effect sizes eta square and partial eta square}
+#' \item{anova_table}{An object of type data.frame. Contains the anova table augmented with the effect size measures}
+#' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
+#' @note LITERATURE
 #' @examples
-#'
-#' CI_list = ow_rma_ete(some_rma_data)
+#' CI_list = ow_rma_eta(some_rma_data)
 #'
 #'
 #'
