@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.4.25)  13 JAN 2017 19:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.4.25)  14 JAN 2017 20:22
 entering extended mode
-**LvB_template.tex
-(LvB_template.tex
+**presentation.tex
+(presentation.tex
 LaTeX2e <2015/01/01>
 Babel <3.9l> and hyphenation patterns for 69 languages loaded.
 ("C:\Programme\MiKTeX 2.9\tex\latex\beamer\beamer.cls"
@@ -759,7 +759,7 @@ Package: cooltooltips 2006/03/07 v1.0 Cool PDF tooltips
 )
 (colordef.sty) (beamerdefs.sty
 \c@mexample=\count176
-) (lvblisting.sty) (LvB_template.aux)
+) (lvblisting.sty) (presentation.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 67.
 LaTeX Font Info:    ... okay on input line 67.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 67.
@@ -836,7 +836,7 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 67.
 LaTeX Info: Redefining \pageref on input line 67.
 LaTeX Info: Redefining \nameref on input line 67.
- (LvB_template.out) (LvB_template.out)
+ (presentation.out) (presentation.out)
 \@outlinefile=\write5
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 67.
@@ -918,28 +918,18 @@ Dictionary: translator-theorem-dictionary, Language: English
 )
 LaTeX Info: Redefining \includegraphics on input line 67.
 \c@lstlisting=\count184
- (LvB_template.nav
-! Undefined control sequence.
-l.1 \beamer@endinputifotherversion
-                                   {3.36pt}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-)
+ (presentation.nav)
 LaTeX Font Info:    Try loading font information for U+msa on input line 67.
  ("C:\Programme\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 67.
- ("C:\Programme\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+
+("C:\Programme\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Try loading font information for U+rsfs on input line 67.
-
-("C:\Programme\MiKTeX 2.9\tex\latex\jknappen\ursfs.fd"
+ ("C:\Programme\MiKTeX 2.9\tex\latex\jknappen\ursfs.fd"
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input line 67.
@@ -950,8 +940,8 @@ File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/mat
 ! Undefined control sequence.
 \beamer@@tmpl@title page ...ormalsize \theauthorb 
                                                   \vskip 0.5mm\par \normalsi...
-l.72 }
-      
+l.70 \frame[plain]{\titlepage}
+                              
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -961,8 +951,8 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \beamer@@tmpl@title page ...ormalsize \theauthorc 
                                                   \vskip 2.5mm\par \par \end...
-l.72 }
-      
+l.70 \frame[plain]{\titlepage}
+                              
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -972,8 +962,8 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 <argument> \linka 
                   
-l.72 }
-      
+l.70 \frame[plain]{\titlepage}
+                              
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -981,13 +971,13 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 72.
+Package hyperref Warning: Suppressing link with empty target on input line 70.
 
 ! Undefined control sequence.
 <argument> \linka 
                   
-l.72 }
-      
+l.70 \frame[plain]{\titlepage}
+                              
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -995,452 +985,206 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 72.
+Package hyperref Warning: Suppressing link with empty target on input line 70.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 72.
+Package hyperref Warning: Suppressing link with empty target on input line 70.
 
+[1
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1
-
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <./hulogo.pdf>]
 
 LaTeX Font Warning: Font shape `T1/cmss/m/n' in size <4> not available
-(Font)              size <5> substituted on input line 72.
+(Font)              size <5> substituted on input line 102.
 
-[2 <./hulogo.pdf> <./Figures/LOB_Logo.pdf>]
 
-! LaTeX Error: \begin{itemize} on input line 85 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.93 	\end{enumerate}
-                     
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+Overfull \hbox (1.56544pt too wide) has occurred while \output is active
+[]  
+ []
 
 pdfTeX warning (ext4): destination with the same identifier (name{Navigation1}) has been already used, duplicate ignored
 
 <to be read again> 
                    \relax 
-l.94 }
-      pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignore
-d
-<to be read again> 
-                   \relax 
-l.94 }
-       [1
-
-] <qletlogo.pdf, id=53, 198.49156pt x 205.26688pt>
-File: qletlogo.pdf Graphic file (type pdf)
- <use qletlogo.pdf>
-Package pdftex.def Info: qletlogo.pdf used on input line 106.
-(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
-
-
-! LaTeX Error: \begin{itemize} on input line 99 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.107 	\end{enumerate}
-                      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-pdfTeX warning (ext4): destination with the same identifier (name{Navigation2}) has been already used, duplicate ignored
-
-<to be read again> 
-                   \relax 
-l.108 }
-       pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignor
+l.102 }
+       pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignor
 ed
 <to be read again> 
                    \relax 
-l.108 }
-        [2
+l.102 }
+        [1
 
- <./qletlogo.pdf>]
+ <./hulogo.pdf>]
+Overfull \hbox (1.56544pt too wide) has occurred while \output is active
+[]  
+ []
+
+[2
+
+] [3
+
+] <qletlogo.pdf, id=57, 198.49156pt x 205.26688pt>
 File: qletlogo.pdf Graphic file (type pdf)
  <use qletlogo.pdf>
-Package pdftex.def Info: qletlogo.pdf used on input line 121.
+Package pdftex.def Info: qletlogo.pdf used on input line 165.
 (pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [4
 
+ <./qletlogo.pdf>]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 177.
 
-! LaTeX Error: \begin{itemize} on input line 114 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.122 	\end{enumerate}
-                      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[3
-
-] [4
-
-] <Figures/vola.pdf, id=74, 457.70651pt x 388.44827pt>
-File: Figures/vola.pdf Graphic file (type pdf)
- <use Figures/vola.pdf>
-Package pdftex.def Info: Figures/vola.pdf used on input line 138.
-(pdftex.def)             Requested size: 91.53967pt x 77.68828pt.
+("C:\Programme\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
+File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 191.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
  [5
 
- <./Figures/vola.pdf>]
-
-! LaTeX Error: \begin{itemize} on input line 147 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.158 	\end{enumerate}
-                      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[6
+]
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 210.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [6
 
 ] [7
 
 ]
-
-! LaTeX Error: Something's wrong--perhaps a missing \item.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.177 		\end{itemize}
-                     
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Something's wrong--perhaps a missing \item.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.182 		\end{itemize}
-                     
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
 File: qletlogo.pdf Graphic file (type pdf)
+
 <use qletlogo.pdf>
-Package pdftex.def Info: qletlogo.pdf used on input line 183.
+Package pdftex.def Info: qletlogo.pdf used on input line 247.
 (pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
-
-! Undefined control sequence.
-<argument> .../enumerate \beameritemnestingprefix 
-                                                  body end
-l.185 		\end{enumerate}
-                       
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-! LaTeX Error: \begin{beamer@framepauses} on input line 170 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.185 		\end{enumerate}
-                       
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.185 		\end{enumerate}
-                       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-[8
+ [8
 
 ]
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.185 		\end{enumerate}
-                       
-Things are pretty mixed up, but I think the worst is over.
+Overfull \vbox (5.69113pt too high) detected at line 278
+ []
 
-! Too many }'s.
-l.186 }
-       
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-File: Figures/vola.pdf Graphic file (type pdf)
-<use Figures/vola.pdf>
-Package pdftex.def Info: Figures/vola.pdf used on input line 193.
-(pdftex.def)             Requested size: 91.53967pt x 77.68828pt.
- [9
-
-]
-! Undefined control sequence.
-<argument> .../enumerate \beameritemnestingprefix 
-                                                  body end
-l.219 	  	\end{enumerate}
-                         
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-! LaTeX Error: \begin{beamer@framepauses} on input line 201 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.219 	  	\end{enumerate}
-                         
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.219 	  	\end{enumerate}
-                         
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-[10
-
-]
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.219 	  	\end{enumerate}
-                         
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-l.220 	  }
-          
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-[11
-
-] [12
+[9
 
 ]
 File: qletlogo.pdf Graphic file (type pdf)
  <use qletlogo.pdf>
-Package pdftex.def Info: qletlogo.pdf used on input line 246.
+Package pdftex.def Info: qletlogo.pdf used on input line 297.
 (pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
-
-! Undefined control sequence.
-<argument> .../enumerate \beameritemnestingprefix 
-                                                  body end
-l.249 	\end{enumerate}
-                      
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-! LaTeX Error: \begin{beamer@framepauses} on input line 242 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.249 	\end{enumerate}
-                      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.249 	\end{enumerate}
-                      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-[13
+ [10
 
 ]
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.249 	\end{enumerate}
-                      
-Things are pretty mixed up, but I think the worst is over.
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 307.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [11
 
-! Too many }'s.
-l.250 }
-       
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
+]
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 324.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [12
+
+] [13
+
+]
+<../r_code/plots_and_tables/sse_reduct.pdf, id=141, 578.16pt x 361.35pt>
+File: ../r_code/plots_and_tables/sse_reduct.pdf Graphic file (type pdf)
+
+<use ../r_code/plots_and_tables/sse_reduct.pdf>
+Package pdftex.def Info: ../r_code/plots_and_tables/sse_reduct.pdf used on input line 358.
+(pdftex.def)             Requested size: 202.35902pt x 126.4744pt.
+
+Overfull \vbox (9.50056pt too high) detected at line 362
+ []
 
 [14
 
-]
-File: Figures/vola.pdf Graphic file (type pdf)
- <use Figures/vola.pdf>
-Package pdftex.def Info: Figures/vola.pdf used on input line 266.
-(pdftex.def)             Requested size: 91.53967pt x 77.68828pt.
- [15
+ <../r_code/plots_and_tables/sse_reduct.pdf>]
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 373.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+
+<../r_code/plots_and_tables/CIs.pdf, id=154, 578.16pt x 361.35pt>
+File: ../r_code/plots_and_tables/CIs.pdf Graphic file (type pdf)
+ <use ../r_code/plots_and_tables/CIs.pdf>
+Package pdftex.def Info: ../r_code/plots_and_tables/CIs.pdf used on input line 378.
+(pdftex.def)             Requested size: 167.6621pt x 104.78882pt.
+
+Overfull \vbox (18.79523pt too high) detected at line 383
+ []
+
+[15
+
+ <../r_code/plots_and_tables/CIs.pdf>]
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 394.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [16
+
+] [17
 
 ]
-! Undefined control sequence.
-<argument> .../enumerate \beameritemnestingprefix 
-                                                  body end
-l.283 	\end{enumerate}
-                      
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 431.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [18
 
-
-! LaTeX Error: \begin{beamer@framepauses} on input line 274 ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.283 	\end{enumerate}
-                      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.283 	\end{enumerate}
-                      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-[16
+] [19
 
 ]
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.283 	\end{enumerate}
-                      
-Things are pretty mixed up, but I think the worst is over.
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 459.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
 
-! Too many }'s.
-l.284 }
-       
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
+[20
 
-[17
+] [21
 
-] [18
+] [22
 
 ]
-! Undefined control sequence.
-<argument> .../enumerate \beameritemnestingprefix 
-                                                  body end
-l.317 	\end{enumerate}
-                      
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+File: qletlogo.pdf Graphic file (type pdf)
+ <use qletlogo.pdf>
+Package pdftex.def Info: qletlogo.pdf used on input line 504.
+(pdftex.def)             Requested size: 9.92516pt x 10.26393pt.
+ [23
 
+] <../r_code/plots_and_tables/opc.pdf, id=225, 578.16pt x 361.35pt>
+File: ../r_code/plots_and_tables/opc.pdf Graphic file (type pdf)
 
-! LaTeX Error: \begin{beamer@framepauses} on input line 304 ended by \end{enumerate}.
+<use ../r_code/plots_and_tables/opc.pdf>
+Package pdftex.def Info: ../r_code/plots_and_tables/opc.pdf used on input line 512.
+(pdftex.def)             Requested size: 231.2599pt x 144.53743pt.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.317 	\end{enumerate}
-                      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+Overfull \vbox (9.00818pt too high) detected at line 516
+ []
 
-! Missing } inserted.
-<inserted text> 
-                }
-l.317 	\end{enumerate}
-                      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
+[24
 
-[19
+ <../r_code/plots_and_tables/opc.pdf>] [25
+
+] [26
+
+] [27
+
+] [28
 
 ]
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.317 	\end{enumerate}
-                      
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-l.318 }
-       
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 322.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 322.
-(LvB_template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 322.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 322.
-Package rerunfilecheck Info: File `LvB_template.out' has not changed.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 585.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 585.
+ (presentation.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 585.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 585.
+Package rerunfilecheck Info: File `presentation.out' has not changed.
 (rerunfilecheck)             Checksum: CC3E76BBBB7AEBE26F150AC99DAF45FB;48.
 
 
@@ -1449,25 +1193,27 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 21951 strings out of 493671
- 415323 string characters out of 3145487
- 646448 words of memory out of 3000000
- 24737 multiletter control sequences out of 15000+200000
- 24438 words of font info for 74 fonts, out of 3000000 for 9000
+ 24025 strings out of 493671
+ 441416 string characters out of 3145487
+ 732448 words of memory out of 3000000
+ 26786 multiletter control sequences out of 15000+200000
+ 25064 words of font info for 76 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 56i,16n,59p,15152b,517s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 56i,16n,59p,15152b,2887s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss0700.pk> <C:\Users\Freddi\AppData\Lo
 cal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss0800.pk> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
-\jknappen\ec\dpi600\ecsi1095.pk> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1000.p
-k> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1440.pk> <C:\Users\Freddi\AppData\Lo
-cal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss0900.pk> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
-\jknappen\ec\dpi600\ecss1095.pk><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Programme/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Pr
-ogramme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
-y10.pfb><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on LvB_template.pdf (21 pages, 225545 bytes).
+\jknappen\ec\dpi600\ecsi1095.pk> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ectt0900.p
+k> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi450\ectt0800.pk> <C:\Users\Freddi\AppData\Lo
+cal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1000.pk> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
+\jknappen\ec\dpi600\ecss0900.pk> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.p
+k> <C:\Users\Freddi\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1440.pk><C:/Programme/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Programme/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi8.pfb
+><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Programme/MiKTeX 2.9/fonts/type1/public/amsfonts
+/symbols/msam10.pfb>
+Output written on presentation.pdf (29 pages, 309169 bytes).
 PDF statistics:
- 440 PDF objects out of 1000 (max. 8388607)
- 40 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 614 PDF objects out of 1000 (max. 8388607)
+ 59 named destinations out of 1000 (max. 500000)
+ 91 words of extra memory for PDF output out of 10000 (max. 10000000)
 

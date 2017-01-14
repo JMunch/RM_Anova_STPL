@@ -1,4 +1,3 @@
-\beamer@endinputifotherversion {3.36pt}
 \select@language {english}
 \beamer@sectionintoc {2}{The Ringelmann Effect}{3}{0}{1}
 \beamer@subsectionintoc {2}{1}{General ideas}{1}{0}{1}
