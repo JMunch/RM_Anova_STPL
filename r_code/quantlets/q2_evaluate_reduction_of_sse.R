@@ -68,13 +68,13 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         # Define basic ANOVA components ---------------------------------------------
         
         
+        # Computation of the baseline component
         grand_mean = mean(dependent_variable)
         baseline_components = matrix(grand_mean, nrow = n_group, ncol = k)
         
+        # Computation of the factor level components
         conditional_means = colMeans(dependent_variable)
         factor_level_components = matrix(conditional_means - grand_mean, nrow = n_group, ncol = k, byrow = TRUE)
-        
-        
         
         # Computation of the error component
         error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
