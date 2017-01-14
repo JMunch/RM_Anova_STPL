@@ -1,0 +1,10 @@
+\select@language {english}
+\beamer@sectionintoc {2}{The Ringelmann Effect}{3}{0}{1}
+\beamer@subsectionintoc {2}{1}{General ideas}{1}{0}{1}
+\beamer@sectionintoc {3}{Technical Implementation}{4}{0}{2}
+\beamer@subsectionintoc {3}{1}{Rules}{10}{0}{2}
+\beamer@subsectionintoc {3}{2}{Further topics}{17}{0}{2}
+\beamer@sectionintoc {4}{Piecewise Uncovering}{18}{0}{3}
+\beamer@subsectionintoc {4}{1}{Uncovering}{1}{0}{3}
+\beamer@subsectionintoc {4}{2}{Hidding}{7}{0}{3}
+\beamer@sectionintoc {5}{Further Information}{12}{0}{4}

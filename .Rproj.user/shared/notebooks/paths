@@ -1,6 +1,11 @@
+<<<<<<< HEAD
+D:/Uni/Statistik/1. Semester/Statistical_Programming/Project/RP_Anova_STPL/RP_Anova_STPL/r_code/script_for_presentation.R="B2299924"
+=======
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet2_adj_and_unadj_ci_error_bar_graphs.R="4091DC14"
 D:/Constantin/Statistik/Master/(S) Statistical Programming Languages (R)/Project/Code/quantlet3_orth_poly_contrasts.R="7EF1981D"
+G:/Dateien/Git Projects/RM_ANOVA_STPL/MAGA/R/ow_rma.R="FE427816"
 G:/Dateien/Git Projects/RM_ANOVA_STPL/MAGA/R/ow_rma_ci.R="5ACC0DDB"
+G:/Dateien/Git Projects/RM_ANOVA_STPL/MAGA/R/ow_rma_sse_reduct.R="4006B307"
 G:/Dateien/Git Projects/RM_ANOVA_STPL/MAGA/R/sim_ow_rma_data.R="20D531CF"
 G:/Dateien/Git Projects/RM_ANOVA_STPL/TODO="66CEF186"
 G:/Dateien/Git Projects/RM_ANOVA_STPL/r_code/quantlets/q1_one_way_rmANOVA.R="A3D6254A"
@@ -12,3 +17,4 @@ G:/Dateien/Git Projects/RM_ANOVA_STPL/r_code/quantlets/q6_orthogonal_polynomial_
 G:/Dateien/Git Projects/RM_ANOVA_STPL/r_code/quantlets/q7_simulate_one_way_rmANOVA_data.R="C8D726DC"
 G:/Dateien/Git Projects/RM_ANOVA_STPL/r_code/to-do="83B03BFC"
 G:/Dateien/Git Projects/RM_ANOVA_STPL/report/latex/repeated_measurement_ANOVA_report.tex="5069780F"
+>>>>>>> 9b6be5f344564d08bf858e55b7c57070caf4cc8b

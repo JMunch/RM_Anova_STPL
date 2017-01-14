@@ -50,7 +50,7 @@
 	Constantin Meyer-Grant\\
 	Joachim Munch\\
 	Quang Nguyen Duc\\
-	Frederik Schreck}
+	Frederik Schreck} % a-c
 
 
 % Define any internet addresses, if you want to display them on the title page:
@@ -68,8 +68,8 @@
 
 % create the title slide, layout controlled in beamerdefs.sty and the foregoing specifications
 \frame[plain]{
-\titlepage
-}
+	\titlepage
+	}
 
 % The titles of the different sections of you talk, can be included via the \section command. The title will be displayed in the upper left corner. To indicate a new section, repeat the \section command with, of course, another section title
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,6 +79,37 @@
 % (A numbering of the slides can be useful for corrections, especially if you are
 % dealing with large tex-files)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+\useheadtemplate{%
+	\raisebox{-0.75cm}{\parbox{\textwidth}{%
+			\footnotesize{\color{isegrey}%
+				\insertsection\ \leavevmode\leaders\hrule heigth3.2pt depth-2.8pt\hfill\kern0pt\}}}
+		}
+
+\frame{
+	\frametitle{Outline}
+	\begin{enumerate}
+		\item The Ringelmann Effect
+		\item Repeated Measures ANOVA
+		\begin{enumerate}
+			\item The ANOVA model
+			\item An Advantageous Model
+			\item Confidence Intervals
+			\item Effect Size
+		\end{enumerate}
+		\item An Important Requirement
+		\item Orthogonal Polynomial Contrasts
+		\item The Package
+	\end{enumerate}
+}
+
+\useheadtemplate{%
+	\raisebox{-0.75cm}{\parbox{\textwidth}{%
+			\footnotesize{\color{isegreq}%
+				\insertsection\ \leavevmode\leaders\hrule height3.2pt depth-2.8pt\hfill\kern0pt\ \thesection-\thepage}}}}
+\setcounter{section}{1}
+			
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame[containsverbatim]{
 	\frametitle{The Ringelmann Effect}
@@ -93,9 +124,10 @@
 	\end{enumerate}
 }
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame[containsverbatim]{
-	\frametitle{Overview}
+	\frametitle{The Ringelmann Effect}
 	\begin{itemize}
 		\item The Ringelmann Effect can be investigated with an experimental design
 		\begin{itemize}
@@ -317,6 +349,95 @@
 	\end{enumerate}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Code}
+	
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Table}
+	
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Orthogonal Polynomial Contrasts}
+	\begin{itemize}
+		\item Further analysis of factor effect
+		\item Requirement: Level of measurement at least interval
+		\item Factor effect can be decomposed into polynomial trend components
+		\item Polynomial trend components can be tested by polynomial contrasts
+		\item If there shall be no redundant information in each trend component, the contrasts have to be orthogonal
+		\begin{itemize}
+			\item Maximum of orthogonal contrasts: $k-1$
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Code}
+	
+	
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{The Repeated Measures ANOVA: Confidence Intervals} %% Insert contrast figure
+	\begin{figure}[htb]
+		\begin{center}
+			\includegraphics[scale=0.2]{Figures/vola}
+			\caption{Include a short, but meaningful caption.}
+		\end{center}
+	\end{figure}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{The Package}
+	\begin{itemize}
+		\item Why we did a package:
+		\begin{itemize}
+			\item Interface for using funtions
+			\item Possibility to share our code
+			\item Documentation
+		\end{itemize}
+		\item How we wrote the package:
+		\begin{itemize}
+			\item a
+			\item b
+			\item c
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Code}
+	
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Thank you for your attention!}
+	\begin{itemize}
+		\item Any remaining questions?
+	\end{itemize}
+}
 
 % Define the end of the document:
 \end{document}
