@@ -7,7 +7,7 @@ rma = function(rma_data, id = 1) {
     # Define needed constants and the dependent variable ----------------------
     
     
-    # id must either be an integer specifying the column position of the independent variable
+    # id must be an integer specifying the column position of the independent variable
     if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
         stop("id must be an integer specifying the column position of the independent variable")
     }
@@ -141,5 +141,5 @@ rma = function(rma_data, id = 1) {
 
 
 # Testing:
-ow_rma(rma_data, 1)
+rma(rma_data, 1)
 

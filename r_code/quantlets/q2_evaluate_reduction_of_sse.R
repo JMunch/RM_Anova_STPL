@@ -176,7 +176,7 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     var = c(sse_anova, ss_subject_anova, sse_rma, ss_subject_rma)
     
     # 'model' is used in the ggplot to assign the values to the bars
-    model = rep(c("No estimation of the\nvariation between entities", "Estimation of the\nvariation between entities"), each = 2)
+    model = rep(c("No estimation of the\nvariation between subjects", "Estimation of the\nvariation between subjects"), each = 2)
     
     # 'source' is required for color and legend label assignment in the ggplot
     source = factor(rep(c("Error", "Entity"), times = 2), levels = c("Entity", "Error"))
