@@ -160,7 +160,8 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     # plot the k-1 polynomial regression lines
     poly_plot = ggplot(data = rma_data_long, aes(x = condition, y = value)) + geom_point() + labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
-        geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(k - 1)))
+        geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(k - 1))) +
+        theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
     
     
     # Return the contrast-table and plot ----------------------------------------

@@ -193,7 +193,7 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     comp_plot_bar = ggplot(comparison_data, aes(model, var_percent, fill = source)) + geom_bar(stat = "identity") + labs(x = "Model", y = "Sum of squares (error)", title = "Reduction of sum of squared errors (SSE)") + 
         guides(fill = guide_legend(title = NULL)) + scale_fill_manual(values = c("orange", "navyblue")) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
-        panel.background = element_blank())
+        panel.background = element_blank()) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
     
     
     # Create pie chart -----------------------------------------------------------------
@@ -201,7 +201,8 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     comp_plot_pie = ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + geom_bar(width = 1, stat = "identity") + labs(x = "", y = "", title = "Reduction of sum of squared errors (SSE) in percent") + 
         guides(fill = guide_legend(title = NULL)) + scale_fill_manual(values = c("orange", "navyblue")) + coord_polar(theta = "y") + facet_grid(~model) + theme_bw() + 
-        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank())
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank()) + 
+        theme_bw()  + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
     
     
     # Selection of plot design --------------------------------------------------

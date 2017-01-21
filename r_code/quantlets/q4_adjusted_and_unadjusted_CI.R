@@ -141,7 +141,8 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
   
   # create plot with adjusted ci values
   ci_plot = ggplot(data = ci_plot_data, aes(Me, Flm)) + geom_point(size = 2) + geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.1) + facet_grid(~plot_nr) + 
-    labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted (standard) confidence intervals")
+    labs(x = "Condition", y = "Value", title = "Comparison of adjusted and unadjusted (standard) confidence intervals") + theme_bw() + 
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
   
   
   # Construct CI-tables ------------------------------------------------------------------------------

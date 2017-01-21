@@ -109,6 +109,6 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
 
 
 # Testing:
-rma_data = sim_rma_data(1000, 4, means = NULL, poly_order = 2, noise_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1)
+rma_data = sim_rma_data(1001, 4, means = NULL, poly_order = 2, noise_sd = c(10, 20, 30, 20), between_subject_sd = 40, NAs = 1)
 rma_data
 
