@@ -100,7 +100,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     maxpoly = k - 1}
     
     # Defining Contrast weights for orthogonal polynomial contrasts
-    contrast_weights = t(contr.poly(k))
+    contrast_weights = (t(contr.poly(k)))[1:maxpoly, ]
     
     # Applying formula for linear contrasts
     weighted_dependend_variables = dependent_variable[rep(1:n, each = maxpoly), ] * (contrast_weights)[rep(1:maxpoly, n), ]
@@ -136,14 +136,15 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     rownames(contrast_table) = NULL
     
     
-    # Orthogonal polynomial trends as polynomial regression ------------------ Used to plot the fitted polynomials This is used to display the aditional explanation of
+    # Orthogonal polynomial trends as polynomial regression ------------------ 
+    # Used to plot the fitted polynomials This is used to display the aditional explanation of
     # the variance in the dependent variable by adding higher order trendcomponent successively
     
     
     # initialize empty dataframe for polynomial regression coefficients
-    poly_coef = data.frame(matrix(0, ncol = k - 1, nrow = k))
+    poly_coef = data.frame(matrix(0, ncol = maxpoly, nrow = k))
     
-    # Fitting the k - 1 orthogonal Polynomials In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
+    # Fitting the orthogonal Polynomials In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
     for (i in 1:maxpoly) {
         pfv = paste("poly_fit_", i, sep = "")
         poly = assign(pfv, lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE)))
@@ -160,7 +161,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     # plot the k-1 polynomial regression lines
     poly_plot = ggplot(data = rma_data_long, aes(x = condition, y = value)) + geom_point() + labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
-        geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(k - 1))) +
+        geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(maxpoly))) +
         theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
     
     
@@ -177,5 +178,5 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
 
 
 # Testing:
-rma_opc(rma_data, id = 1)
+rma_opc(rma_data, id = 1, maxpoly = 2)
 
