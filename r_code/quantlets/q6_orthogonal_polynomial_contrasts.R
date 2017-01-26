@@ -120,8 +120,8 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     # Computing sums of squares for each contrast
     contrast_ss = n * contrast_estimator^2/rowSums(contrast_weights^2)
     
-    # Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend ss_trend
-    # / ss_factor
+    # Computing amount of the variance in the dependent variable explained by the factor 
+    # which in turn can be explained by a cerain orthogonal polynomial trend ss_trend / ss_factor
     proportional_trend_contribution = contrast_ss/rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly)
     
     
