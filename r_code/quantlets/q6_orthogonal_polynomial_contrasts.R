@@ -97,7 +97,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     # maximal polynomial degree for orthogonal polynomials
     if((maxpoly > k - 1) | (is.na(maxpoly))){
-    maxpoly = k - 1}
+        maxpoly = k - 1}
     
     # Defining Contrast weights for orthogonal polynomial contrasts
     contrast_weights = (t(contr.poly(k)))[1:maxpoly, ]
@@ -168,7 +168,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     # Return the contrast-table and plot ----------------------------------------
     
     if (print_plot == TRUE){
-    print(poly_plot)}
+        print(poly_plot)}
     
     return(list(contrast_table = contrast_table, poly_plot = poly_plot))
 }
