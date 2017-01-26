@@ -59,7 +59,7 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         # Helmert matrix required for the computation of mauchly's W --------------
         
         
-        helmert = function(k) {
+        helmert = function(k, df) {
             H = matrix(0, k, k)
             diag(H) = (0:df) * (-((0:df) * ((0:df) + 1))^(-0.5))
             for (i in 2:k) {
@@ -70,7 +70,7 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         }
         
         # The first row of the helmert matrix is not required for further use in this procedure
-        C = helmert(k)[-1, ]
+        C = helmert(k, df)[-1, ]
         
         
         # Computation of mauchly's W ----------------------------------------------
