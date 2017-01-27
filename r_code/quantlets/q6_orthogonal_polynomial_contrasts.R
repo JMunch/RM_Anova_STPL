@@ -142,13 +142,12 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     
     # initialize empty dataframe for polynomial regression coefficients
-    poly_coef = data.frame(matrix(0, ncol = maxpoly, nrow = k))
+    poly_coef = matrix(0, ncol = maxpoly, nrow = k)
     
     # Fitting the orthogonal Polynomials In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
     for (i in 1:maxpoly) {
-        pfv = paste("poly_fit_", i, sep = "")
-        poly = assign(pfv, lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE)))
-        poly_coef[, i][1:(i + 1)] = poly$coef
+      poly = lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE))
+      poly_coef[, i][1:(i + 1)] = poly$coef
     }
     
     # Plotting contrats (ggplot) -------------------------------------------------
@@ -156,13 +155,15 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     # create datapoints for polynomial plot: this code automatically sets up the data that is required to plot the k-1 polynomial regression lines
     
-    poly_curve_data = data.frame(x = seq(1, k, length.out = 100), tcrossprod(outer(seq(1, k, length.out = 100), 0:(k - 1), `^`), do.call(rbind, poly_coef))) %>% gather(var, 
-        y, -x)
+    x = seq(1, k, length.out = 1000)
+    poly_values = outer(x, 0:(k - 1), `^`)
+    poly_curve_data = data.frame(x, poly_values %*% poly_coef)
+    poly_curve_data = gather(poly_curve_data, curve, y, -x)
     
     # plot the k-1 polynomial regression lines
     poly_plot = ggplot(data = rma_data_long, aes(x = condition, y = value)) + geom_point() + labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
-        geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(maxpoly))) +
-        theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
+      geom_path(data = poly_curve_data, aes(x, y, color = curve), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(maxpoly))) +
+      theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.key = element_rect(colour = "black"), plot.title = element_text(face="bold", hjust = .5))
     
     
     # Return the contrast-table and plot ----------------------------------------
@@ -178,5 +179,5 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
 
 
 # Testing:
-rma_opc(rma_data, id = 1, maxpoly = 2)
+rma_opc(rma_data, id = 1, maxpoly = 3)
 
