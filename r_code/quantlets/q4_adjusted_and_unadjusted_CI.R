@@ -116,7 +116,7 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
   AdjVal = data.frame(Adj = (cf * ((rma_data_long$value - EEmlong$Em + Gm) - MeFlmlong$Flm)) + MeFlmlong$Flm)
   rma_data_long_adj = cbind.data.frame(rma_data_long, AdjVal)
   
-  # Standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014, see also Loftus & Masson; 1994)
+  # Standard errors of the conditional means adjusted with the method of O'Brien and Cousineau (2014)
   SE_adj = (tapply(rma_data_long_adj$Adj, rma_data_long_adj$condition, sd)/sqrt(n))
   CIdist_adj = abs(qt((1 - C_level)/2, (n - 1))) * SE_adj
   
@@ -157,7 +157,7 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
   # Return plot and table displaying adjusted and unadjusted confidence intervals --------------------
   
   if (print_plot == TRUE){
-  print(ci_plot)}
+      print(ci_plot)}
   return(list(confidence_intervals = data.frame(adjusted_CI = lu_adj_CI, unadjusted_CI = lu_unadj_CI), ci_plot = ci_plot))
 }
 
