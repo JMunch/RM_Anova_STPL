@@ -80,7 +80,7 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         error_components_ANOVA = dependent_variable - baseline_components - factor_level_components
         
         
-        # Construct decomposition matrix ---------------------------------------------- Matrix with n rows and 4 columns. One column for: original values, factor level
+        # Construct decomposition matrix ---------------------------------------------- Matrix with k*n rows and 4 columns. One column for: original values, factor level
         # component, error component
         
         
