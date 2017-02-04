@@ -1,0 +1,6 @@
+@book{stevens2012applied,
+  title={Applied multivariate statistics for the social sciences},
+  author={Stevens, James P},
+  year={2012},
+  publisher={Routledge}
+}

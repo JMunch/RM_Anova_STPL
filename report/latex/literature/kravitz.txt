@@ -1,0 +1,6 @@
+@article{kravitz1986ringelmann,
+  title={Ringelmann rediscovered: The original article.},
+  author={Kravitz, David A and Martin, Barbara},
+  year={1986},
+  publisher={American Psychological Association}
+}

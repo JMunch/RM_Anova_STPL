@@ -1,0 +1,10 @@
+@article{geisser1958extension,
+  title={An extension of box's results on the use of the $ F $ distribution in multivariate analysis},
+  author={Geisser, Seymour and Greenhouse, Samuel W and others},
+  journal={The Annals of Mathematical Statistics},
+  volume={29},
+  number={3},
+  pages={885--891},
+  year={1958},
+  publisher={Institute of Mathematical Statistics}
+}

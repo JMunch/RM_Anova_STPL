@@ -1,0 +1,9 @@
+@article{cousineau2005confidence,
+  title={Confidence intervals in within-subject designs: A simpler solution to Loftus and Masson’s method},
+  author={Cousineau, Denis},
+  journal={Tutorials in quantitative methods for psychology},
+  volume={1},
+  number={1},
+  pages={42--45},
+  year={2005}
+}

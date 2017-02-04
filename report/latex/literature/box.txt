@@ -1,0 +1,10 @@
+@article{box1954some,
+  title={Some theorems on quadratic forms applied in the study of analysis of variance problems, I. Effect of inequality of variance in the one-way classification},
+  author={Box, George EP and others},
+  journal={The annals of mathematical statistics},
+  volume={25},
+  number={2},
+  pages={290--302},
+  year={1954},
+  publisher={Institute of Mathematical Statistics}
+}

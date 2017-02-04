@@ -1,0 +1,108 @@
+\begin{thebibliography}{xx}
+
+\harvarditem{Bakeman}{2005}{bakeman2005recommended}
+Bakeman, R.  \harvardyearleft 2005\harvardyearright .
+\newblock Recommended effect size statistics for repeated measures designs,
+  {\em Behavior research methods} {\bf 37}(3):~379--384.
+
+\harvarditem{Box et~al.}{1954}{box1954some}
+Box, G. E.~P. et~al.  \harvardyearleft 1954\harvardyearright .
+\newblock Some theorems on quadratic forms applied in the study of analysis of
+  variance problems, i. effect of inequality of variance in the one-way
+  classification, {\em The Annals of Mathematical Statistics} {\bf
+  25}(2):~290--302.
+
+\harvarditem{Chambers}{2008}{chambers2008software}
+Chambers, J.  \harvardyearleft 2008\harvardyearright .
+\newblock {\em Software for data analysis: programming with R}, {Springer
+  Science {\&} Business Media}.
+
+\harvarditem{Cousineau}{2005}{cousineau2005confidence}
+Cousineau, D.  \harvardyearleft 2005\harvardyearright .
+\newblock Confidence intervals in within-subject designs: A simpler solution to
+  loftus and masson's method, {\em Tutorials in quantitative methods for
+  psychology} {\bf 1}(1):~42--45.
+
+\harvarditem{Franz \harvardand\ Loftus}{2012}{franz2012standard}
+Franz, V.~H. \harvardand\ Loftus, G.~R.  \harvardyearleft 2012\harvardyearright
+  .
+\newblock Standard errors and confidence intervals in within-subjects designs:
+  Generalizing loftus and masson (1994) and avoiding the biases of alternative
+  accounts, {\em Psychonomic bulletin {\&} review} {\bf 19}(3):~395--404.
+
+\harvarditem[Geisser et~al.]{Geisser, Greenhouse
+  et~al.}{1958}{geisser1958extension}
+Geisser, S., Greenhouse, S.~W. et~al.  \harvardyearleft 1958\harvardyearright .
+\newblock An extension of box's results on the use of the f distribution in
+  multivariate analysis, {\em The Annals of Mathematical Statistics} {\bf
+  29}(3):~885--891.
+
+\harvarditem{Girden}{1992}{girden1992anova}
+Girden, E.~R.  \harvardyearleft 1992\harvardyearright .
+\newblock {\em ANOVA: Repeated measures}, Sage.
+
+\harvarditem{Greenhouse \harvardand\ Geisser}{1959}{greenhouse1959methods}
+Greenhouse, S.~W. \harvardand\ Geisser, S.  \harvardyearleft
+  1959\harvardyearright .
+\newblock On methods in the analysis of profile data, {\em Psychometrika} {\bf
+  24}(2):~95--112.
+
+\harvarditem{Huynh \harvardand\ Feldt}{1976}{huynh1976estimation}
+Huynh, H. \harvardand\ Feldt, L.~S.  \harvardyearleft 1976\harvardyearright .
+\newblock Estimation of the box correction for degrees of freedom from sample
+  data in randomized block and split-plot designs, {\em Journal of educational
+  statistics} {\bf 1}(1):~69--82.
+
+\harvarditem{Kravitz \harvardand\ Martin}{1986}{kravitz1986ringelmann}
+Kravitz, D.~A. \harvardand\ Martin, B.  \harvardyearleft 1986\harvardyearright
+  .
+\newblock Ringelmann rediscovered: The original article.
+
+\harvarditem{Loftus \harvardand\ Masson}{1994}{loftus1994using}
+Loftus, G.~R. \harvardand\ Masson, M. E.~J.  \harvardyearleft
+  1994\harvardyearright .
+\newblock Using confidence intervals in within-subject designs, {\em
+  Psychonomic bulletin {\&} review} {\bf 1}(4):~476--490.
+
+\harvarditem{Morey}{2008}{morey2008confidence}
+Morey, R.~D.  \harvardyearleft 2008\harvardyearright .
+\newblock Confidence intervals from normalized data: A correction to cousineau
+  (2005), {\em reason} {\bf 4}(2):~61--64.
+
+\harvarditem{O'Brien \harvardand\ Cousineau}{2014}{o2014representing}
+O'Brien, F. \harvardand\ Cousineau, D.  \harvardyearleft 2014\harvardyearright
+  .
+\newblock Representing error bars in within-subject designs in typical software
+  packages, {\em The Quantitative Methods for Psychology} {\bf 10}(1):~56--67.
+
+\harvarditem{Olejnik \harvardand\ Algina}{2003}{olejnik2003generalized}
+Olejnik, S. \harvardand\ Algina, J.  \harvardyearleft 2003\harvardyearright .
+\newblock Generalized eta and omega squared statistics: measures of effect size
+  for some common research designs, {\em Psychological methods} {\bf
+  8}(4):~434--447.
+
+\harvarditem{Rutherford}{2001}{rutherford2001introducing}
+Rutherford, A.  \harvardyearleft 2001\harvardyearright .
+\newblock {\em Introducing ANOVA and ANCOVA: a GLM approach}, Sage.
+
+\harvarditem{Wickham}{2015}{wickham2015r}
+Wickham, H.  \harvardyearleft 2015\harvardyearright .
+\newblock {\em R packages}, {O'Reilly Media, Inc}.
+
+\harvarditem{Wickham}{2016}{wickham2016ggplot2}
+Wickham, H.  \harvardyearleft 2016\harvardyearright .
+\newblock {\em ggplot2: elegant graphics for data analysis}, Springer.
+
+\harvarditem{Wickham \harvardand\ Chang}{2015}{wickham2015devtools}
+Wickham, H. \harvardand\ Chang, W.  \harvardyearleft 2015\harvardyearright .
+\newblock devtools: Tools to make developing r code easier, {\em R package
+  version} {\bf 1}(0).
+
+\harvarditem[Wickham et~al.]{Wickham, Danenberg \harvardand\
+  Eugster}{2013}{wickham2013roxygen2}
+Wickham, H., Danenberg, P. \harvardand\ Eugster, M.  \harvardyearleft
+  2013\harvardyearright .
+\newblock roxygen2: In-source documentation for r, {\em R package version} {\bf
+  3}(0).
+
+\end{thebibliography}

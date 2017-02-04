@@ -1,0 +1,757 @@
+% Type of the document
+\documentclass{beamer}
+
+% elementary packages:
+\usepackage{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{eso-pic}
+\usepackage{mathrsfs}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tikz}
+
+% additional packages
+\usepackage{bbm}
+
+% packages supplied with ise-beamer:
+\usepackage{cooltooltips}
+\usepackage{colordef}
+\usepackage{beamerdefs}
+\usepackage{lvblisting}
+
+% Change the pictures here:
+% logobig and logosmall are the internal names for the pictures: do not modify them. 
+% Pictures must be supplied as JPEG, PNG or, to be preferred, PDF
+\pgfdeclareimage[height=2cm]{logobig}{hulogo}
+% Supply the correct logo for your class and change the file name to "logo". The logo will appear in the lower
+% right corner:
+\pgfdeclareimage[height=0.7cm]{logosmall}{hulogo}
+
+% Title page outline:
+% use this number to modify the scaling of the headline on title page
+\renewcommand{\titlescale}{1.0}
+% the title page has two columns, the following two values determine the percentage each one should get
+\renewcommand{\titlescale}{1.0}
+\renewcommand{\leftcol}{0.6}
+
+% Define the title.Don't forget to insert an abbreviation instead 
+% of "title for footer". It will appear in the lower left corner:
+\title{Analyzing the Ringelmann Effect with the Repeated Measures ANOVA }
+% Define the authors:
+\authora{Nikolas Höft\\
+	Constantin Meyer-Grant\\
+	Joachim Munch\\
+	Quang Nguyen Duc\\
+	Frederik Schreck} % a-c
+
+
+% Define any internet addresses, if you want to display them on the title page:
+\def\linkb{}
+\def\linkc{}
+% Define the institute:
+\institute{Statistical Programming Languages\\
+	Humboldt-Universität zu Berlin}
+
+% Comment the following command, if you don't want, that the pdf file starts in full screen mode:
+\hypersetup{pdfpagemode=FullScreen}
+
+%Start of the document
+\begin{document}
+
+% create the title slide, layout controlled in beamerdefs.sty and the foregoing specifications
+%\frame[plain]{\titlepage}
+
+% The titles of the different sections of you talk, can be included via the \section command. The title will be displayed in the upper left corner. To indicate a new section, repeat the \section command with, of course, another section title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% (A numbering of the slides can be useful for corrections, especially if you are
+% dealing with large tex-files)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% No number on outline slide
+\section{}
+\useheadtemplate{%
+    \raisebox{-0.75cm}{\parbox{\textwidth}{%
+            \footnotesize{\color{isegray}%
+                \insertsection\ \leavevmode\leaders\hrule height3.2pt depth-2.8pt\hfill\kern0pt\ }}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{MAGA: The Package to make ANOVA great again}
+	\begin{itemize}
+		\item The package bundles functionalities around the grand topic repeated measures ANOVA.
+		\item Some of the functionalities have not been implemented in R yet. This package aims to fill this void.
+		\item Each core functionality of the package represents a quantlet.
+		\item After presenting the theory and code examples from the package, we will give a short overview of the technical implementation.
+		
+		
+	\end{itemize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{
+\frametitle{Outline}
+
+\begin{enumerate}
+\item The Ringelmann Effect
+\item The Repeated Measures ANOVA
+	\begin{enumerate}
+	\item Based on the ANOVA Model
+	\item An Advantageous Model
+	\item Confidence Intervals
+	\item Effect Size Measures
+	\end{enumerate}
+\item An Important Requirement
+\item Orthogonal Polynomial Contrasts
+\item Our Package
+	\begin{enumerate}
+		\item Motivation for Making a Package
+		\item Tools to Create a Package in R
+		\item Things to Consider
+	\end{enumerate}
+\end{enumerate}
+}
+
+% No number on outline slide
+\useheadtemplate{%
+    \raisebox{-0.75cm}{\parbox{\textwidth}{%
+            \footnotesize{\color{isegray}%
+                \insertsection\ \leavevmode\leaders\hrule height3.2pt depth-2.8pt\hfill\kern0pt\ \thesection-\thepage}}}}
+\setcounter{section}{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame[containsverbatim]{
+	\frametitle{The Ringelmann Effect}
+	\begin{itemize}
+	\item Maximilian Ringelmann (1861-1931):
+	 \begin{itemize}
+	 \item French professor of agricultural engineering
+	 \end{itemize}
+	\item Findings:
+		\begin{itemize}
+			\item Work performance depends of number of group size
+			\item Decreasing individual performance with increasing group size 
+			\item Example: Pulling weights in differently sized groups
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame[containsverbatim]{
+	\frametitle{The Ringelmann Effect}
+	\begin{itemize}
+	\item The Ringelmann Effect can be investigated with an experimental design
+	\begin{itemize}
+	\item Dependent Variable: Individual performance
+	\item Independent Variable / Factor: Group size 
+	\item Realization of different factor levels
+	\end{itemize}
+	\item For our purpose: Data simulation \quantnet
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 1: Data Simulation \quantnet}
+	
+\begin{itemize}
+		\item Simulation function:
+	\end{itemize}
+	\begin{lstlisting}
+sim_ow_rma_data(n, k, means = c(10, 5, 7),
+	poly_order = NULL, noise_sd = 10, 
+	between_subject_sd = 40, NAs = 0)
+	\end{lstlisting}
+	\begin{itemize}
+		\item Simulate deviation between subjects:
+	\end{itemize}
+\begin{lstlisting}
+mean_deviation = rnorm(n, mean = 0, 
+	sd = between_subject_sd)
+ow_rma_data[, 2:(k + 1)] = ow_rma_data[, 2:(k + 1)] 
+	+ mean_deviation
+	\end{lstlisting}
+}	
+	
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 1: Data Simulation \quantnet}	
+	
+	\begin{itemize}
+			\item Simulate noise:
+		\end{itemize}
+		\begin{lstlisting}
+noise = matrix(NA, nrow = n, ncol = k)
+	for (i in 1:k) {noise[, i] = rnorm(n, 
+	mean = 0, sd = noise_sd[i])}
+ow_rma_data[, 2:(k + 1)] = ow_rma_data[, 2:(k + 1)] 
+	+ noise
+		\end{lstlisting}
+	
+}	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{The Ringelmann Effect} %% Insert Data Graphic!
+	
+	\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ Subject & Factor.1 & Factor.2 & Factor.3 & Factor.4 & Factor.5 \\ 
+  \hline
+	1 & 218.25 & 147.13 & 69.18 & 74.96 & 80.11 \\ 
+  2 & 173.77 & 119.62 & 114.15 & 94.04 & 87.57 \\ 
+  3 & 177.49 & 116.17 & 97.97 & 72.91 & 69.28 \\ 
+  4 & 126.58 & 110.36 & 123.45 & 90.82 & 75.07 \\ 
+  5 & 146.61 & 108.26 & 86.91 & 76.62 & 61.94 \\ 
+  6 & 167.03 & 95.48 & 72.13 & 93.29 & 102.31 \\ 
+   \hline
+	\end{tabular}
+\caption{The first 6 observations of our simulated data.}
+\end{table}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame[containsverbatim]{
+	\frametitle{The Repeated Measures ANOVA: Based on the ANOVA Model} 
+	\begin{itemize}
+	\item ANOVA: Analysis of Variance
+	\item Comparison of the \textit{k} factor level means
+	\item Hypotheses:
+		\begin{eqnarray*}
+		H_{0}: {\mu_{1}} = {\mu_{2}} = ... = {\mu_{k}} \\
+		H_{1}: \exists i \not= j: {\mu_{i}} \not= {\mu_{j}} 
+		\end{eqnarray*} 
+		\\
+	\item Test is accomplished by decomposition of variance components
+	\item ANOVA is used for independent data
+	\item For dependent data: Repeated Measures ANOVA \quantnet
+	\end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\frame[containsverbatim]{
+		\frametitle{The Repeated Measures ANOVA: An Advantageous Model}
+		\begin{itemize}
+		\item Design Requirement: Each subject hast to be measured under all factor levels
+		\end{itemize}
+		
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ Subject & Factor.1 & Factor.2 & Factor.3 & Factor.4 & Factor.5 \\ 
+  \hline
+	1 & 218.25 & 147.13 & 69.18 & 74.96 & 80.11 \\ 
+  2 & 173.77 & 119.62 & 114.15 & 94.04 & 87.57 \\ 
+  3 & 177.49 & 116.17 & 97.97 & 72.91 & 69.28 \\ 
+  4 & 126.58 & 110.36 & 123.45 & 90.82 & 75.07 \\ 
+  5 & 146.61 & 108.26 & 86.91 & 76.62 & 61.94 \\ 
+  6 & 167.03 & 95.48 & 72.13 & 93.29 & 102.31 \\ 
+   \hline
+	\end{tabular}
+\caption{Our simulated data consists of dependent data.}
+\end{table}
+		
+		
+	  }
+	  	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 2: Repeated Measures ANOVA \quantnet}
+
+\begin{itemize}
+	\item Repeated Measures ANOVA function:
+\end{itemize}
+\begin{lstlisting}
+rma = function(rma_data, id = 1)
+
+\end{lstlisting}
+
+\begin{itemize}
+	\item Number of entities:
+\end{itemize}
+\begin{lstlisting}
+n = nrow(rma_data)
+
+\end{lstlisting}
+
+\begin{itemize}
+	\item Number of factor levels:
+\end{itemize}
+\begin{lstlisting}
+k = ncol(dependent_variable)
+
+\end{lstlisting}
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 2: Repeated Measures ANOVA \quantnet}
+	
+\begin{itemize}
+	\item Define basic components:
+\end{itemize}
+\begin{lstlisting}
+grand_mean = mean(dependent_variable)
+baseline_components = matrix(grand_mean, nrow = n, 
+	ncol = k)
+conditional_means = colMeans(dependent_variable)
+factor_level_components = matrix(conditional_means -
+	grand_mean, nrow = n, ncol = k, byrow = TRUE)
+subject_means = rowMeans(dependent_variable)
+subject_components = matrix(subject_means - 
+	grand_mean, nrow = n, ncol = k)
+    
+error_components = dependent_variable - 
+	baseline_components - factor_level_components - 
+	subject_components
+\end{lstlisting}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 2: Repeated Measures ANOVA \quantnet}
+	
+\begin{itemize}
+	\item Construct decomposition matrix:
+\end{itemize}
+\begin{lstlisting}
+decomposition_matrix = data.frame(dependent_variable 
+  = as.vector(dependent_variable), 
+  baseline = as.vector(baseline_components), 
+  factor_level = as.vector(factor_level_components), 
+  subject_level = as.vector(subject_components), 
+  error = as.vector(error_components))
+
+\end{lstlisting}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame[containsverbatim]{
+	\frametitle{The Repeated Measures ANOVA: An Advantageous Model}
+	
+	\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{\begin{tabular}{rlrrrrr}
+  \hline
+ & Source & Sum of squares & Degrees of freedom & Mean squares & F-value & p-value \\ 
+  \hline
+1 & Baseline & 1769610.20 & 1.00 & 1769610.20 & 1430.36 & 0.00 \\ 
+  2 & Factor & 174706.07 & 4.00 & 43676.52 & 142.23 & 0.00 \\ 
+  3 & Subject & 33403.82 & 27.00 & 1237.18 &  &  \\ 
+  4 & Error & 33166.05 & 108.00 & 307.09 &  &  \\ 
+  5 & Total & 2010886.14 & 140.00 &  &  &  \\ 
+  6 & Corrected total & 241275.94 & 139.00 & 1735.80 &  &  \\ 
+   \hline
+\end{tabular}}
+\caption{ANOVA-table for our Repeated Measures ANOVA.}
+\end{table}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{The Repeated Measures ANOVA: An Advantageous Model}
+		\begin{itemize}
+		\item Problem of ANOVA: In case of large variance between different subjects\\
+		$\Rightarrow$ High error variance
+		$\Rightarrow$ Loss of power in F-Test
+		\item Repeated Measures ANOVA considers the between subject variance separately\\
+		$\Rightarrow$ Relatively low error variance
+		$\Rightarrow$ Gain of power in F-Test \quantnet
+		\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 3: ANOVA and SSE Reduction \quantnet}
+\begin{itemize}
+	\item Reduction of sum of squares error function:
+\end{itemize}
+\begin{lstlisting}
+rma_sse_reduct = function(rma_data, id = 1, 
+	plot_type = "pie", return_anova_table = FALSE)
+
+\end{lstlisting}
+
+
+\begin{itemize}
+	\item ANOVA function:
+\end{itemize}
+\begin{lstlisting}
+ow_a = function(rma_data, id)
+
+\end{lstlisting}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 3: ANOVA and SSE Reduction \quantnet}
+
+\begin{itemize}
+  \item ANOVA-tables of Repeated Measures ANOVA and ANOVA
+\end{itemize}
+\begin{lstlisting}
+ow_a_results = ow_a(rma_data, id)[[1]]
+rma_results = rma(rma_data, id)[[1]]
+    
+sse_anova = ow_a_results[3, 2]
+ss_subject_anova = 0
+
+sse_rma = rma_results[4, 2]
+ss_subject_rma = rma_results[3, 2]
+\end{lstlisting}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\frame[containsverbatim]{
+		\frametitle{The Repeated Measures ANOVA: An Advantageous Model} 
+		\begin{figure}[htb]
+		\begin{center}
+		\includegraphics[scale=0.35]{../r_code/plots_and_tables/sse_reduct.pdf}
+		\caption{Pie chart on the reduction of sum of squares (SSE) in percentages.}
+		\end{center}
+		\end{figure}
+	}
+	
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{The Repeated Measures ANOVA: Confidence Intervals}
+	
+	\begin{itemize}
+	\item The computation of the confidence intervals has to be adjusted in the Repeated Measures ANOVA \quantnet
+	\end{itemize}
+	
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.29]{../r_code/plots_and_tables/CIs.pdf}
+\caption{Unadjusted and adjusted confidence intervals.}
+\end{center}
+\end{figure}
+		
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 4: Confidence Intervals \quantnet}
+	
+\begin{lstlisting}
+rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE)
+
+\end{lstlisting}
+}
+
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{The Repeated Measures ANOVA: Effect Size Measures}
+	\begin{itemize}
+	\item Two measures of effect size: 
+		\begin{itemize}
+		\item $\eta^2$
+		\item $\eta_{p}^2$
+		\end{itemize}
+	\end{itemize}
+	
+		\begin{table}[ht]
+\centering
+\begin{tabular}{rlrr}
+  \hline
+ & Source & eta squared & partial eta squared \\ 
+  \hline
+1 & Factor & 0.72 & 0.84 \\ 
+   \hline
+\end{tabular}
+\caption{Effect size measures for our simulated data.}
+\end{table}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 5: Effect Size Measures \quantnet}
+	
+\begin{lstlisting}
+rma_eta = function(rma_data, id = 1, append = FALSE)
+
+\end{lstlisting}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{An Important Requirement}
+	\begin{itemize}
+	\item Sphericity: The variance of differences are equal for each pair of factor levels
+	\item Test for sphericity: Mauchly test
+	\item Measurement of sphericity $(\epsilon \in [0, 1])$: 
+		\begin{itemize}
+			\item Greenhouse \& Geisser: $\epsilon_{GG}$
+			\item Box: $\epsilon_{B}$
+			\item Huynh \& Feldt: $\epsilon_{HF}$
+		\end{itemize}
+	\item These can be used to correct the degrees of freedom and therefore adjust the p-values if sphericity is violated
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 6: Test and Adjustment for Sphericity \quantnet}
+	
+\begin{lstlisting}
+rma_spheri = function(rma_data, id = 1, append = FALSE)
+
+\end{lstlisting}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Table}
+	
+	\begin{table}[ht]
+\centering
+\begin{tabular}{rlrrrr}
+  \hline
+ & Source & Mauchly's W & Chi square & df & p \\ 
+  \hline
+1 & Factor & 0.20 & 41.48 & 9.00 & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{Adjustment for sphericity in our simulated data.}
+\end{table}
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Orthogonal Polynomial Contrasts}
+	\begin{itemize}
+		\item Further analysis of factor effect
+		\item Requirement: Level of measurement at least interval
+		\item Factor effect can be decomposed into polynomial trend components
+		\item Polynomial trend components can be tested by polynomial contrasts
+		\item If there shall be no redundant information in each trend component, the contrasts have to be orthogonal
+		\begin{itemize}
+			\item Maximum of orthogonal contrasts: $k-1$
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Quantlet 7: Orthogonal Polynomial Contrasts \quantnet}
+	
+\begin{lstlisting}
+rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE)
+
+\end{lstlisting}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\frame[containsverbatim]{
+		\frametitle{Orthogonal Polynomial Contrasts} 
+		\begin{figure}[htb]
+		\begin{center}
+		\includegraphics[scale=0.4]{../r_code/plots_and_tables/opc.pdf}
+		\caption{Orthogonal polynomial contrasts.}
+		\end{center}
+		\end{figure}
+	}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\frame[containsverbatim]{
+	\frametitle{Orthogonal Polynomial Regresssion Curves} 
+	\begin{lstlisting}
+for (i in 1:maxpoly){
+	pfv = paste("poly_fit_", i, sep = "")
+	poly_reg = assign(pfv, lm(rma_data_long$value ~ 
+		poly(rma_data_long$condition, degree = i,
+		 raw = TRUE)))
+	poly_coef[, i][1:(i + 1)] = poly_reg$coef
+	}
+		
+	\end{lstlisting}
+	
+	}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Transform Data to Long Format} 
+	\begin{lstlisting}
+poly_curve_data = data.frame(x = seq(1, k,
+ length.out = 100), tcrossprod(outer(seq(1, k, length.out = 100), 0:(k - 1), `^`), do.call(rbind, poly_coef))) %>% gather(var, y, -x)
+
+	
+	\end{lstlisting}
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame[containsverbatim]{
+	\frametitle{Plotting the Orthogonal Polynomial Curves} 
+	\begin{lstlisting}
+poly_plot = ggplot(data = rma_data_long, aes(x = condition, y = value)) + geom_point() + labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") + 
+geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) + scale_color_discrete(labels = as.character(1:(k - 1)))
+
+	
+	
+	\end{lstlisting}
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame[containsverbatim]{
+\frametitle{Our Package: Motivation for Making a Package}
+
+\begin{itemize}
+\item A package bundles together code, data, documentation, and tests
+\item Makes it easy to share and publish code with others (CRAN, Github via Devtools)
+\item Loads all relevant functions into the namespace
+\item Automatically checks and installs dependency if necessary
+\item Packages allow to document functions, so that they easily be used by others (help function, argument list, etc.)
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame[containsverbatim]{
+	\frametitle{Our Package: Tools to Create a Package\\ in R}
+	
+	\begin{itemize}
+		\item roxygen2
+		\begin{itemize}
+			\item Enables documentation to be written directly into the R script
+		\end{itemize}
+		\item devtools
+		\begin{itemize}
+			\item Load packages still under development e.g. from Github
+		\end{itemize}
+		\item Github
+		\begin{itemize}
+			\item A package can be handled like a repository, which enables colloboration
+		\end{itemize}
+		\item RStudio
+		\begin{itemize}
+			\item Provides many helpful functionalities for creating a package (create, build, check)
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame[containsverbatim]{
+	\frametitle{Create a Package in R-Studio} 
+	\begin{figure}[htb]
+		\begin{center}
+			\includegraphics[scale=0.35]{create_package.png}
+			\caption{Select R-Package to directly create a Package}
+		\end{center}
+	\end{figure}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Helpfiles with roxygen2} 
+	\begin{figure}[htb]
+		\begin{center}
+			\includegraphics[scale=0.35]{roxygen_code.png}
+			
+		\end{center}
+	\end{figure}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Helpfiles with roxygen2} 
+	\begin{figure}[htb]
+		\begin{center}
+			\includegraphics[scale=0.23]{rd_file.png}
+		\end{center}
+	\end{figure}
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Package: Things to consider}
+	\begin{itemize}
+		\item Use function names that speak for themselves and use them consistently.
+		\begin{itemize}
+			\item \grqq{}There are only two hard things in computer science: cache invalidation and naming things.\grqq{} Phil Karlton
+		\end{itemize}
+		\item Error handling
+		\begin{itemize}
+			\item Make sure that functions are robust regarding violation of the required input, e.g. character vector supplied although a numeric vector is needed. Use if-statements or try().
+		\end{itemize}
+		\item Custom error and warning messages
+		\begin{itemize}
+			\item stop() interrupts the code and returns an error message
+			\item warning() executes the code but returns a warning message
+		\end{itemize}
+	
+	\end{itemize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame[containsverbatim]{
+	\frametitle{Thank you for your Attention!}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define the end of the document:
+\end{document}

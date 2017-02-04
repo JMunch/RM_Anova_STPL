@@ -1,0 +1,9 @@
+@article{morey2008confidence,
+  title={Confidence intervals from normalized data: A correction to Cousineau (2005)},
+  author={Morey, Richard D},
+  journal={reason},
+  volume={4},
+  number={2},
+  pages={61--64},
+  year={2008}
+}

@@ -1,0 +1,10 @@
+@article{franz2012standard,
+  title={Standard errors and confidence intervals in within-subjects designs: Generalizing Loftus and Masson (1994) and avoiding the biases of alternative accounts},
+  author={Franz, Volker H and Loftus, Geoffrey R},
+  journal={Psychonomic bulletin \& review},
+  volume={19},
+  number={3},
+  pages={395--404},
+  year={2012},
+  publisher={Springer}
+}

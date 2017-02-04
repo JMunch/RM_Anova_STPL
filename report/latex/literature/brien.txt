@@ -1,0 +1,9 @@
+@article{o2014representing,
+  title={Representing error bars in within-subject designs in typical software packages},
+  author={O’Brien, Fearghal and Cousineau, Denis},
+  journal={The Quantitative Methods for Psychology},
+  volume={10},
+  number={1},
+  pages={56--67},
+  year={2014}
+}

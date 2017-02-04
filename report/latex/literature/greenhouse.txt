@@ -1,0 +1,10 @@
+@article{greenhouse1959methods,
+  title={On methods in the analysis of profile data},
+  author={Greenhouse, Samuel W and Geisser, Seymour},
+  journal={Psychometrika},
+  volume={24},
+  number={2},
+  pages={95--112},
+  year={1959},
+  publisher={Springer}
+}

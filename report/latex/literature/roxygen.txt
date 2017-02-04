@@ -1,0 +1,8 @@
+@article{wickham2013roxygen2,
+  title={roxygen2: In-source documentation for R},
+  author={Wickham, Hadley and Danenberg, Peter and Eugster, Manuel},
+  journal={R package version},
+  volume={3},
+  number={0},
+  year={2013}
+}

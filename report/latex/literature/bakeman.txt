@@ -1,0 +1,10 @@
+@article{bakeman2005recommended,
+  title={Recommended effect size statistics for repeated measures designs},
+  author={Bakeman, Roger},
+  journal={Behavior research methods},
+  volume={37},
+  number={3},
+  pages={379--384},
+  year={2005},
+  publisher={Springer}
+}

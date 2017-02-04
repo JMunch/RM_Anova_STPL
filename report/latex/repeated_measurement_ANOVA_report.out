@@ -1,20 +1,19 @@
 \BOOKMARK [1][-]{section.1}{Theorie and Motivation}{}% 1
-\BOOKMARK [1][-]{section.2}{Simulating and Preparing the Data}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Simulation}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Listwise Deletion}{section.2}% 4
-\BOOKMARK [1][-]{section.3}{Estimating the Repeated Measures Anova}{}% 5
-\BOOKMARK [2][-]{subsection.3.1}{Estimation}{section.3}% 6
-\BOOKMARK [2][-]{subsection.3.2}{Effect Size}{section.3}% 7
-\BOOKMARK [1][-]{section.4}{SSE Reduction with the Repeated Measures Anova \(currently in work...\(Freddi\)\) }{}% 8
-\BOOKMARK [2][-]{subsection.4.1}{Estimating Anova}{section.4}% 9
-\BOOKMARK [2][-]{subsection.4.2}{Comparing the Error Terms}{section.4}% 10
-\BOOKMARK [1][-]{section.5}{Confidence Intervals\(CI\)}{}% 11
-\BOOKMARK [2][-]{subsection.5.1}{Unadjusted CIs}{section.5}% 12
-\BOOKMARK [2][-]{subsection.5.2}{Adjusted CIs}{section.5}% 13
-\BOOKMARK [2][-]{subsection.5.3}{Plotting the CIs}{section.5}% 14
-\BOOKMARK [1][-]{section.6}{Sphericity}{}% 15
-\BOOKMARK [2][-]{subsection.6.1}{Test for Sphericity}{section.6}% 16
-\BOOKMARK [2][-]{subsection.6.2}{Adjustment for Sphericity}{section.6}% 17
-\BOOKMARK [1][-]{section.7}{Orthogonal polynomial contrasts}{}% 18
-\BOOKMARK [2][-]{subsection.7.1}{Computing the Orthogonal Polynomial Contrasts}{section.7}% 19
-\BOOKMARK [2][-]{subsection.7.2}{Plotting the Contrasts}{section.7}% 20
+\BOOKMARK [2][-]{subsection.1.1}{Make Anova great again}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{The Ringelmann-Effect}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Simulating and Preparing the Data}{}% 4
+\BOOKMARK [2][-]{subsection.2.1}{Simulation}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.2}{Listwise Deletion}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Estimating the Repeated Measures Anova}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Estimation}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{SSE Reduction with the Repeated Measures Anova \(currently in work...\(Freddi\)\) }{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{Estimating Anova}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{Comparing the Error Terms}{section.4}% 11
+\BOOKMARK [1][-]{section.5}{Effect Size}{}% 12
+\BOOKMARK [1][-]{section.6}{Confidence Intervals\(CI\)}{}% 13
+\BOOKMARK [1][-]{section.7}{Sphericity}{}% 14
+\BOOKMARK [2][-]{subsection.7.1}{Test for Sphericity}{section.7}% 15
+\BOOKMARK [2][-]{subsection.7.2}{Adjustment for Sphericity}{section.7}% 16
+\BOOKMARK [1][-]{section.8}{Orthogonal polynomial contrasts}{}% 17
+\BOOKMARK [1][-]{section.9}{R Packages}{}% 18
+\BOOKMARK [1][-]{section*.4}{Literature}{}% 19

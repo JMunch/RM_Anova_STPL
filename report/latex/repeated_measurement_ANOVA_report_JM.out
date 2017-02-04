@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section.1}{Theory and Motivation}{}% 1
+\BOOKMARK [1][-]{section.2}{Data Simulation}{}% 2
+\BOOKMARK [1][-]{section.3}{Data Preparation}{}% 3
+\BOOKMARK [1][-]{section.4}{Repeated Measures ANOVA}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Based on the ANOVA model}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Repeated Measures ANOVA Model}{section.4}% 6
+\BOOKMARK [1][-]{section.5}{Reduction of Error Sum of Squares}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{Estimation of our ANOVA model}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.2}{Comparing the Error Terms}{section.5}% 9
+\BOOKMARK [1][-]{section.6}{Effect Size}{}% 10
+\BOOKMARK [1][-]{section.7}{Confidence Intervals}{}% 11
+\BOOKMARK [1][-]{section.8}{Sphericity}{}% 12
+\BOOKMARK [1][-]{section.9}{Orthogonal polynomial contrasts}{}% 13
+\BOOKMARK [1][-]{section.10}{R Packages}{}% 14
+\BOOKMARK [1][-]{section*.6}{Literature}{}% 15

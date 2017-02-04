@@ -1,0 +1,6 @@
+@book{howell2012statistical,
+  title={Statistical methods for psychology},
+  author={Howell, David C},
+  year={2012},
+  publisher={Cengage Learning}
+}

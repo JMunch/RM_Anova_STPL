@@ -1,0 +1,9 @@
+@inproceedings{ringelmann1913research,
+  title={Research on animate sources of power: The work of man},
+  author={Ringelmann, M},
+  booktitle={Annales de l’Institut National Agronomique},
+  volume={12},
+  number={2},
+  pages={1--40},
+  year={1913}
+}

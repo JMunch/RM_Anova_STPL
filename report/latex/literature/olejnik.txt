@@ -1,0 +1,10 @@
+@article{olejnik2003generalized,
+  title={Generalized eta and omega squared statistics: measures of effect size for some common research designs},
+  author={Olejnik, Stephen and Algina, James},
+  journal={Psychological methods},
+  volume={8},
+  number={4},
+  pages={434--447},
+  year={2003},
+  publisher={American Psychological Association}
+}

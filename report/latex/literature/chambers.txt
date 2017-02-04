@@ -1,0 +1,6 @@
+@book{chambers2008software,
+  title={Software for data analysis: programming with R},
+  author={Chambers, John},
+  year={2008},
+  publisher={Springer Science \& Business Media}
+}
