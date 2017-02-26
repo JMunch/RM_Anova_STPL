@@ -21,7 +21,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     # suppress warning message about ggplot NOTE: This function still loads the package!
     suppressWarnings(suppressMessages(require(ggplot2)))
     
-    
     # Define needed constants and variables -----------------------------------
     
     
@@ -37,7 +36,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     
     # check if the data meet the requirements ---------------------------------
-    
     
     # rma_data needs to meet the following requirements:
     
@@ -59,7 +57,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     # Convert data to long format ---------------------------------------------
     
-    
     rma_data_long = reshape(rma_data, 
                             varying       = rm_names, 
                             v.names       = "value", 
@@ -73,7 +70,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     
     # Compute means -----------------------------------------------------------
-    
     
     # Factor level means
     Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
@@ -97,7 +93,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     # Compute CI for Anova without repeated measures --------------------------
     
-    
     # Standard errors of the conditional means
     SE = tapply(rma_data_long$value, rma_data_long$condition, sd)/sqrt(n)
     
@@ -107,14 +102,12 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     # Compute CI for Anova without repeated measures -----------------------------
     
-    
     # Compute upper and lower bound
     up_unadj  = MeFlm$Flm + CIdist_unadj
     low_unadj = MeFlm$Flm - CIdist_unadj
     
     
     # Compute CI for Anova with repeated measures -----------------------------
-    
     
     # Correction factor etablished by Morey (2008)
     cf = sqrt(k/(k - 1))
@@ -133,7 +126,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     # CI comparison (ggplot) ----------------------------------------------------
     
-    
     # create two vectors for lower ci values and upper ci values respectively
     lower = c(low_adj, low_unadj)
     upper = c(up_adj, up_unadj)
@@ -143,7 +135,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     # create data frame for ggplot: comparison of ci
     ci_plot_data = data.frame(plot_nr, rbind(MeFlm, MeFlm), lower, upper)
-    
     
     # create plot with adjusted ci values
     ci_plot = ggplot(data = ci_plot_data, aes(Me, Flm)) + 
@@ -162,7 +153,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     
     # Construct CI-tables ------------------------------------------------------------------------------
     
-    
     lu_adj_CI   = cbind(low_adj, up_adj)
     lu_unadj_CI = cbind(low_unadj, up_unadj)
     
@@ -176,10 +166,3 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
     }
     return(list(confidence_intervals = data.frame(adjusted_CI = lu_adj_CI, unadjusted_CI = lu_unadj_CI), ci_plot = ci_plot))
 }
-
-
-# -------------------------------------------------------------------------
-
-
-# Testing:
-rma_ci(rma_data, id = 1)

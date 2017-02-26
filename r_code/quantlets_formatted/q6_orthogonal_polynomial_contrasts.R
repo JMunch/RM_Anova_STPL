@@ -8,7 +8,6 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     suppressWarnings(suppressMessages(require(ggplot2)))
     suppressWarnings(suppressMessages(require(tidyverse)))
     
-    
     # Check if the data meet the following requirement:
     
     # id must either be an integer specifying the column position of the independent variable
@@ -19,9 +18,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     dependent_variable = as.matrix(rma_data[, -id])
     
     
-    
     # Define some variables ---------------------------------------------------
-    
     
     # number of entities
     n = nrow(rma_data)
@@ -29,14 +26,12 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     # number of factor levels
     k = ncol(dependent_variable)
     
-    
     # Specify the names of the 'id'-variable and of the 'condition'-variables
     rm_names = colnames(dependent_variable)
     id_names = colnames(rma_data)[id]
     
     
     # check if the data meet the requirements ---------------------------------
-    
     
     # rma_data needs to meet the following requirements:
     
@@ -58,7 +53,6 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     # Convert to long format --------------------------------------------------
     
-    
     rma_data_long = reshape(rma_data, 
                             varying       = rm_names, 
                             v.names       = "value", 
@@ -72,7 +66,6 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     
     # Define some more variables ----------------------------------------------
-    
     
     # factor level means
     Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
@@ -99,7 +92,6 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     
     # Orthogonal polynomial Contrasts -----------------------------------------
-    
     
     # maximal polynomial degree for orthogonal polynomials
     if ((maxpoly > k - 1) | (is.na(maxpoly))) {
@@ -132,9 +124,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly)
     
     
-    
     # Create contrast table ---------------------------------------------------
-    
     
     # define source variable
     source         = rownames(contrast_weights)
@@ -154,7 +144,6 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     # Used to plot the fitted polynomials This is used to display the aditional explanation of the variance in the dependent
     # variable by adding higher order trendcomponent successively
     
-    
     # initialize empty dataframe for polynomial regression coefficients
     poly_coef = matrix(0, ncol = maxpoly, nrow = k)
     
@@ -165,12 +154,11 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
         poly_coef[, i][1:(i + 1)] = poly$coef
     }
     
-    # Plotting contrats (ggplot) -------------------------------------------------
     
+    # Plotting contrats (ggplot) -------------------------------------------------
     
     # create datapoints for polynomial plot: this code automatically sets up the data that is required to plot the k-1 polynomial
     # regression lines
-    
     x               = seq(1, k, length.out = 1000)
     poly_values     = outer(x, 0:(k - 1), `^`)
     poly_curve_data = data.frame(x, poly_values %*% poly_coef)
@@ -200,11 +188,3 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     
     return(list(contrast_table = contrast_table, poly_plot = poly_plot))
 }
-
-
-# ---------------------------------------------------------------------------
-
-
-# Testing:
-rma_opc(rma_data, id = 1, maxpoly = 3)
-

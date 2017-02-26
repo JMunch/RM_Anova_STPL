@@ -3,10 +3,8 @@
 
 rma_eta = function(rma_data, id = 1, append = FALSE) {
     
-    
     # check if the data meet the requirements ---------------------------------
-    
-    
+  
     # rma_data needs to meet the following requirements:
     
     # id must either be an integer specifying the column position of the independent variable
@@ -32,13 +30,11 @@ rma_eta = function(rma_data, id = 1, append = FALSE) {
     
     # Get anova-table --------------------------------------------------------- 
     # rmanova function 'rma' is required!
-    
-    
+  
     anova_table = rma(rma_data, id = id)[[1]]
     
     
     # Define needed sums of squares -------------------------------------------
-    
     
     SS_Factor  = anova_table[2, 2]
     SS_Error   = anova_table[4, 2]
@@ -47,16 +43,13 @@ rma_eta = function(rma_data, id = 1, append = FALSE) {
     
     # Compute effect size measures --------------------------------------------
     
-    
     # Compute standard eta^2
     eta_sq = SS_Factor / SS_K_Total
     
     # Compute partial eta^2
     eta_partial = SS_Factor / (SS_Factor + SS_Error)
     
-    
     # Create separate table for effect sizes
-    
     
     effect_size_table = data.frame(check.names           = FALSE, 
                                    Source                = "Factor", 
@@ -67,13 +60,11 @@ rma_eta = function(rma_data, id = 1, append = FALSE) {
     
     # Append effect size measures to anova-table ------------------------------
     
-    
     anova_table[, "eta squared"]         = c(NA, eta_sq, NA, NA, NA, NA)
     anova_table[, "partial eta squared"] = c(NA, eta_partial, NA, NA, NA, NA)
     
     
     # Return anova-table with effect sizes or create seperate table -----------
-    
     
     if (append == TRUE) {
         return(anova_table)
@@ -81,11 +72,3 @@ rma_eta = function(rma_data, id = 1, append = FALSE) {
         return(effect_size_table)
     }
 }
-
-
-# -------------------------------------------------------------------------
-
-
-# Testing:
-rma_eta(rma_data, id = 1, append = TRUE)
-

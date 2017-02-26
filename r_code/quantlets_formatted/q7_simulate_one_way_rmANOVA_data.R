@@ -3,16 +3,13 @@
 
 sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, between_subject_sd = 40, NAs = 0) {
     
-    
     # Create data structure and simulate data --------------------------------------------------
-    
     
     # Create empty n x k matrix
     rma_data = matrix(NA, nrow = n, ncol = k + 1)
     
     # Add column with subject_id
     rma_data[, 1] = 1:n
-    
     
     if (!is.null(means)) {
         con_means = means
@@ -61,7 +58,6 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     
     # Add noise to data ----------------------------------------------------------
     
-    
     noise = matrix(NA, nrow = n, ncol = k)
     
     for (i in 1:k) {
@@ -80,7 +76,6 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     
     # Listwise deletion in case of NAs -------------------------------------------
     
-    
     deletionvector = vector(mode = "numeric", length = 0)
     
     for (i in 1:nrow(rma_data)) {
@@ -95,7 +90,6 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     
     # Naming columns ------------------------------------------------------------
     
-    
     factor_names    = character(k + 1)
     factor_names[1] = "Subject_id"
     
@@ -106,17 +100,3 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
     
     return(data.frame(rma_data))
 }
-
-
-# ---------------------------------------------------------------------------
-
-
-# Testing:
-rma_data = sim_rma_data(1001, 4, 
-                        means              = NULL, 
-                        poly_order         = 2, 
-                        noise_sd           = c(10, 20, 30, 20), 
-                        between_subject_sd = 40, 
-                        NAs                = 1)
-rma_data
-

@@ -3,9 +3,7 @@
 
 rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_table = FALSE) {
     
-    
     # check if the data meet the requirements ---------------------------------
-    
     
     # rma_data needs to meet the following requirements:
     
@@ -28,11 +26,10 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     if ((ncol(rma_data) - 1) < 2) {
         stop("At least two factor factor levels required")
     }
-    
+  
     
     # Libraries needed ----------------------------------------------------------
-    
-    
+  
     suppressWarnings(suppressMessages(require(dplyr)))
     suppressWarnings(suppressMessages(require(ggplot2)))
     
@@ -45,12 +42,9 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     # The ANOVA without repeated measures treates the data as if they are independend i.e. as if there were different entities in each
     # group, which is in fact not the case.
     
-    
     ow_a = function(rma_data, id) {
         
-        
         # Define needed constants and the dependent variable ------------------------
-        
         
         dependent_variable = as.matrix(rma_data[, -id])
         
@@ -63,10 +57,8 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         # Number of entities
         n = (k * n_group)
         
-        
-        
+      
         # Define basic ANOVA components ---------------------------------------------
-        
         
         # Computation of the baseline component
         grand_mean          = mean(dependent_variable)
@@ -83,24 +75,20 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         # Construct decomposition matrix ---------------------------------------------- 
         # Matrix with k*n rows and 4 columns. One column for: original values, factor level component, error component
         
-        
         decomposition_matrix_ANOVA = data.frame(dependent_variable = as.vector(dependent_variable), 
                                                 baseline           = as.vector(baseline_components), 
                                                 factor_level       = as.vector(factor_level_components), 
                                                 error              = as.vector(error_components_ANOVA))
         
         
-        
         # Compute sums of squares ---------------------------------------------------
-        
         
         ss_ANOVA           = as.data.frame(t(colSums(decomposition_matrix_ANOVA^2)))
         rownames(ss_ANOVA) = "sums_of_squares"
         
-        
+    
         # Set degrees of freedom ---------------------------------------------------- 
         # Different dof's for the ss_error than in rmANOVA
-        
         
         dof_ANOVA = data.frame(dependent_variable = n, 
                                baseline           = 1, 
@@ -110,20 +98,17 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         
         # Compute mean squares ------------------------------------------------------
         
-        
         ms_ANOVA           = ss_ANOVA / dof_ANOVA
         rownames(ms_ANOVA) = "mean_squares"
         
         
         # Calculate the F-Value -----------------------------------------------------
-        
-        
+      
         F_value_factor_ANOVA   = ms_ANOVA$factor_level/ms_ANOVA$error
         F_value_baseline_ANOVA = ms_ANOVA$baseline/ms_ANOVA$error
         
         
         # Set p-value of F-distribution ---------------------------------------------
-        
         
         p_factor_ANOVA   = 1 - pf(F_value_factor_ANOVA, dof_ANOVA$factor_level, dof_ANOVA$error)
         p_baseline_ANOVA = 1 - pf(F_value_baseline_ANOVA, dof_ANOVA$baseline, dof_ANOVA$error)
@@ -131,14 +116,12 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         
         # Compute corrected total sum of squares (variance) -------------------------
         
-        
         corrected_sst = ss_ANOVA$dependent_variable - ss_ANOVA$baseline
         variance      = corrected_sst/(dof_ANOVA$dependent_variable - dof_ANOVA$baseline)
         
         
-        # Create the output table --------------------------------------------------- Corrected total sum of squares could be taken from the
-        # repeated measures ANOVA-Model as they coincide
-        
+        # Create the output table ---------------------------------------------------
+        # Corrected total sum of squares could be taken from the repeated measures ANOVA-Model as they coincide
         
         # Specify source variable
         source_ANOVA = c("Baseline", "Factor", "Error", "Total", "Corrected total")
@@ -156,24 +139,21 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         
         # Return ANOVA-table --------------------------------------------------------
         
-        
         return(list(ANOVA_table_without_repeaded_measures = ANOVA_table))
     }
     
     
     # Comparison of error terms in both models ----------------------------------
     
-    
-    # Defining variables -------------------------------------------------------- rmANOVA function 'ow-rma' is required!  ANOVA function
-    # 'ow-a' is required!
-    
+    # Defining variables -------------------------------------------------------- 
+    # rmANOVA function 'ow-rma' is required!  ANOVA function 'ow-a' is required!
     
     # ANOVA-tables of rmANOVA and ANOVA without repeated measures
-    ow_a_results = ow_a(rma_data, id)[[1]]
-    rma_results  = rma(rma_data, id)[[1]]
-    
+    ow_a_results     = ow_a(rma_data, id)[[1]]
+    rma_results      = rma(rma_data, id)[[1]]
     sse_anova        = ow_a_results[3, 2]
     ss_subject_anova = 0
+    
     # Always zero because the subject effect is not considered in an ANOVA without repeated measures
     
     sse_rma        = rma_results[4, 2]
@@ -181,7 +161,6 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     
     # Create variables for comparison plot displaying the reduction of error terms ------------------------------------------
-    
     
     # 'var' contains the sse by subject and error
     var = c(sse_anova, ss_subject_anova, sse_rma, ss_subject_rma)
@@ -222,7 +201,6 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     # Create pie chart -----------------------------------------------------------------
     
-    
     comp_plot_pie = ggplot(comparison_data, aes(x = "", y = var_percent, fill = source)) + 
                         geom_bar(width = 1, stat = "identity") + 
                         labs(x     = "", 
@@ -245,7 +223,6 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     # Selection of plot design --------------------------------------------------
     
-    
     if (plot_type == "pie") {
         final_plot = comp_plot_pie
     } else {
@@ -253,10 +230,8 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     }
     
     
-    # Create comparison table --------------------------------------------------- Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus
-    # SS entety
-    
-    
+    # Create comparison table --------------------------------------------------- 
+    # Dependency: SSE in RM ANOVA is equal to SSE ANOVA minus SS entety
     
     error_ss_comparison_table = data.frame(check.names        = FALSE, 
                                            ` `                = c("Error", "Entity"), 
@@ -267,7 +242,6 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
     
     # Return comparison table ---------------------------------------------------
     
-    
     print(final_plot)
     
     if (return_anova_table == TRUE) {
@@ -277,11 +251,3 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
         return(list(sse_reduction_table = error_ss_comparison_table))
     }
 }
-
-
-# ---------------------------------------------------------------------------
-
-
-# Testing:
-rma_sse_reduct(rma_data, id = 1, plot_type = "bar", return_anova_table = TRUE)
-

@@ -3,9 +3,7 @@
 
 rma = function(rma_data, id = 1) {
     
-    
     # Define needed constants and the dependent variable ----------------------
-    
     
     # id must be an integer specifying the column position of the independent variable
     if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
@@ -14,7 +12,6 @@ rma = function(rma_data, id = 1) {
     
     dependent_variable = as.matrix(rma_data[, -id])
     
-    
     # Number of entities
     n = nrow(rma_data)
     
@@ -22,9 +19,7 @@ rma = function(rma_data, id = 1) {
     k = ncol(dependent_variable)
     
     
-    
     # check if the data meet the requirements ---------------------------------
-    
     
     # rma_data needs to meet the following requirements:
     
@@ -46,13 +41,11 @@ rma = function(rma_data, id = 1) {
     
     # Libraries needed --------------------------------------------------------
     
-    
     # suppress warning message about masked objects by dplyr NOTE: This function still loads the dplyr package!
     suppressWarnings(suppressMessages(require(dplyr)))
     
     
     # Define basic anova components -------------------------------------------
-    
     
     grand_mean              = mean(dependent_variable)
     baseline_components     = matrix(grand_mean, nrow = n, ncol = k)
@@ -66,9 +59,10 @@ rma = function(rma_data, id = 1) {
     error_components        = dependent_variable - baseline_components - factor_level_components - subject_components
     
     
-    # Construct decomposition matrix ------------------------------------------ Matrix with k * n rows and 5 columns One column for:
-    # original values, baseline component, factor level component, subject component, error component
+    # Construct decomposition matrix ------------------------------------------ 
     
+    # Matrix with k * n rows and 5 columns One column for:
+    # original values, baseline component, factor level component, subject component, error component
     
     decomposition_matrix = data.frame(dependent_variable = as.vector(dependent_variable), 
                                       baseline           = as.vector(baseline_components), 
@@ -77,16 +71,13 @@ rma = function(rma_data, id = 1) {
                                       error              = as.vector(error_components))
     
     
-    
     # Compute sums of squares -------------------------------------------------
-    
     
     ss           = as.data.frame(t(colSums(decomposition_matrix^2)))
     rownames(ss) = "sums_of_squares"
     
     
     # Set degrees of freedom --------------------------------------------------
-    
     
     dof = data.frame(dependent_variable = n * k, 
                      baseline           = 1, 
@@ -97,13 +88,11 @@ rma = function(rma_data, id = 1) {
     
     # Compute mean squares ----------------------------------------------------
     
-    
     ms           = ss / dof
     rownames(ms) = "mean_squares"
     
     
     # Compute corrected total sum of squares (variance) -----------------------
-    
     
     corrected_sst = ss$dependent_variable - ss$baseline
     variance      = corrected_sst / (dof$dependent_variable - dof$baseline)
@@ -111,21 +100,17 @@ rma = function(rma_data, id = 1) {
     
     # Compute F-values --------------------------------------------------------
     
-    
-    F_value_factor = ms$factor_level / ms$error
-    
+    F_value_factor   = ms$factor_level / ms$error
     F_value_baseline = ms$baseline / ms$subject_level
     
     
     # Set p-values of F distribution ------------------------------------------
-    
     
     p_factor   = 1 - pf(F_value_factor, dof$factor_level, dof$error)
     p_baseline = 1 - pf(F_value_baseline, dof$baseline, dof$subject_level)
     
     
     # Create the output table for rmANOVA--------------------------------------
-    
     
     # Specify source variable
     source = c("Baseline", "Factor", "Subject", "Error", "Total", "Corrected total")
@@ -143,14 +128,5 @@ rma = function(rma_data, id = 1) {
     
     # Return ANOVA-table ------------------------------------------------------
     
-    
     return(list(rm_ANOVA_table = ANOVA_table))
 }
-
-
-# -------------------------------------------------------------------------
-
-
-# Testing:
-rma(rma_data, 1)
-

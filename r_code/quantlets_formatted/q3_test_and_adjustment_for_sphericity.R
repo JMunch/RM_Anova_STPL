@@ -4,7 +4,6 @@
 
 rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
-    
     # id must either be an integer specifying the column position of the independent variable
     if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
         stop("id must be an integer specifying the column position of the independent variable")
@@ -12,8 +11,8 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     dependent_variable = as.matrix(rma_data[, -id])
     
-    # Defining some variables -------------------------------------------------
     
+    # Defining some variables -------------------------------------------------
     
     # number of factor levels
     k = ncol(dependent_variable)
@@ -29,7 +28,6 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     
     # check if the data meet the requirements ---------------------------------
-    
     
     # rma_data needs to meet the following requirements:
     
@@ -48,14 +46,13 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
         stop("At least two factor factor levels required")
     }
     
-    
     # Check whether a test for sphericity is needed
     if (k == 2) {
         stop("Note that there can't be a violation of sphericity since the factor of the one-way anova has only two factor levels")
     }
     
-    # Helmert matrix required for the computation of mauchly's W --------------
     
+    # Helmert matrix required for the computation of mauchly's W --------------
     
     helmert = function(k, df) {
         H       = matrix(0, k, k)
@@ -75,13 +72,11 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     # Computation of mauchly's W ----------------------------------------------
     
-    
     w = det(C %*% covariance_matix %*% t(C))/((sum(diag(C %*% covariance_matix %*% t(C)))/df)^(df))
     
     
     # Chi-Square Test ---------------------------------------------------------
-    
-    
+  
     # Computing the degrees of freedom for the chi-square value
     df_w = ((k * df)/2) - 1
     
@@ -94,8 +89,7 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     
     # Create summary table for mauchly's test ---------------------------------
-    
-    
+  
     mauchly_table = data.frame(check.names   = FALSE, 
                                Source        = "Factor", 
                                `Mauchly's W` = w, 
@@ -108,7 +102,6 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     # The three different correction factors (epsilon) ------------------------ 
     # Computing the three different correction factors for the nominator/denominator df of the rmanova factor F-test 
     # (Box, 1954; Geisser & Greenhouse, 1958; Greenhouse & Geisser, 1959; Huynh & Feldt, 1976)
-    
     
     # Lower-Bound correction (Greenhouse & Geisser, 1959)
     epsilon_lb = 1/df
@@ -124,7 +117,6 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     # Computing the adjusted p-values for the anova-factor F-test ------------- 
     # The adjustment is realised via correction of the F-distribution degrees of freedom by multplication with the 
     # respective correction factor (epsilon) rmanova function 'rma' is required!
-    
     
     anova_table         = rma(rma_data)[[1]]
     
@@ -143,7 +135,6 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     
     # Table with adjusted p-values and respective corection factors -----------
     
-    
     epsilon_table = data.frame(check.names = FALSE, 
                                Source      = c("Epsilon", "Adjusted p-Value"), 
                                `Lower-Bound correction (Greenhouse & Geisser, 1959)` = c(epsilon_lb, p_factor_lb), 
@@ -151,11 +142,10 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
                                `Huynh-Feldt correction (Huynh & Feldt, 1976)`        = c(epsilon_hf, p_factor_hf))
     rownames(epsilon_table) = NULL
     
-    
+  
     # Choose recommended adjustment and add to anova-table ---------------------- 
     # Correction is only applied if assumption of sphericity is rejected Recomendation (e.g.  Girden, 1992) 
     # based on results of Greenhouse and Geisser (1959) as well as Huynh and Feldt (1976)
-    
     
     if (p_w < 0.05) {
         if (p_factor_lb < 0.05) {
@@ -174,7 +164,6 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
     # Return spericity test and p-value adjustment ---------------------------- 
     # If append is 'TRUE' the function will also return the anova-table with the recomendet adjustment of the p-value
     
-    
     if (append == TRUE) {
         return(list(mauchly_table                    = mauchly_table, 
                     correction_factors_epsilon_table = epsilon_table, 
@@ -184,11 +173,3 @@ rma_spheri = function(rma_data, id = 1, append = FALSE) {
                     correction_factors_epsilon_table = epsilon_table))
     }
 }
-
-
-# -------------------------------------------------------------------------
-
-
-# Testing:
-rma_spheri(rma_data, id = 1, append = TRUE)
-
