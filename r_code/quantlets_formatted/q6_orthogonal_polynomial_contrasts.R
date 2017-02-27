@@ -144,7 +144,7 @@ rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
     # Used to plot the fitted polynomials This is used to display the aditional explanation of the variance in the dependent
     # variable by adding higher order trendcomponent successively
     
-    # initialize empty dataframe for polynomial regression coefficients
+    # Initialize empty dataframe for polynomial regression coefficients
     poly_coef = matrix(0, ncol = maxpoly, nrow = k)
     
     # Fitting the orthogonal Polynomials In each cycle of the loop the coefficients are assigned to the i-th column of the object

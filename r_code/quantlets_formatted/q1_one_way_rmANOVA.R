@@ -64,7 +64,7 @@ rma = function(rma_data, id = 1) {
     # Matrix with k * n rows and 5 columns One column for:
     # original values, baseline component, factor level component, subject component, error component
     
-    decomposition_matrix = data.frame(dependent_variable = as.vector(dependent_variable), 
+    decomp_matrix = data.frame(dependent_variable = as.vector(dependent_variable), 
                                       baseline           = as.vector(baseline_components), 
                                       factor_level       = as.vector(factor_level_components), 
                                       subject_level      = as.vector(subject_components), 
@@ -73,7 +73,7 @@ rma = function(rma_data, id = 1) {
     
     # Compute sums of squares -------------------------------------------------
     
-    ss           = as.data.frame(t(colSums(decomposition_matrix^2)))
+    ss           = as.data.frame(t(colSums(decomp_matrix^2)))
     rownames(ss) = "sums_of_squares"
     
     
