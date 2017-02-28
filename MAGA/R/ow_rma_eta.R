@@ -2,7 +2,7 @@
 #'
 #' Compute eta-square and partial eta_square for repeated measures ANOVA. Partial eta square is the effect size for the total variance reduced by the inter-subject variance (as done in a repeated measures ANOVA model)
 #'
-#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
 #' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
 #' @param append Logical. If FALSE only the effect sizes. If TRUE, an ANOVA table augmented with effect sizes is returned aditionally. Default is FALSE.
 #'
@@ -12,32 +12,57 @@
 #' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
 #' @note LITERATURE
 #' @examples
-#' CI_list = ow_rma_eta(some_rma_data)
 #'
+#' rma_eta(some_rma_data, id = 1, append = FALSE)
 #'
-#'
-#' @rdname ow_rma_eta
+#' @rdname rma_eta
 #' @export
-ow_rma_eta = function(ow_rma_data, append = FALSE){
 
 
-# Get ANOVA-table ---------------------------------------------------------
-  # rmANOVA function 'ow_rma' is required!
+##### Effect size measures for a one-way repeated measures anova Function 'rma' is required!
 
 
-  ANOVA_table = ow_rma(ow_rma_data)[[1]]
+rma_eta = function(rma_data, id = 1, append = FALSE) {
+
+  # check if the data meet the requirements ---------------------------------
+
+  # rma_data needs to meet the following requirements:
+
+  # id must be an integer specifying the column position of the ID variable
+  if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+    stop("id must be an integer specifying the column position of the ID variable")
+  }
+
+  # all variables must be numeric
+  if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+    stop("All variables in rma_data must be numeric")
+  }
+
+  # n > k (i.e. more entities than factor levels)
+  if (nrow(rma_data) <= (ncol(rma_data) - 1)) {
+    stop("Number of entities must exceed number of factor levels")
+  }
+
+  # k >= 2 (i.e. at least two or more factor levels)
+  if ((ncol(rma_data) - 1) < 2) {
+    stop("At least two factor factor levels required")
+  }
 
 
-# Define needed sums of squares -------------------------------------------
+  # Get anova-table ---------------------------------------------------------
+  # rmanova function 'rma' is required!
+
+  anova_table = rma(rma_data, id = id)[[1]]
 
 
-  SS_Factor = ANOVA_table[2,2]
-  SS_Error = ANOVA_table[4, 2]
-  SS_K_Total = ANOVA_table[6,2]
+  # Define needed sums of squares -------------------------------------------
+
+  SS_Factor  = anova_table[2, 2]
+  SS_Error   = anova_table[4, 2]
+  SS_K_Total = anova_table[6, 2]
 
 
-# Compute effect size measures --------------------------------------------
-
+  # Compute effect size measures --------------------------------------------
 
   # Compute standard eta^2
   eta_sq = SS_Factor / SS_K_Total
@@ -45,32 +70,26 @@ ow_rma_eta = function(ow_rma_data, append = FALSE){
   # Compute partial eta^2
   eta_partial = SS_Factor / (SS_Factor + SS_Error)
 
+  # Create separate table for effect sizes
 
-# Create separate table for effect sizes
-
-
-  effect_size_table = data.frame(check.names = FALSE,
-                                 "Source" = "Factor",
-                                 "eta squared" = eta_sq,
-                                 "partial eta squared" = eta_partial
-                                 )
+  effect_size_table = data.frame(check.names           = FALSE,
+                                 Source                = "Factor",
+                                 `eta squared`         = eta_sq,
+                                 `partial eta squared` = eta_partial)
   rownames(effect_size_table) = NULL
 
-# Append effect size measures to ANOVA-table ------------------------------
+
+  # Append effect size measures to anova-table ------------------------------
+
+  anova_table[, "eta squared"]         = c(NA, eta_sq, NA, NA, NA, NA)
+  anova_table[, "partial eta squared"] = c(NA, eta_partial, NA, NA, NA, NA)
 
 
-  ANOVA_table[,"eta squared"] = c(NA, eta_sq, NA, NA, NA, NA)
-  ANOVA_table[,"partial eta squared"] = c(NA, eta_partial, NA, NA, NA, NA)
+  # Return anova-table with effect sizes or create seperate table -----------
 
-
-# Return ANOVA-table with effect sizes or create seperate table -----------
-
-
-  if (append == TRUE){
-    return(list("effect_size_table" = effect_size_table, "one_way_repeated_measures_ANOVA_table_with_effect_size_measures" = ANOVA_table))
-  }else{
-    return(list("effect_size_table" = effect_size_table))
+  if (append == TRUE) {
+    return(anova_table)
+  } else {
+    return(effect_size_table)
   }
 }
-
-

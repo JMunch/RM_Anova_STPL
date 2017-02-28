@@ -2,7 +2,7 @@
 #'
 #' Estimate an AVOVA model with repeated measurements.
 #'
-#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
 #' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
 #'
 #'
@@ -12,137 +12,141 @@
 #' @note This is the main function of the MAGA-package to estimate the repeated measurement ANOVA.
 #' @examples
 #'
-#' ANOVA_table = ow_rma(some_rma_data)
+#' rma(some_rma_data)
 #'
-#' @rdname ow_rma
+#' @rdname rma
 #' @export
-ow_rma = function(ow_rma_data, independent_var = 1){
 
 
-# Libraries needed --------------------------------------------------------
+##### Computation of one-way repeated measures ANOVA (rma)
 
 
-  require(dplyr)
+rma = function(rma_data, id = 1) {
 
+  # Define needed constants and the dependent variable ----------------------
 
-# Define needed constants and the dependent variable ----------------------
+  # id must be an integer specifying the column position of the ID variable
+  if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+    stop("id must be an integer specifying the column position of the ID variable")
+  }
+
+  dependent_variable = as.matrix(rma_data[, -id])
 
   # Number of entities
-  n = nrow(ow_rma_data)
+  n = nrow(rma_data)
 
   # Number of factor levels
-  k = ncol(ow_rma_data) - 1
-
-  dependent_variable = as.matrix(ow_rma_data[, -1])
+  k = ncol(dependent_variable)
 
 
-# Define basic anova components -------------------------------------------
+  # check if the data meet the requirements ---------------------------------
+
+  # rma_data needs to meet the following requirements:
+
+  # all variables must be numeric
+  if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+    stop("All variables in rma_data must be numeric")
+  }
+
+  # n > k (i.e. more entities than factor levels)
+  if (n <= k) {
+    stop("Number of entities must exceed number of factor levels")
+  }
+
+  # k >= 2 (i.e. at least two or more factor levels)
+  if (k < 2) {
+    stop("At least two factor factor levels required")
+  }
 
 
-  grand_mean = mean(as.matrix(ow_rma_data[,2: (k + 1)]))
-  baseline_components = matrix(rep(grand_mean, times = k*n), nrow = n)
+  # Libraries needed --------------------------------------------------------
 
-  conditional_means = apply(dependent_variable, 2, mean)
-  factor_level_components = matrix(rep(conditional_means - grand_mean, each = n), nrow = n)
-
-  subject_means = apply(dependent_variable, 1, mean)
-  subject_components = matrix(rep(subject_means - grand_mean, times = k), nrow = n)
-
-  error_components = dependent_variable - baseline_components - factor_level_components - subject_components
+  # suppress warning message about masked objects by dplyr NOTE: This function still loads the dplyr package!
+  suppressWarnings(suppressMessages(require(dplyr)))
 
 
-# Prepare decomposition matrix --------------------------------------------
-  # Matrix with k * n rows and 5 columns
-  # One column for: original values, baseline component, factor level component, subject component, error component
+  # Define basic anova components -------------------------------------------
+
+  grand_mean              = mean(dependent_variable)
+  baseline_components     = matrix(grand_mean, nrow = n, ncol = k)
+
+  conditional_means       = colMeans(dependent_variable)
+  factor_level_components = matrix(conditional_means - grand_mean, nrow = n, ncol = k, byrow = TRUE)
+
+  subject_means           = rowMeans(dependent_variable)
+  subject_components      = matrix(subject_means - grand_mean, nrow = n, ncol = k)
+
+  error_components        = dependent_variable - baseline_components - factor_level_components - subject_components
 
 
-  decomposition_matrix = data.frame("dependent_variable" = numeric(n*k),
-                                    "baseline" = numeric(n*k),
-                                    "factor_level" = numeric(n*k),
-                                    "subject_level" = numeric(n*k),
-                                    "error" = numeric(n*k)
-                                    )
+  # Construct decomposition matrix ------------------------------------------
+
+  # Matrix with k * n rows and 5 columns One column for:
+  # original values, baseline component, factor level component, subject component, error component
+
+  decomp_matrix = data.frame(dependent_variable = as.vector(dependent_variable),
+                             baseline           = as.vector(baseline_components),
+                             factor_level       = as.vector(factor_level_components),
+                             subject_level      = as.vector(subject_components),
+                             error              = as.vector(error_components))
 
 
-# Construct decomposition matrix ------------------------------------------
+  # Compute sums of squares -------------------------------------------------
 
-
-  decomposition_matrix$dependent_variable = as.vector(dependent_variable)
-  decomposition_matrix$baseline = as.vector(baseline_components)
-  decomposition_matrix$factor_level = as.vector(factor_level_components)
-  decomposition_matrix$subject_level = as.vector(subject_components)
-  decomposition_matrix$error = as.vector(error_components)
-
-
-# Compute sums of squares -------------------------------------------------
-
-
-  ss = as.data.frame(t(colSums(decomposition_matrix^2)))
+  ss           = as.data.frame(t(colSums(decomp_matrix^2)))
   rownames(ss) = "sums_of_squares"
 
 
-# Set degrees of freedom --------------------------------------------------
+  # Set degrees of freedom --------------------------------------------------
+
+  dof = data.frame(dependent_variable = n * k,
+                   baseline           = 1,
+                   factor_level       = k - 1,
+                   subject_level      = n - 1,
+                   error              = (n * k) - 1 - (k - 1) - (n - 1))
 
 
-  dof = data.frame("dependent_variable" = n*k,
-                  "baseline" = 1,
-                  "factor_level" = k-1,
-                  "subject_level" = n-1,
-                  "error" = (n*k)-1-(k-1)-(n-1)
-                  )
+  # Compute mean squares ----------------------------------------------------
 
-
-# Compute mean squares ----------------------------------------------------
-
-
-  ms = ss / dof
+  ms           = ss / dof
   rownames(ms) = "mean_squares"
 
 
-# Compute corrected total sum of squares (variance) -----------------------
-
+  # Compute corrected total sum of squares (variance) -----------------------
 
   corrected_sst = ss$dependent_variable - ss$baseline
-  variance = corrected_sst / (dof$dependent_variable - dof$baseline)
+  variance      = corrected_sst / (dof$dependent_variable - dof$baseline)
 
 
-# Compute F-values --------------------------------------------------------
+  # Compute F-values --------------------------------------------------------
 
-
-  F_value_factor = ms$factor_level / ms$error
-
+  F_value_factor   = ms$factor_level / ms$error
   F_value_baseline = ms$baseline / ms$subject_level
 
 
-# Set p-values of F distribution ------------------------------------------
+  # Set p-values of F distribution ------------------------------------------
 
-
-  p_factor = 1 - pf(F_value_factor, dof$factor_level, dof$error)
+  p_factor   = 1 - pf(F_value_factor, dof$factor_level, dof$error)
   p_baseline = 1 - pf(F_value_baseline, dof$baseline, dof$subject_level)
 
 
-# Create the output table for rmANOVA--------------------------------------
-
+  # Create the output table for rmANOVA--------------------------------------
 
   # Specify source variable
   source = c("Baseline", "Factor", "Subject", "Error", "Total", "Corrected total")
 
   # Create table
-  ANOVA_table = data.frame(check.names = FALSE,
-                           "Source" = source,
-                           "Sum of squares" = c(ss %>% select(2:5,1) %>% unlist(), corrected_sst),
-                           "Degrees of freedom" = c(dof %>% select(2:5,1) %>% unlist(), (n*k)-1),
-                           "Mean squares" = c(ms %>% select(2:5) %>% unlist(), NA, variance),
-                           "F-value" = c(F_value_baseline, F_value_factor, NA, NA, NA, NA),
-                           "p-value" = c(p_baseline, p_factor, NA, NA, NA, NA)
-                           )
+  ANOVA_table = data.frame(check.names          = FALSE,
+                           Source               = source,
+                           `Sum of squares`     = c(ss %>% select(2:5, 1) %>% unlist(), corrected_sst),
+                           `Degrees of freedom` = c(dof %>% select(2:5, 1) %>% unlist(), (n * k) - 1),
+                           `Mean squares`       = c(ms %>% select(2:5) %>% unlist(), NA, variance),
+                           `F-value`            = c(F_value_baseline, F_value_factor, NA, NA, NA, NA),
+                           `p-value`            = c(p_baseline, p_factor, NA, NA, NA, NA))
   rownames(ANOVA_table) = NULL
 
 
-# Return ANOVA-table ------------------------------------------------------
+  # Return ANOVA-table ------------------------------------------------------
 
-
-  return(list("one_way_repeated_measures_ANOVA_table" = ANOVA_table))
+  return(list(rm_ANOVA_table = ANOVA_table))
 }
-
-

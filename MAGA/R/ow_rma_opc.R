@@ -2,9 +2,10 @@
 #'
 #' Compute orthogonal polynomial contrasts and plot orthogonal polynomial regression curves for a repeated measures ANOVA.
 #'
-#' @param ow_rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
+#' @param rma_data An object of type data.frame. Each row should represent one subject and each column one variable.
 #' @param id An integer specifying the column position of the subject ID. Default is 1. Set to "none" if the data does not contain an ID variable.
 #' @param maxpoly Integer. Specifies the highest order polynomial for the contrast analysis. Truncated to number of factor levels (k) -1 if larger. Default is NA which will be set to k-1 within the function.
+#' @param print_plot Logical. If TRUE, function returns a plot that displays the polynomial regression curves. Default is TRUE.
 #'
 #' @return Returns an object of type list.
 #' \item{contrast_table}{An object of type data.frame containing the contribution of the polynomial trends to the total factor effect and their respective significance levels}
@@ -13,163 +14,197 @@
 #' @note LITERATURE
 #' @examples
 #'
-#' @rdname ow_rma_opc
+#' @rdname rma_opc
 #' @export
 
-ow_rma_opc = function(ow_rma_data){
 
-    require(dplyr)
-    require(ggplot2)
-    # needed for preparation of plot data
-    require(tidyverse)
+##### Orthogonal polynomial contrasts in a one-way repeated measures ANOVA
 
 
-# Define some variables ---------------------------------------------------
+rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
 
+  # suppress warning messages from the required packages NOTE: This function still loads the packages!
+  suppressWarnings(suppressMessages(require(dplyr)))
+  suppressWarnings(suppressMessages(require(ggplot2)))
+  suppressWarnings(suppressMessages(require(tidyverse)))
+
+  # Check if the data meet the following requirement:
+
+  # id must be an integer specifying the column position of the ID variable
+  if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
+    stop("id must be an integer specifying the column position of the ID variable")
+  }
+
+  dependent_variable = as.matrix(rma_data[, -id])
+
+
+  # Define some variables ---------------------------------------------------
 
   # number of entities
-  n = as.numeric(length(ow_rma_data[,1]))
+  n = nrow(rma_data)
 
-  # id-variable and condition-variable
-  rm_names = colnames(ow_rma_data)[-1]
-  id_names = colnames(ow_rma_data)[1]
+  # number of factor levels
+  k = ncol(dependent_variable)
 
-  #  number of factor levels
-  k = as.numeric(length(rm_names))
-
-
-# Convert to long format --------------------------------------------------
+  # Specify the names of the 'id'-variable and of the 'condition'-variables
+  rm_names = colnames(dependent_variable)
+  id_names = colnames(rma_data)[id]
 
 
-  ow_rma_data_long = reshape(ow_rma_data,
-                             varying = rm_names,
-                             v.names = "value",
-                             timevar = "condition",
-                             times = (1:k),
-                             idvar = id_names,
-                             new.row.names = 1:(k * n),
-                             direction = "long"
-                             )
-  colnames(ow_rma_data_long)[1] = "id"
-  ow_rma_data_long$condition = as.numeric(ow_rma_data_long$condition)
+  # check if the data meet the requirements ---------------------------------
+
+  # rma_data needs to meet the following requirements:
+
+  # all variables must be numeric
+  if (all(sapply(rma_data, is.numeric)) == FALSE | any(sapply(rma_data, is.factor))) {
+    stop("All variables in rma_data must be numeric")
+  }
+
+  # n > k (i.e. more entities than factor levels)
+  if (n <= k) {
+    stop("Number of entities must exceed number of factor levels")
+  }
+
+  # k >= 2 (i.e. at least two or more factor levels)
+  if (k < 2) {
+    stop("At least two factor factor levels required")
+  }
 
 
-# Define some more variables ----------------------------------------------
+  # Convert to long format --------------------------------------------------
 
+  rma_data_long = reshape(rma_data,
+                          varying       = rm_names,
+                          v.names       = "value",
+                          timevar       = "condition",
+                          times         = (1:k),
+                          idvar         = id_names,
+                          new.row.names = 1:(k * n),
+                          direction     = "long")
+  colnames(rma_data_long)[1] = "id"
+  rma_data_long$condition    = as.numeric(rma_data_long$condition)
+
+
+  # Define some more variables ----------------------------------------------
 
   # factor level means
-  Flm = tapply(ow_rma_data_long$value, ow_rma_data_long$condition, mean)
+  Flm = tapply(rma_data_long$value, rma_data_long$condition, mean)
 
   # general mean
-  Gm = mean(ow_rma_data_long$value)
+  Gm = mean(rma_data_long$value)
 
   # entity/subject mean
-  Em = tapply(ow_rma_data_long$value, ow_rma_data_long$id, mean)
+  Em = tapply(rma_data_long$value, rma_data_long$id, mean)
 
   # Measurements
-  Me = (1:k)
+  Me = 1:k
 
   # Mean of each measurement condition ('MeFlm' dataframe)
-  MeFlm = data.frame(Me, Flm)
-  MeFlmlong = MeFlm[rep(seq_len(nrow(MeFlm)), each = n),]
+  MeFlm     = data.frame(Me, Flm)
+  MeFlmlong = MeFlm[rep(seq_len(nrow(MeFlm)), each = n), ]
 
   # Entities
-  E = (1:n)
+  E = 1:n
 
   # Mean of each entity/subject ('EEm' dataframe)
-  EEm = data.frame(E, Em)
-  EEmlong = EEm[rep(seq_len(nrow(EEm)), k), ]
+  EEm     = data.frame(E, Em)
+  EEmlong = EEm[rep(seq_len(nrow(EEm)), each = k), ]
 
 
-# Orthogonal polynomial Contrasts -----------------------------------------
-
+  # Orthogonal polynomial Contrasts -----------------------------------------
 
   # maximal polynomial degree for orthogonal polynomials
-  maxpoly = k - 1
+  if ((maxpoly > k - 1) | (is.na(maxpoly))) {
+    maxpoly = k - 1
+  }
 
   # Defining Contrast weights for orthogonal polynomial contrasts
-  contrast_weights = t(contr.poly(k))
+  contrast_weights = (t(contr.poly(k)))[1:maxpoly, ]
 
   # Applying formula for linear contrasts
-  weighted_dependend_variables = ow_rma_data[rep(seq_len(nrow(ow_rma_data)), each = maxpoly), ][,-1] * (contrast_weights)[rep(seq_len(nrow(contrast_weights)), n), ]
-  linear_subject_contrasts = matrix(rowSums(weighted_dependend_variables), byrow = TRUE, ncol = maxpoly)
+  weighted_dependend_variables = dependent_variable[rep(1:n, each = maxpoly), ] * (contrast_weights)[rep(1:maxpoly, n), ]
+  linear_subject_contrasts     = matrix(rowSums(weighted_dependend_variables), byrow = TRUE, ncol = maxpoly)
 
   # Computing contrast estimators for each orthogonal polynomial contrast as well as standard errors for thees estimators
   contrast_estimator = colMeans(linear_subject_contrasts)
-  contrast_se = sqrt(apply(linear_subject_contrasts,2,var)) / sqrt(n)
+  contrast_se        = sqrt(apply(linear_subject_contrasts, 2, var)) / sqrt(n)
 
   # Computing t-values for each contrast
   contrast_t_values = contrast_estimator / contrast_se
-  #contrast_F_values = contrast_t_values^2
+  # contrast_F_values = contrast_t_values^2
 
   # Computing the corresponding p-values
-  contrast_p_values = 1 - pt(abs(contrast_t_values), n-1)
+  contrast_p_values = 1 - pt(abs(contrast_t_values), n - 1)
 
   # Computing sums of squares for each contrast
   contrast_ss = n * contrast_estimator^2 / rowSums(contrast_weights^2)
 
-  # Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain orthogonal polynomial trend
-  # ss_trend / ss_factor
-  proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly) # seems strange?! Is this right? --> Jap, 'sum(rep((Flm - Gm)^2, each = n)' is computing the Factor ss (its the deviation of the factor level means from grand mean, than squared, and than that times n till every subject is measured under each condition); the last 'rep(..., maxpoly)' is just to matcht the size of the 'contrast_ss' vector
+  # Computing amount of the variance in the dependent variable explained by the factor which in turn can be explained by a cerain
+  # orthogonal polynomial trend ss_trend / ss_factor
+  proportional_trend_contribution = contrast_ss / rep(sum(rep((Flm - Gm)^2, each = n)), maxpoly)
 
 
-# Create contrast table ---------------------------------------------------
-
+  # Create contrast table ---------------------------------------------------
 
   # define source variable
-  source = rownames(contrast_weights)
+  source         = rownames(contrast_weights)
   contrast_table = data.frame(check.names = FALSE,
-                              "Source" = source,
-                              "Sum of squares" = contrast_ss,
-                              "Proportional contribution to the factor effect" = proportional_trend_contribution,
-                              "Contrast estimator" = contrast_estimator,
-                              "Standard error" = contrast_se,
-                              "Degrees of freedom" = rep((n - 1), maxpoly),
-                              "t-value" = contrast_t_values,
-                              "p-value" = contrast_p_values
-                              )
+                              Source      = source,
+                              `Sum of squares`     = contrast_ss,
+                              `Proportional contribution to the factor effect` = proportional_trend_contribution,
+                              `Contrast estimator` = contrast_estimator,
+                              `Standard error`     = contrast_se,
+                              `Degrees of freedom` = rep((n - 1), maxpoly),
+                              `t-value` = contrast_t_values,
+                              `p-value` = contrast_p_values)
   rownames(contrast_table) = NULL
 
 
-# Orthogonal polynomial trends as polynomial regression  ------------------
-  # Used to plot the fitted polynomials
-  # This is used to display the aditional explanation of the variance in the dependent variable by adding higher order trendcomponent successively
+  # Orthogonal polynomial trends as polynomial regression ------------------
+  # Used to plot the fitted polynomials This is used to display the aditional explanation of the variance in the dependent
+  # variable by adding higher order trendcomponent successively
 
+  # Initialize empty dataframe for polynomial regression coefficients
+  poly_coef = matrix(0, ncol = maxpoly, nrow = k)
 
-  # initialize empty dataframe for polynomial regression coefficients
-  poly_coef <- data.frame(matrix(0, ncol = k-1, nrow = k))
-
-  # Fitting the k - 1 orthogonal Polynomials
-  # In each cycle of the loop the coefficients are assigned to the i-th column of the object poly_coef
-  for(i in 1:maxpoly){
-      pfv = paste("poly.fit.", i, sep = "")
-      poly <- assign(pfv, lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE)))
-      poly_coef[,i][1:(i+1)] <- poly$coef
-      poly.fit.max = lm(ow_rma_data_long$value ~ poly(ow_rma_data_long$condition, degree = i, raw = TRUE))
+  # Fitting the orthogonal Polynomials In each cycle of the loop the coefficients are assigned to the i-th column of the object
+  # poly_coef
+  for (i in 1:maxpoly) {
+    poly                      = lm(rma_data_long$value ~ poly(rma_data_long$condition, degree = i, raw = TRUE))
+    poly_coef[, i][1:(i + 1)] = poly$coef
   }
 
-# Plotting contrats -------------------------------------------------------
 
+  # Plotting contrats (ggplot) -------------------------------------------------
 
-  # create datapoints for polynomial plot:
-  # this code automatically sets up the data that is required to plot the k-1 polynomial regression lines
-
-  poly_curve_data <- data.frame(x = seq(1, k, length.out = 100),
-                                tcrossprod(outer(seq(1, k, length.out = 100), 0:(k-1), `^`), do.call(rbind, poly_coef))) %>%
-      gather(var, y, -x)
+  # create datapoints for polynomial plot: this code automatically sets up the data that is required to plot the k-1 polynomial
+  # regression lines
+  x               = seq(1, k, length.out = 1000)
+  poly_values     = outer(x, 0:(k - 1), `^`)
+  poly_curve_data = data.frame(x, poly_values %*% poly_coef)
+  poly_curve_data = gather(poly_curve_data, curve, y, -x)
 
   # plot the k-1 polynomial regression lines
-  poly_plot <- ggplot(data = ow_rma_data_long, aes(x = condition, y = value)) +
-      geom_point() +
-      labs(col = "Order of \npolynomial", x = "Condition", y = "Value", title = "Orthogonal polynomial contrasts") +
-      geom_path(data = poly_curve_data, aes(x, y, color = var), lwd = 1.2) +
-      scale_color_discrete(labels=as.character(1:(k-1)))
+  poly_plot = ggplot(data = rma_data_long, aes(x = condition, y = value)) +
+    geom_point() +
+    labs(col   = "Order of \npolynomial",
+         x     = "Condition",
+         y     = "Value",
+         title = "Orthogonal polynomial contrasts") +
+    geom_path(data = poly_curve_data, aes(x, y, color = curve), lwd = 1.2) +
+    scale_color_discrete(labels = as.character(1:(maxpoly))) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.key       = element_rect(colour = "black"),
+          plot.title       = element_text(face = "bold", hjust = 0.5))
 
 
-# Return the contrast-table -----------------------------------------------
+  # Return the contrast-table and plot ----------------------------------------
 
-  print(poly_plot)
-  return(list("orthogonal_polynomial_contrast_table" = contrast_table))
+  if (print_plot == TRUE) {
+    print(poly_plot)
+  }
+
+  return(list(contrast_table = contrast_table, poly_plot = poly_plot))
 }
-
-
