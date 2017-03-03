@@ -22,6 +22,11 @@
 
 
 rma = function(rma_data, id = 1) {
+  
+  # Listwise deletion in case of NAs -------------------------------------------
+  
+  rma_data = rma_data[complete.cases(rma_data),]
+  
 
   # Define needed constants and the dependent variable ----------------------
 

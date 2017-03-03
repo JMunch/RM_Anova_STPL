@@ -50,11 +50,10 @@ rma_sse_reduct = function(rma_data, id = 1, plot_type = "pie", return_anova_tabl
   }
 
 
-  # Libraries needed ----------------------------------------------------------
-
-  suppressWarnings(suppressMessages(require(dplyr)))
-  suppressWarnings(suppressMessages(require(ggplot2)))
-
+  # Listwise deletion in case of NAs -------------------------------------------
+  
+  rma_data = rma_data[complete.cases(rma_data),]
+  
 
   # Computaion of ANOVA model -------------------------------------------------
 
