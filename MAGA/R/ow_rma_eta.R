@@ -10,7 +10,12 @@
 #' \item{effect_size_table}{An object of type data.frame containing the effect sizes eta square and partial eta square}
 #' \item{anova_table}{An object of type data.frame. Contains the anova table augmented with the effect size measures}
 #' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
-#' @note LITERATURE
+#' @note References:
+#'
+#' Bakeman, R. (2005). Recommended effect size statistics for repeated measures designs, Behavior research methods 37(3): 379–384.
+#'
+#' Cousineau, D. (2005). Confidence intervals in within-subject designs: A simpler solution to loftus and masson’s method, Tutorials in quantitative methods for psychology 1(1): 42–45.
+#'
 #' @examples
 #'
 #' rma_eta(some_rma_data, id = 1, append = FALSE)

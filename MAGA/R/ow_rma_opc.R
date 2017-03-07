@@ -11,8 +11,9 @@
 #' \item{contrast_table}{An object of type data.frame containing the contribution of the polynomial trends to the total factor effect and their respective significance levels}
 #' \item{poly_plot}{A ggplot object. Displays the orthogonal polynomial regression curves.}
 #' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
-#' @note LITERATURE
 #' @examples
+#'
+#' rma_opc(some_rma_data, id = 1, maxpoly = 4, print_plot = TRUE)
 #'
 #' @rdname rma_opc
 #' @export

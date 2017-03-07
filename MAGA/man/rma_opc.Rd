@@ -23,10 +23,9 @@ Returns an object of type list.
 \description{
 Compute orthogonal polynomial contrasts and plot orthogonal polynomial regression curves for a repeated measures ANOVA.
 }
-\note{
-LITERATURE
-}
 \examples{
+
+rma_opc(some_rma_data, id = 1, maxpoly = 4, print_plot = TRUE)
 
 }
 \author{

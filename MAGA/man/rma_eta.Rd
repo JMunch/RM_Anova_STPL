@@ -22,7 +22,11 @@ Returns an object of type list.
 Compute eta-square and partial eta_square for repeated measures ANOVA. Partial eta square is the effect size for the total variance reduced by the inter-subject variance (as done in a repeated measures ANOVA model)
 }
 \note{
-LITERATURE
+References:
+
+Bakeman, R. (2005). Recommended effect size statistics for repeated measures designs, Behavior research methods 37(3): 379–384.
+
+Cousineau, D. (2005). Confidence intervals in within-subject designs: A simpler solution to loftus and masson’s method, Tutorials in quantitative methods for psychology 1(1): 42–45.
 }
 \examples{
 

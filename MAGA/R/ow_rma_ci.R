@@ -11,7 +11,12 @@
 #' \item{ci_plot}{A ggplot object displaying the comparison of adjusted and unadjusted confidence intervals}
 #' \item{confidence_intervals}{An object of type data.frame. Contains adjusted and unadjusted confidence intervals of specified level.}
 #' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
-#' @note This functions allows to calculate the confidence intervals of a repeated measurement ANOVA.
+#' @note References:
+#'
+#' Morey, R. D. (2008). Confidence intervals from normalized data: A correction to cousineau (2005), reason 4(2): 61–64.
+#'
+#' O’Brien, F., & Cousineau, D. (2014). Representing error bars in within-subject designs in typical software packages. The Quantitative Methods for Psychology, 10(1), 56–67.
+#'
 #' @examples
 #'
 #' CI_list = rma_ci(some_rma_data, C_level = .95, id = 1, print_plot = TRUE)

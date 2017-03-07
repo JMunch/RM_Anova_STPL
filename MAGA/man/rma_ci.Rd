@@ -24,7 +24,11 @@ Returns an object of type list.
 Estimate adjusted and unadjusted confidence intervals for repeated measurement ANOVA. Adjusted confidence intervals take into account the inter-subject variance. The functions allows to visually compare both types.
 }
 \note{
-This functions allows to calculate the confidence intervals of a repeated measurement ANOVA.
+References:
+
+Morey, R. D. (2008). Confidence intervals from normalized data: A correction to cousineau (2005), reason 4(2): 61–64.
+
+O’Brien, F., & Cousineau, D. (2014). Representing error bars in within-subject designs in typical software packages. The Quantitative Methods for Psychology, 10(1), 56–67.
 }
 \examples{
 

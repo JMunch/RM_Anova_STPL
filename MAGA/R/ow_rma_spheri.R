@@ -11,7 +11,17 @@
 #' \item{correction_factors}{An object of type data.frame containing the correction factors for p-values in the presence of sphericity}
 #' \item{corrected_rm_anova}{An object of type data.frame. RM ANOVA table with appropriately adjusted p-values}
 #' @author Joachim Munch, Frederik Schreck, Quang Nguyen Duc, Constantin Meyer-Grant, Nikolas Hoeft
-#' @note LITERATURE REFERENCES
+#' @note References:
+#'
+#' Geisser, S., Greenhouse, S. W. (1958). An extension of box’s results on the use of the f distribution in multivariate analysis, The Annals of Mathematical Statistics 29(3): 885–891.
+#'
+#' Greenhouse, S. W., & Geisser, S. (1959). On methods in the analysis of profile data. Psychometrika, 24(2), 95–112.
+#'
+#' Huynh, H., & Feldt, L. S. (1970). Conditions under Which Mean Square Ratios in Repeated Measurements Designs Have Exact F-Distributions. Journal of the American Statistical Association, 65(332), 1582–1589.
+#'
+#' Huynh, H., & Feldt, L. S. (1976). Estimation of the Box Correction for Degrees of Freedom from Sample Data in Randomized Block and Split-Plot Designs. Journal of Educational and Behavioral Statistics, 1(1), 69–82.
+#'
+#' Mauchly, J. W. (1940). Significance test for sphericity of a normal n-variate distribution. The Annals of Mathematical Statistics, 11(2), 204–209.
 #' @examples
 #'
 #'rma_spheri(some_rma_data, id = 1, append = FALSE)
