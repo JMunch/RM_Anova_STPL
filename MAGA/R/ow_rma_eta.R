@@ -52,6 +52,12 @@ rma_eta = function(rma_data, id = 1, append = FALSE) {
   if ((ncol(rma_data) - 1) < 2) {
     stop("At least two factor factor levels required")
   }
+  
+  
+  # Listwise deletion in case of NAs -------------------------------------------
+  
+  rma_data = rma_data[complete.cases(rma_data),]
+  
 
 
   # Get anova-table ---------------------------------------------------------

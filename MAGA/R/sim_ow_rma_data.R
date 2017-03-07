@@ -98,20 +98,6 @@ sim_rma_data = function(n, k, means = NULL, poly_order = NULL, noise_sd = 10, be
   }
 
 
-  # Listwise deletion in case of NAs -------------------------------------------
-
-  deletionvector = vector(mode = "numeric", length = 0)
-
-  for (i in 1:nrow(rma_data)) {
-    if (any(is.na(rma_data[i, ])) == TRUE) {
-      deletionvector = union(deletionvector, i)
-      print(paste("Listwise deletion due to missing value(s) for subject", i))
-    }
-  }
-
-  rma_data = rma_data[-deletionvector, ]
-
-
   # Naming columns ------------------------------------------------------------
 
   factor_names    = character(k + 1)

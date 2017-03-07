@@ -36,6 +36,10 @@
 
 
 rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
+  
+  # Listwise deletion in case of NAs -------------------------------------------
+  
+  rma_data = rma_data[complete.cases(rma_data),]
 
   # 'C_level' must be larger than 0 and smaler than 1
   if (C_level >= 1 | C_level <= 0) {
@@ -48,12 +52,6 @@ rma_ci = function(rma_data, C_level = 0.95, id = 1, print_plot = TRUE) {
 
   dependent_variable = as.matrix(rma_data[, -id])
 
-
-  # Libraries needed --------------------------------------------------------
-
-
-  # suppress warning message about ggplot NOTE: This function still loads the package!
-  suppressWarnings(suppressMessages(require(ggplot2)))
 
   # Define needed constants and variables -----------------------------------
 

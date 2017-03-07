@@ -23,11 +23,11 @@
 
 
 rma_opc = function(rma_data, id = 1, maxpoly = NA, print_plot = TRUE) {
-
-  # suppress warning messages from the required packages NOTE: This function still loads the packages!
-  suppressWarnings(suppressMessages(require(dplyr)))
-  suppressWarnings(suppressMessages(require(ggplot2)))
-  suppressWarnings(suppressMessages(require(tidyverse)))
+  
+  # Listwise deletion in case of NAs -------------------------------------------
+  
+  rma_data = rma_data[complete.cases(rma_data),]
+  
 
   # Check if the data meet the following requirement:
 

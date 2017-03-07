@@ -35,6 +35,10 @@
 
 
 rma_spheri = function(rma_data, id = 1, append = FALSE) {
+  
+  # Listwise deletion in case of NAs -------------------------------------------
+  
+  rma_data = rma_data[complete.cases(rma_data),]
 
   # id must be an integer specifying the column position of the ID variable
   if (id %in% 1:ncol(rma_data) == FALSE || length(id) != 1) {
