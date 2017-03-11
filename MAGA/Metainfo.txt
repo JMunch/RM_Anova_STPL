@@ -1,0 +1,22 @@
+
+Name of Quantlet: ow_rma
+
+Published in: 	  Statistical Programming Languages
+
+Description:      'This bundled package (see related quantlets) computes the One-way Repeated Measures ANOVA 
+		  including inferencial statistical analysis and a simulated data for testing purposes.
+		  - ow_rma computes the RM ANOVA model and gives the ANOVA table as output
+		  - ow_rma_ci computes both adjusted and unadjusted confidence intervals
+		  - ow_rma_eta gives the effect size measures
+		  - ow_rma_opc detects orthogonal polynomial trend components in the effects of the factor
+		  - ow_rma_spheri checks the requirement of sphericity in the data
+		  - ow_rma_sse_reduct evaluates the reduction in SSE due to consideration/elimination of 
+		    between subjects variance
+		  - sim_ow_rma_data simulates test data with ability to control factor level, number of observations,
+		    variance, etc.'
+
+Keywords:         ANOVA, repeated, measures, variance, simulation, confidence-interval, sphericity, R-package
+
+Author:           Nikolas Höft, Constantin Meyer-Grant, Joachim Munch, Quang Nguyen Duc, Frederik Schreck
+
+See also:         ow_rma_ci, ow_rma_eta, ow_rma_opc, ow_rma_spheri, ow_rma_sse_reduct, sim_ow_rma_data
